@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Models\Machine;
+use Illuminate\Http\Response;
 
-class MachineController extends Controller
+class MachinesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Collection|Machine[]
      */
     public function index()
     {
@@ -20,10 +22,10 @@ class MachineController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         return Machine::create($request->all());
     }
@@ -32,7 +34,7 @@ class MachineController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -42,9 +44,9 @@ class MachineController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -55,19 +57,19 @@ class MachineController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
         //
     }
-    
+
 
         /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      * SELECT title FROM pages WHERE my_col LIKE %$param1% OR another_col LIKE %$param2%;
      */
     public function search($term)

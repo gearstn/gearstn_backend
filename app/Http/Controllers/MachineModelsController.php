@@ -3,42 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\MachineCategory;
+use App\Models\MachineModel;
+use Illuminate\Http\Response;
 
-class MachineCategoryController extends Controller
+class MachineModelsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function index($equipmenttype)
+    public function index($sub_category, $manufacture)
     {
-        return MachineCategory::where('category', '=', $equipmenttype)->get();
+        return MachineModel::where('subcategory_id', '=', $sub_category)->where('manufacture_id', '=', $manufacture)->orderBy('model','ASC')->get();
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
-        if (MachineCategory::find($request->name)) {
+        if (MachineModel::find($request->name)) {
             return redirect()->back();
         }
-        if (MachineCategory::where('sub_category', '=', $request->get('sub_category'))->count() > 0) {
-            return 'Categroy is already exist';
+        if (MachineModel::where('title', '=', $request->get('title'))->count() > 0) {
+            return 'Model is already exist';
         }
-        return MachineCategory::create($request->all());
+        return MachineModel::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -48,9 +49,9 @@ class MachineCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, $id)
     {
@@ -61,7 +62,7 @@ class MachineCategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
@@ -73,7 +74,7 @@ class MachineCategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      * SELECT title FROM pages WHERE my_col LIKE %$param1% OR another_col LIKE %$param2%;
      */
 }
