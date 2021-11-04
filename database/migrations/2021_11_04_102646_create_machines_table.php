@@ -15,10 +15,6 @@ class CreateMachinesTable extends Migration
     {
         Schema::create('machines', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('seller_id');
-            $table->string('category');
-            $table->string('sub_category');
-            $table->string('manufacture');
             $table->string('model');
             $table->integer('year');
             $table->string('sn');
@@ -31,6 +27,14 @@ class CreateMachinesTable extends Migration
             $table->string('slug');
             $table->longText('images');
             $table->boolean('approved');
+            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('subcategory_id');
+            $table->unsignedBigInteger('manufacture_id');
+            $table->unsignedBigInteger('seller_id');
+            $table->foreign("category_id")->references("id")->on("categories")->onDelete("cascade");
+            $table->foreign("subcategory_id")->references("id")->on("subcategories")->onDelete("cascade");
+            $table->foreign("manufacture_id")->references("id")->on("manufactures")->onDelete("cascade");
+            $table->foreign("seller_id")->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();
         });
     }

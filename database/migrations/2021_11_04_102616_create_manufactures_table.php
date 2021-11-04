@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMachineModelTable extends Migration
+class CreateManufacturesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateMachineModelTable extends Migration
      */
     public function up()
     {
-        Schema::create('machine_model', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('category');
-            $table->string('sub_category');
-            $table->string('manufacture');
-            $table->string('model')->unique();
+        Schema::create('manufactures', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->unsignedBigInteger('subcategory_id');
+            $table->foreign("subcategory_id")->references("id")->on("subcategories")->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateMachineModelTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('machine_manufacture');
+        Schema::dropIfExists('manufactures');
     }
 }

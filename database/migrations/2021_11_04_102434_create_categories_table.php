@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMachineCategoryTable extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateMachineCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('machine_category', function (Blueprint $table) {
-            $table->increments('id')->unique();
-            $table->string('category');
-            $table->string('sub_category')->unique();
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateMachineCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('machine_category');
+        Schema::dropIfExists('categories');
     }
 }
