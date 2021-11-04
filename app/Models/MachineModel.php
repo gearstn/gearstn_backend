@@ -9,11 +9,11 @@ class MachineModel extends Model
 {
 
     use HasFactory;
-    protected $table = 'machine_model';
+    protected $table = 'models';
     protected $fillable = [
-        'category', // construction
-        'sub_category', // loader, forklift, excvators
-        'manufacture', // caterpiller
-        'model', // 330BL
+        'title',
+        'category_id', // loader, forklift, excvators
+        'subcategory_id', // loader, forklift, excvators
+        'manufacture_id', // caterpiller
     ];
 }

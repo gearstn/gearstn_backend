@@ -12,9 +12,9 @@ class Machine extends Model
     protected $table = 'machines';
     protected $fillable = [
         'seller_id',
-        'category',
-        'sub_category',
-        'manufacture',
+        'category_id',
+        'subcategory_id',
+        'manufacture_id',
         'model',
         'year',
         'sn',

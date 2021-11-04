@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MachineCategory extends Model
+class Manufacture extends Model
 {
-
     use HasFactory;
-    protected $table = 'machine_category';
+    protected $table = 'manufactures';
     protected $fillable = [
-        'category', // construction
-        'sub_category', // loader, forklift, excvators
+        'title',
+        'subcategory_id',
     ];
 }
