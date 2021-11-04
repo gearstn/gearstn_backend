@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\MachineModelsController;
+use App\Http\Controllers\MachinesController;
+use App\Http\Controllers\ManufacturesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MachineController;
-use App\Http\Controllers\MachineModelController;
-use App\Http\Controllers\MachineCategoryController;
-use App\Http\Controllers\MachineManufactureController;
-use App\Models\User;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,32 +19,25 @@ use App\Models\User;
 */
 
 Route::post('/auth/register', [AuthController::class, 'register']);
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/login',[AuthController::class, 'login']);
 // FORGET PASSWORD
-Route::post('/auth/forgot-password', [AuthController::class , 'forgotPassword'])->name('forgot-password');
-Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::post('/auth/change-password', [AuthController::class ,'change_password']);
-});
-
+Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/auth/change-password',[AuthController::class, 'change_password']);
     Route::get('/me', function (Request $request) {
         return auth()->user();
     });
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::post('/auth/logout',[AuthController::class, 'logout']);
+
+    Route::resource('machines', MachinesController::class)->except('search');
+    Route::resource('categories',CategoriesController::class)->except('index');
+    Route::resource('manufactures',ManufacturesController::class)->except('index');
+    Route::resource('machine-models', MachineModelsController::class)->except('index');
 });
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/machine/post', [MachineController::class, 'store']);
-    Route::post('/machine_category/post', [MachineCategoryController::class, 'store']);
-    Route::post('/machine_manufacture/post', [MachineManufactureController::class, 'store']);
-    Route::post('/machine_model/post', [MachineModelController::class, 'store']);
-});
 
 
-
-$router->resource('machines', MachineController::class);
-
-$router->get('/machines/search/{term}', [MachineController::class, 'search']);
-$router->get('/machine_category/{equipmenttype}', [MachineCategoryController::class, 'index']);
-$router->get('/machine_manufacture/{category}', [MachineManufactureController::class, 'index']);
-$router->get('/machine_model/{subcategory}/{manufacture}', [MachineModelController::class, 'index']);
+Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
+Route::get('/categories/{equipmenttype}',[CategoriesController::class, 'index']);
+Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);
+Route::get('/models/{subcategory}/{manufacture}',[MachineModelsController::class,'index']);
