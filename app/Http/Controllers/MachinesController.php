@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MachineCollection;
+use App\Http\Resources\MachineResource;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Models\Machine;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class MachinesController extends Controller
 {
@@ -16,18 +19,24 @@ class MachinesController extends Controller
      */
     public function index()
     {
-        return Machine::all();
+        $machines = Machine::all();
+        return response()->json(new MachineCollection($machines),200);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
      */
-    public function store(Request $request): Response
+    public function store(Request $request)
     {
-        return Machine::create($request->all());
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, Machine::$cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $machine = Machine::create($inputs);
+        return response()->json(new MachineResource($machine), 200);
     }
 
     /**
@@ -38,7 +47,8 @@ class MachinesController extends Controller
      */
     public function show($id)
     {
-        //
+        $machine = Machine::findOrFail($id);
+        return response()->json(new MachineResource($machine), 200);
     }
 
     /**
@@ -50,7 +60,10 @@ class MachinesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $inputs = $request->all();
+        $machine = Machine::find($id);
+        $machine->update($inputs);
+        return response()->json(new MachineResource($machine), 200);
     }
 
     /**
@@ -61,7 +74,10 @@ class MachinesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $machine = Machine::findOrFail($id);
+        $machine->delete();
+        return response()->json(new MachineResource($machine), 200);
+
     }
 
 

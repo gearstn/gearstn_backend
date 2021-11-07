@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MachineModelCollection;
+use App\Http\Resources\MachineModelResource;
 use Illuminate\Http\Request;
 use App\Models\MachineModel;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class MachineModelsController extends Controller
 {
@@ -13,9 +16,10 @@ class MachineModelsController extends Controller
      *
      * @return Response
      */
-    public function index($sub_category, $manufacture)
+    public function index()
     {
-        return MachineModel::where('subcategory_id', '=', $sub_category)->where('manufacture_id', '=', $manufacture)->orderBy('model','ASC')->get();
+        $models = MachineModel::all();
+        return response()->json(new MachineModelCollection($models),200);
     }
 
     /**
@@ -26,13 +30,13 @@ class MachineModelsController extends Controller
      */
     public function store(Request $request)
     {
-        if (MachineModel::find($request->name)) {
-            return redirect()->back();
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, MachineModel::$cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
         }
-        if (MachineModel::where('title', '=', $request->get('title'))->count() > 0) {
-            return 'Model is already exist';
-        }
-        return MachineModel::create($request->all());
+        $models = MachineModel::create($inputs);
+        return response()->json(new MachineModelResource($models),200);
     }
 
     /**
@@ -43,7 +47,8 @@ class MachineModelsController extends Controller
      */
     public function show($id)
     {
-        //
+        $models = MachineModel::findOrFail($id);
+        return response()->json(new MachineModelResource($models),200);
     }
 
     /**
@@ -55,7 +60,10 @@ class MachineModelsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $inputs = $request->all();
+        $models = MachineModel::find($id);
+        $models->update($inputs);
+        return response()->json(new MachineModelResource($models),200);
     }
 
     /**
@@ -66,15 +74,9 @@ class MachineModelsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $models = MachineModel::findOrFail($id);
+        $models->delete();
+        return response()->json(new MachineModelResource($models),200);
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     * SELECT title FROM pages WHERE my_col LIKE %$param1% OR another_col LIKE %$param2%;
-     */
 }

@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryCollection;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class CategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     *
      */
-    public function index($equipmenttype): Response
+    public function index()
     {
-        return Category::where('category', '=', $equipmenttype)->get();
+        $categories = Category::all();
+        // return response()->json($categories,200);
+        return response()->json(new CategoryCollection($categories),200);
     }
 
     /**
@@ -27,13 +32,13 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        if (Category::find($request->name)) {
-            return redirect()->back();
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, Category::$cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
         }
-//        if (Category::where('sub_category', '=', $request->get('sub_category'))->count() > 0) {
-//            return 'Categroy is already exist';
-//        }
-        return Category::create($request->all());
+        $category = Category::create($inputs);
+        return response()->json(new CategoryResource($category), 200);
     }
 
     /**
@@ -44,7 +49,8 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return response()->json(new CategoryResource($category), 200);
     }
 
     /**
@@ -56,7 +62,10 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $inputs = $request->all();
+        $category = Category::find($id);
+        $category->update($inputs);
+        return response()->json(new CategoryResource($category), 200);
     }
 
     /**
@@ -67,7 +76,9 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->delete();
+        return response()->json(new CategoryResource($category), 200);
     }
 
 }
