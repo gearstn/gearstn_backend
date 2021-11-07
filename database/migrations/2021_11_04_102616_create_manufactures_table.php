@@ -15,7 +15,8 @@ class CreateManufacturesTable extends Migration
     {
         Schema::create('manufactures', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title_en');
+            $table->string('title_ar');
             $table->unsignedBigInteger('subcategory_id');
             $table->foreign("subcategory_id")->references("id")->on("subcategories")->onDelete("cascade");
             $table->timestamps();
