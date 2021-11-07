@@ -6,9 +6,10 @@ use App\Models\User;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
-
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -16,23 +17,22 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $attr = $request->validate([
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
             'first_name' => 'string|max:255',
             'last_name' => 'string|max:255',
             'company_name' => 'string|max:255',
-            'reg_license' => 'string|max:255',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed'
         ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
 
-        $user = User::create([
-            'first_name' => $attr['first_name'],
-            'last_name' => $attr['last_name'],
-            'company_name' => $attr['company_name'],
-            'reg_license' => $attr['reg_license'],
-            'password' => bcrypt($attr['password']),
-            'email' => $attr['email']
-        ]);
+        $inputs['password'] = bcrypt($inputs['password']);
+        $user = User::create($inputs);
+        event(new Registered($user));
+
         $token = $user->createToken('API Token')->plainTextToken;
         return response()->json([
             'access_token' => $token,
@@ -43,7 +43,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $attr = $request->validate([
-            'email' => 'required|string|email|',
+            'email' => 'required|string|email',
             'password' => 'required|string|min:6'
         ]);
 
