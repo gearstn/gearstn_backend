@@ -5,24 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MachineModel extends Model
+class SubCategory extends Model
 {
-
     use HasFactory;
-    protected $table = 'models';
+    protected $table = 'subcategories';
     protected $fillable = [
         'title_en',
         'title_ar',
         'category_id',
-        'sub_category_id',
-        'manufacture_id',
     ];
 
     public static $cast = [
-        'title_en' => 'required|unique:models',
+        'title_en' => 'required|unique:subcategories',
         'title_ar' => 'required',
         'category_id' => 'required',
-        'sub_category_id' => 'required',
-        'manufacture_id' => 'required',
     ];
 }
