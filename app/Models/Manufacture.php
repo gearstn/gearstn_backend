@@ -10,7 +10,14 @@ class Manufacture extends Model
     use HasFactory;
     protected $table = 'manufactures';
     protected $fillable = [
-        'title',
+        'title_en',
+        'title_ar',
         'subcategory_id',
+    ];
+
+    public static $cast = [
+        'title_en' => 'required|unique:manufactures',
+        'title_ar' => 'required',
+        'subcategory_id' => 'required',
     ];
 }

@@ -11,9 +11,18 @@ class MachineModel extends Model
     use HasFactory;
     protected $table = 'models';
     protected $fillable = [
-        'title',
-        'category_id', // loader, forklift, excvators
-        'subcategory_id', // loader, forklift, excvators
-        'manufacture_id', // caterpiller
+        'title_en',
+        'title_ar',
+        'category_id',
+        'sub_category_id',
+        'manufacture_id',
+    ];
+
+    public static $cast = [
+        'title_en' => 'required|unique:models',
+        'title_ar' => 'required',
+        'category_id' => 'required',
+        'sub_category_id' => 'required',
+        'manufacture_id' => 'required',
     ];
 }

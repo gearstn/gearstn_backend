@@ -10,7 +10,14 @@ class SubCategory extends Model
     use HasFactory;
     protected $table = 'subcategories';
     protected $fillable = [
-        'title',
+        'title_en',
+        'title_ar',
         'category_id',
+    ];
+
+    public static $cast = [
+        'title_en' => 'required|unique:subcategories',
+        'title_ar' => 'required',
+        'category_id' => 'required',
     ];
 }
