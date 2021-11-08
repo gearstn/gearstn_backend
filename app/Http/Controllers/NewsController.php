@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\NewsCollection;
+use App\Http\Resources\NewsResource;
 use Illuminate\Http\Request;
 use App\Models\News;
+use Illuminate\Support\Facades\Validator;
 
 class NewsController extends Controller
 {
@@ -14,7 +17,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return News::all();
+        $news = News::all();
+        return response()->json(new NewsCollection($news),200);
     }
 
     /**
@@ -25,7 +29,13 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        return News::create($request->all());
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, News::$cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $news = News::create($inputs);
+        return response()->json(new NewsResource($news), 200);
     }
 
     /**
@@ -36,7 +46,8 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        //
+        $news = News::findOrFail($id);
+        return response()->json(new NewsResource($news), 200);
     }
 
     /**
@@ -48,7 +59,10 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $inputs = $request->all();
+        $news = News::find($id);
+        $news->update($inputs);
+        return response()->json(new NewsResource($news), 200);
     }
 
     /**
@@ -59,6 +73,8 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $news = News::findOrFail($id);
+        $news->delete();
+        return response()->json(new NewsResource($news), 200);
     }
 }
