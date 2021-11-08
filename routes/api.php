@@ -5,6 +5,8 @@ use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\MachineModelsController;
 use App\Http\Controllers\MachinesController;
 use App\Http\Controllers\ManufacturesController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\AuctionsController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -46,9 +48,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit');
     Route::resource('manufactures',ManufacturesController::class)->except('create','edit');
     Route::resource('machine-models', MachineModelsController::class)->except('create','edit');
+    Route::resource('news', NewsController::class)->except('create','edit');
+    Route::resource('auctions', AuctionsController::class)->except('create','edit');
 });
 
 
+Route::get('/categories/search/{query}', [CategoriesController::class, 'search']);
 Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
 // Route::get('/categories/{equipmenttype}',[CategoriesController::class, 'index']);
 Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);

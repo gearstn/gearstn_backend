@@ -26,6 +26,7 @@ class CreateMachinesTable extends Migration
             $table->string('slug');
             $table->longText('images');
             $table->boolean('approved');
+            $table->string('skq');
 
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('category_id');
