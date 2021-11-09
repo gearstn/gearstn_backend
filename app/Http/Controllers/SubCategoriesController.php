@@ -7,6 +7,7 @@ use App\Http\Resources\SubCategoryResource;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoriesController extends Controller
 {
@@ -77,5 +78,21 @@ class SubCategoriesController extends Controller
         $sub_category = SubCategory::findOrFail($id);
         $sub_category->delete();
         return response()->json(new SubCategoryResource($sub_category),200);
+    }
+
+    public function search(Request $request)
+    {
+        // dd($request['filter']);
+
+        $inputs = $request->all();
+        $inputs = searchable_lang($inputs,'title');
+        $request->merge($inputs);
+
+        $filtered_sub_categories = QueryBuilder::for(SubCategory::class,$request)
+            ->allowedFilters('title_en', 'title_ar','category_id')
+            ->allowedSorts('id')
+            ->get();
+
+        return response()->json($filtered_sub_categories,200);
     }
 }

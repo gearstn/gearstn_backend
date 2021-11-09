@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\MachineModel;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class MachineModelsController extends Controller
 {
@@ -77,6 +78,21 @@ class MachineModelsController extends Controller
         $models = MachineModel::findOrFail($id);
         $models->delete();
         return response()->json(new MachineModelResource($models),200);
+    }
+
+
+    public function search(Request $request)
+    {
+        $inputs = $request->all();
+        $inputs = searchable_lang($inputs,'title');
+        $request->merge($inputs);
+
+        $filtered_machine_models = QueryBuilder::for(MachineModel::class,$request)
+            ->allowedFilters('title_en', 'title_ar','sub_category_id','manufacture_id')
+            ->allowedSorts('id')
+            ->get();
+
+        return response()->json($filtered_machine_models,200);
     }
 
 }

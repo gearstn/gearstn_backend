@@ -8,6 +8,7 @@ use App\Models\Manufacture;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ManufacturesController extends Controller
 {
@@ -81,5 +82,17 @@ class ManufacturesController extends Controller
         return response()->json(new ManufactureResource($manufacture),200);
     }
 
+    public function search(Request $request)
+    {
+        $inputs = $request->all();
+        $inputs = searchable_lang($inputs,'title');
+        $request->merge($inputs);
 
+        $filtered_manufactures = QueryBuilder::for(Manufacture::class,$request)
+            ->allowedFilters('title_en', 'title_ar','sub_category_id')
+            ->allowedSorts('id')
+            ->get();
+
+        return response()->json($filtered_manufactures,200);
+    }
 }

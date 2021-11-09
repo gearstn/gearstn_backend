@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use App\Models\SubCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Searchable\Search as Search;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoriesController extends Controller
@@ -83,19 +81,20 @@ class CategoriesController extends Controller
         return response()->json(new CategoryResource($category), 200);
     }
 
-    public function search($query)
+    public function search(Request $request)
     {
-        $categories = (new Search())
-            ->registerModel(SubCategory::class, ['title_en', 'title_ar'])
-            ->search($query);
+        // dd($request['filter']);
 
-        $filtered_categories = QueryBuilder::for($categories) // start from an existing Builder instance
-            // ->withTrashed() // use your existing scopes
-            ->allowedFilters('category_id')
-            /*->where('score', '>', 42)*/; // chain on any of Laravel's query builder methods
+        $inputs = $request->all();
+        $inputs = searchable_lang($inputs,'title');
+        $request->merge($inputs);
 
-        dd($filtered_categories);
-            return response()->json($filtered_categories,200);
+        $filtered_categories = QueryBuilder::for(Category::class,$request)
+            ->allowedFilters('title_en', 'title_ar')
+            ->allowedSorts('id')
+            ->get();
+
+        return response()->json($filtered_categories,200);
     }
 
 }
