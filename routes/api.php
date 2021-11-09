@@ -31,6 +31,7 @@ Route::get('/auth/login',[AuthController::class, 'login'])->name('login');
 Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
     Route::post('/auth/change-password',[AuthController::class, 'change_password']);
     Route::get('/me', function (Request $request) {
         return auth()->user();
@@ -52,9 +53,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('auctions', AuctionsController::class)->except('create','edit');
 });
 
+Route::get('/categories-search', [CategoriesController::class, 'search']);
+Route::get('/sub-categories-search', [SubCategoriesController::class, 'search']);
+Route::get('/manufactures-search', [ManufacturesController::class, 'search']);
+Route::get('/machine-models-search', [MachineModelsController::class, 'search']);
+Route::get('/machines-search', [MachinesController::class, 'search']);
+// Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
+// Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);
+// Route::get('/models/{subcategory}/{manufacture}',[MachineModelsController::class,'index']);
 
-Route::get('/categories/search/{query}', [CategoriesController::class, 'search']);
-Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
-// Route::get('/categories/{equipmenttype}',[CategoriesController::class, 'index']);
-Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);
-Route::get('/models/{subcategory}/{manufacture}',[MachineModelsController::class,'index']);
