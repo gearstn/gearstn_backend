@@ -12,12 +12,12 @@ class Manufacture extends Model
     protected $fillable = [
         'title_en',
         'title_ar',
-        'subcategory_id',
+        'sub_category_id',
     ];
 
     public static $cast = [
         'title_en' => 'required|unique:manufactures',
         'title_ar' => 'required',
-        'subcategory_id' => 'required',
+        'sub_category_id' => 'required',
     ];
 }

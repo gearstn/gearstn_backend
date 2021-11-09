@@ -17,8 +17,8 @@ class CreateManufacturesTable extends Migration
             $table->id();
             $table->string('title_en');
             $table->string('title_ar');
-            $table->unsignedBigInteger('subcategory_id');
-            $table->foreign("subcategory_id")->references("id")->on("subcategories")->onDelete("cascade");
+            $table->unsignedBigInteger('sub_category_id');
+            $table->foreign("sub_category_id")->references("id")->on("subcategories")->onDelete("cascade");
             $table->timestamps();
         });
     }

@@ -5,6 +5,8 @@ use App\Http\Controllers\SubCategoriesController;
 use App\Http\Controllers\MachineModelsController;
 use App\Http\Controllers\MachinesController;
 use App\Http\Controllers\ManufacturesController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\AuctionsController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,6 +31,7 @@ Route::get('/auth/login',[AuthController::class, 'login'])->name('login');
 Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
     Route::post('/auth/change-password',[AuthController::class, 'change_password']);
     Route::get('/me', function (Request $request) {
         return auth()->user();
@@ -46,10 +49,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit');
     Route::resource('manufactures',ManufacturesController::class)->except('create','edit');
     Route::resource('machine-models', MachineModelsController::class)->except('create','edit');
+    Route::resource('news', NewsController::class)->except('create','edit');
+    Route::resource('auctions', AuctionsController::class)->except('create','edit');
 });
 
+Route::get('/categories-search', [CategoriesController::class, 'search']);
+Route::get('/sub-categories-search', [SubCategoriesController::class, 'search']);
+Route::get('/manufactures-search', [ManufacturesController::class, 'search']);
+Route::get('/machine-models-search', [MachineModelsController::class, 'search']);
+Route::get('/machines-search', [MachinesController::class, 'search']);
+// Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
+// Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);
+// Route::get('/models/{subcategory}/{manufacture}',[MachineModelsController::class,'index']);
 
-Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
-// Route::get('/categories/{equipmenttype}',[CategoriesController::class, 'index']);
-Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);
-Route::get('/models/{subcategory}/{manufacture}',[MachineModelsController::class,'index']);

@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoriesController extends Controller
 {
@@ -20,7 +21,6 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::all();
-        // return response()->json($categories,200);
         return response()->json(new CategoryCollection($categories),200);
     }
 
@@ -79,6 +79,22 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
         return response()->json(new CategoryResource($category), 200);
+    }
+
+    public function search(Request $request)
+    {
+        // dd($request['filter']);
+
+        $inputs = $request->all();
+        $inputs = searchable_lang($inputs,'title');
+        $request->merge($inputs);
+
+        $filtered_categories = QueryBuilder::for(Category::class,$request)
+            ->allowedFilters('title_en', 'title_ar')
+            ->allowedSorts('id')
+            ->get();
+
+        return response()->json($filtered_categories,200);
     }
 
 }

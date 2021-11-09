@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\NewsCollection;
-use App\Http\Resources\NewsResource;
+use App\Http\Resources\AuctionCollection;
+use App\Http\Resources\AuctionResource;
+use App\Models\Auction;
 use Illuminate\Http\Request;
-use App\Models\News;
 use Illuminate\Support\Facades\Validator;
 
-class NewsController extends Controller
+class AuctionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,9 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::all();
-        return response()->json(new NewsCollection($news),200);
+        $auctions = Auction::all();
+        // return response()->json($categories,200);
+        return response()->json(new AuctionCollection($auctions),200);
     }
 
     /**
@@ -30,12 +31,13 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
-        $validator = Validator::make($inputs, News::$cast);
+        $validator = Validator::make($inputs, Auction::$cast);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-        $news = News::create($inputs);
-        return response()->json(new NewsResource($news), 200);
+        $auction = Auction::create($inputs);
+        return response()->json(new AuctionResource($auction), 200);
+
     }
 
     /**
@@ -46,8 +48,8 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        $news = News::findOrFail($id);
-        return response()->json(new NewsResource($news), 200);
+        $auction = Auction::findOrFail($id);
+        return response()->json(new AuctionResource($auction), 200);
     }
 
     /**
@@ -60,9 +62,9 @@ class NewsController extends Controller
     public function update(Request $request, $id)
     {
         $inputs = $request->all();
-        $news = News::find($id);
-        $news->update($inputs);
-        return response()->json(new NewsResource($news), 200);
+        $auction = Auction::find($id);
+        $auction->update($inputs);
+        return response()->json(new AuctionResource($auction), 200);
     }
 
     /**
@@ -73,8 +75,8 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        $news = News::findOrFail($id);
-        $news->delete();
-        return response()->json(new NewsResource($news), 200);
+        $auction = Auction::findOrFail($id);
+        $auction->delete();
+        return response()->json(new AuctionResource($auction), 200);
     }
 }

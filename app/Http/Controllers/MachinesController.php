@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Machine;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class MachinesController extends Controller
 {
@@ -81,19 +82,17 @@ class MachinesController extends Controller
     }
 
 
-        /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     * SELECT title FROM pages WHERE my_col LIKE %$param1% OR another_col LIKE %$param2%;
-     */
-    public function search($term)
+    public function search(Request $request)
     {
-        return Machine::where('sub_category', 'like', '%'.$term.'%')
-                    ->orWhere('manufacture', 'like', '%'.$term.'%')
-                    ->orWhere('model', 'like', '%'.$term.'%')
-                    ->orWhere('sn', 'like', '%'.$term.'%')
-                    ->get();
+        // $inputs = $request->all();
+        // $inputs = searchable_lang($inputs,'title');
+        // $request->merge($inputs);
+
+        $filtered_machine_models = QueryBuilder::for(Machine::class,$request)
+            ->allowedFilters('description','model_id','category_id','subcategory_id','manufacture_id','seller_id')
+            ->allowedSorts('id','year','condition')
+            ->get();
+
+        return response()->json($filtered_machine_models,200);
     }
 }

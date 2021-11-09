@@ -15,5 +15,13 @@ class News extends Model
         'post_date',
         'image_url',
         'bodytext',
+        'slug',
+    ];
+    public static $cast = [
+        'title' => 'required|unique:news',
+        'post_date' => 'required',
+        'image_url' => 'required',
+        'bodytext' => 'required',
+        'slug' => 'required',
     ];
 }
