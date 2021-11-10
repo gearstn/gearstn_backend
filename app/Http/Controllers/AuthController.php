@@ -28,7 +28,6 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-
         $inputs['password'] = bcrypt($inputs['password']);
         $user = User::create($inputs);
         event(new Registered($user));
@@ -39,6 +38,7 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
         ]);
     }
+
 
     public function login(Request $request)
     {
