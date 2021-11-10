@@ -5,21 +5,16 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'GearsTN api doc',
             ],
 
             'routes' => [
                 /*
                  * Route for accessing api documentation interface
                 */
-                'api' => 'api/documentation',
+                'api' => 'api/v1/docs',
             ],
             'paths' => [
-                /*
-                 * Edit to include full URL in ui for assets
-                */
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
-
                 /*
                  * File name of the generated json documentation file
                 */
@@ -77,7 +72,7 @@ return [
             /*
              * Absolute path to location where parsed annotations will be stored
             */
-            'docs' => storage_path('api-docs'),
+            'docs' => resource_path('docs'),
 
             /*
              * Absolute path to directory where to export views
@@ -105,14 +100,12 @@ return [
         'scanOptions' => [
             /**
              * analyser: defaults to \OpenApi\StaticAnalyser .
-             *
              * @see \OpenApi\scan
              */
             'analyser' => null,
 
             /**
              * analysis: defaults to a new \OpenApi\Analysis .
-             *
              * @see \OpenApi\scan
              */
             'analysis' => null,
@@ -129,7 +122,6 @@ return [
 
             /**
              * pattern: string       $pattern File pattern(s) to scan (default: *.php) .
-             *
              * @see \OpenApi\scan
              */
             'pattern' => null,
@@ -248,8 +240,8 @@ return [
         /*
          * Uncomment to add constants which can be used in annotations
          */
-        'constants' => [
-        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
-        ],
+        // 'constants' => [
+        // 'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://my-default-host.com'),
+        // ],
     ],
 ];
