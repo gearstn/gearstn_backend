@@ -25,4 +25,20 @@ class MachineModel extends Model
         'sub_category_id' => 'required',
         'manufacture_id' => 'required',
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function sub_category()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+    public function manufacture()
+    {
+        return $this->belongsTo(Manufacture::class);
+    }
+    public function machines()
+    {
+        return $this->hasMany(Machine::class);
+    }
 }
