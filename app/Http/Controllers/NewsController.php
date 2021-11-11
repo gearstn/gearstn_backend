@@ -17,8 +17,9 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::all();
-        return response()->json(new NewsCollection($news),200);
+        $news = News::paginate(number_in_page());
+        return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
+
     }
 
     /**

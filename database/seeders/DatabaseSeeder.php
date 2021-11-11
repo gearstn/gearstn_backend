@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Machine;
+use App\Models\MachineModel;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,5 +17,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        if (User::all()->count() == 0) $this->call(UserSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(SubCategorySeeder::class);
+        $this->call(ManufactureSeeder::class);
+        MachineModel::factory()->count(100)->create();
+        Machine::factory()->count(100)->create();
     }
 }

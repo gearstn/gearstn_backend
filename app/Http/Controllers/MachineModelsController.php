@@ -19,8 +19,9 @@ class MachineModelsController extends Controller
      */
     public function index()
     {
-        $models = MachineModel::all();
-        return response()->json(new MachineModelCollection($models),200);
+        $models = MachineModel::paginate(number_in_page());
+        return MachineModelResource::collection($models)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
+
     }
 
     /**

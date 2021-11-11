@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
@@ -13,15 +12,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CategoriesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     *
-     */
+
     public function index()
     {
-        $categories = Category::all();
-        return response()->json(new CategoryCollection($categories),200);
+        $categories = Category::paginate(number_in_page());
+        return CategoryResource::collection($categories)->additional(['status' => 200, 'message' => 'Categories fetched successfully']);
     }
 
     /**
@@ -83,9 +78,7 @@ class CategoriesController extends Controller
 
     public function search(Request $request)
     {
-        // dd($request['filter']);
-
-        $inputs = $request->all();
+     $inputs = $request->all();
         $inputs = searchable_lang($inputs,'title');
         $request->merge($inputs);
 

@@ -24,7 +24,7 @@ class Machine extends Model
         'approved',
         'seller_id',
         'category_id',
-        'subcategory_id',
+        'sub_category_id',
         'manufacture_id',
         'model_id',
     ];
@@ -33,8 +33,35 @@ class Machine extends Model
         'condition' => 'required',
         'sell_type' => 'required',
         'seller_id' => 'required',
-        'subcategory_id' => 'required',
+        'sub_category_id' => 'required',
         'manufacture_id' => 'required',
         'model_id' => 'required',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function sub_category()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function manufacture()
+    {
+        return $this->belongsTo(Manufacture::class);
+    }
+
+    public function machine_model()
+    {
+        return $this->belongsTo(MachineModel::class);
+    }
+
+    //User how want to sell a machine
+    public function seller()
+    {
+        return $this->belongsTo(MachineModel::class);
+    }
+
 }

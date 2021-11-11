@@ -26,15 +26,15 @@ class CreateMachinesTable extends Migration
             $table->string('slug');
             $table->longText('images');
             $table->boolean('approved');
-            $table->string('skq');
+            $table->string('skq')->nullable();
 
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('subcategory_id');
+            $table->unsignedBigInteger('sub_category_id');
             $table->unsignedBigInteger('manufacture_id');
             $table->unsignedBigInteger('seller_id');
             $table->foreign("category_id")->references("id")->on("categories")->onDelete("cascade");
-            $table->foreign("subcategory_id")->references("id")->on("subcategories")->onDelete("cascade");
+            $table->foreign("sub_category_id")->references("id")->on("subcategories")->onDelete("cascade");
             $table->foreign("manufacture_id")->references("id")->on("manufactures")->onDelete("cascade");
             $table->foreign("seller_id")->references("id")->on("users")->onDelete("cascade");
             $table->foreign("model_id")->references("id")->on("models")->onDelete("cascade");

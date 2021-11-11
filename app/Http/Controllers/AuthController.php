@@ -28,17 +28,17 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-
         $inputs['password'] = bcrypt($inputs['password']);
         $user = User::create($inputs);
         event(new Registered($user));
 
-        $token = $user->createToken('API Token')->plainTextToken;
+        // $token = $user->createToken('API Token')->plainTextToken;
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
+            'message' => 'You Have registered successfully',
+            'email_verification' => 'Please, check your Email to verify your Email',
         ]);
     }
+
 
     public function login(Request $request)
     {
@@ -71,6 +71,7 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request)
     {
+        // dd($request->all());
         $request->validate(['email' => 'required|email']);
         $status = Password::sendResetLink(
             $request->only('email')
