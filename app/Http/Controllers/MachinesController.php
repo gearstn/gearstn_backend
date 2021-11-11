@@ -20,8 +20,8 @@ class MachinesController extends Controller
      */
     public function index()
     {
-        $machines = Machine::all();
-        return response()->json(new MachineCollection($machines),200);
+        $machines = Machine::paginate(number_in_page());
+        return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
     /**
@@ -84,10 +84,6 @@ class MachinesController extends Controller
 
     public function search(Request $request)
     {
-        // $inputs = $request->all();
-        // $inputs = searchable_lang($inputs,'title');
-        // $request->merge($inputs);
-
         $filtered_machine_models = QueryBuilder::for(Machine::class,$request)
             ->allowedFilters('description','model_id','category_id','subcategory_id','manufacture_id','seller_id')
             ->allowedSorts('id','year','condition')

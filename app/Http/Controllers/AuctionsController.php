@@ -17,9 +17,8 @@ class AuctionsController extends Controller
      */
     public function index()
     {
-        $auctions = Auction::all();
-        // return response()->json($categories,200);
-        return response()->json(new AuctionCollection($auctions),200);
+        $auctions = Auction::paginate(number_in_page());
+        return AuctionResource::collection($auctions)->additional(['status' => 200, 'message' => 'Auctions fetched successfully']);
     }
 
     /**

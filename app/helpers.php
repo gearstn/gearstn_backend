@@ -11,3 +11,11 @@ if (!function_exists("searchable_lang")) {
         return $inputs;
     }
 }
+if (!function_exists("number_in_page")) {
+
+    function number_in_page($num = null)
+    {
+        $num = $num == null ? $num = 10 : $num;
+        return $num;
+    }
+}

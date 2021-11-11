@@ -18,8 +18,8 @@ class SubCategoriesController extends Controller
      */
     public function index()
     {
-        $sub_categories = SubCategory::all();
-        return response()->json(new SubCategoryCollection($sub_categories),200);
+        $sub_categories = SubCategory::paginate(number_in_page());
+        return SubCategoryResource::collection($sub_categories)->additional(['status' => 200, 'message' => 'SubCategories fetched successfully']);
     }
 
     /**
@@ -82,8 +82,6 @@ class SubCategoriesController extends Controller
 
     public function search(Request $request)
     {
-        // dd($request['filter']);
-
         $inputs = $request->all();
         $inputs = searchable_lang($inputs,'title');
         $request->merge($inputs);
