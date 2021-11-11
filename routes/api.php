@@ -55,12 +55,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 //Index of all Entities
 Route::get('/categories', [CategoriesController::class, 'index']);
-Route::get('/sub-categories', [CategoriesController::class, 'index']);
-Route::get('/manufactures', [CategoriesController::class, 'index']);
-Route::get('/machine-models', [CategoriesController::class, 'index']);
-Route::get('/machines', [CategoriesController::class, 'index']);
-Route::get('/news', [CategoriesController::class, 'index']);
-Route::get('/auctions', [CategoriesController::class, 'index']);
+Route::get('/sub-categories', [SubCategoriesController::class, 'index']);
+Route::get('/manufactures', [ManufacturesController::class, 'index']);
+Route::get('/machine-models', [MachineModelsController::class, 'index']);
+Route::get('/machines', [MachinesController::class, 'index']);
+Route::get('/news', [NewsController::class, 'index']);
+Route::get('/auctions', [AuctionsController::class, 'index']);
 
 //Search for all Entities
 Route::get('/categories-search', [CategoriesController::class, 'search']);
