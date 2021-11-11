@@ -44,21 +44,27 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
 
 
-    Route::resource('machines', MachinesController::class)->except('search');
-    Route::resource('categories',CategoriesController::class)->except('create','edit');
-    Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit');
-    Route::resource('manufactures',ManufacturesController::class)->except('create','edit');
-    Route::resource('machine-models', MachineModelsController::class)->except('create','edit');
-    Route::resource('news', NewsController::class)->except('create','edit');
-    Route::resource('auctions', AuctionsController::class)->except('create','edit');
+    Route::resource('categories',CategoriesController::class)->except('create','edit','index');
+    Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit','index');
+    Route::resource('manufactures',ManufacturesController::class)->except('create','edit','index');
+    Route::resource('machine-models', MachineModelsController::class)->except('create','edit','index');
+    Route::resource('machines', MachinesController::class)->except('create','edit','index');
+    Route::resource('news', NewsController::class)->except('create','edit','index');
+    Route::resource('auctions', AuctionsController::class)->except('create','edit','index');
 });
 
+//Index of all Entities
+Route::get('/categories', [CategoriesController::class, 'index']);
+Route::get('/sub-categories', [CategoriesController::class, 'index']);
+Route::get('/manufactures', [CategoriesController::class, 'index']);
+Route::get('/machine-models', [CategoriesController::class, 'index']);
+Route::get('/machines', [CategoriesController::class, 'index']);
+Route::get('/news', [CategoriesController::class, 'index']);
+Route::get('/auctions', [CategoriesController::class, 'index']);
+
+//Search for all Entities
 Route::get('/categories-search', [CategoriesController::class, 'search']);
 Route::get('/sub-categories-search', [SubCategoriesController::class, 'search']);
 Route::get('/manufactures-search', [ManufacturesController::class, 'search']);
 Route::get('/machine-models-search', [MachineModelsController::class, 'search']);
 Route::get('/machines-search', [MachinesController::class, 'search']);
-// Route::get('/machines/search/{term}', [MachinesController::class, 'search']);
-// Route::get('/manufactures/{category}',[ManufacturesController::class, 'index']);
-// Route::get('/models/{subcategory}/{manufacture}',[MachineModelsController::class,'index']);
-
