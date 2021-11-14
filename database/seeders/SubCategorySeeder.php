@@ -25,47 +25,42 @@ class SubCategorySeeder extends Seeder
         $sub_categories = [
             [
                 'title_en' => 'wheel loaders',
-                'title_ar' => 'wheel loaders',
+                'title_ar' => 'رافعات شوكية',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'excavators',
-                'title_ar' => 'excavators',
+                'title_ar' => 'حفارات',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'backhoe loader',
-                'title_ar' => 'backhoe loader',
-                'category_id' => Category::all()->random()->id,
-            ],
-            [
-                'title_en' => 'backhoe loader',
-                'title_ar' => 'backhoe loader',
+                'title_ar' => 'لودر حفار',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'roller',
-                'title_ar' => 'roller',
+                'title_ar' => 'أسطوانة',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'wheel excavators',
-                'title_ar' => 'wheel excavators',
+                'title_ar' => 'حفارات ذات عجلات',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'crawlaer loaders',
-                'title_ar' => 'crawlaer loaders',
+                'title_ar' => 'لوادر زحافة',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'skid steere',
-                'title_ar' => 'skid steere',
+                'title_ar' => 'انزلاقية التوجيه',
                 'category_id' => Category::all()->random()->id,
             ],
             [
                 'title_en' => 'dozer',
-                'title_ar' => 'dozer',
+                'title_ar' => 'الجرار',
                 'category_id' => Category::all()->random()->id,
             ],
        ];
