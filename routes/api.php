@@ -44,23 +44,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
 
 
-    Route::resource('categories',CategoriesController::class)->except('create','edit','index');
-    Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit','index');
-    Route::resource('manufactures',ManufacturesController::class)->except('create','edit','index');
-    Route::resource('machine-models', MachineModelsController::class)->except('create','edit','index');
-    Route::resource('machines', MachinesController::class)->except('create','edit','index');
-    Route::resource('news', NewsController::class)->except('create','edit','index');
-    Route::resource('auctions', AuctionsController::class)->except('create','edit','index');
+    Route::resource('categories',CategoriesController::class)->except('create','edit','index','show');
+    Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit','index','show');
+    Route::resource('manufactures',ManufacturesController::class)->except('create','edit','index','show');
+    Route::resource('machine-models', MachineModelsController::class)->except('create','edit','index','show');
+    Route::resource('machines', MachinesController::class)->except('create','edit','index','show');
+    Route::resource('news', NewsController::class)->except('create','edit','index','show');
+    Route::resource('auctions', AuctionsController::class)->except('create','edit','index','show');
 });
 
-//Index of all Entities
-Route::get('/categories', [CategoriesController::class, 'index']);
-Route::get('/sub-categories', [SubCategoriesController::class, 'index']);
-Route::get('/manufactures', [ManufacturesController::class, 'index']);
-Route::get('/machine-models', [MachineModelsController::class, 'index']);
-Route::get('/machines', [MachinesController::class, 'index']);
-Route::get('/news', [NewsController::class, 'index']);
-Route::get('/auctions', [AuctionsController::class, 'index']);
+//Index & Show of all Entities
+Route::resource('categories',CategoriesController::class)->only('index','show');
+Route::resource('sub-categories',SubCategoriesController::class)->only('index','show');
+Route::resource('manufactures',ManufacturesController::class)->only('index','show');
+Route::resource('machine-models', MachineModelsController::class)->only('index','show');
+Route::resource('machines', MachinesController::class)->only('index','show');
+Route::resource('news', NewsController::class)->only('index','show');
+Route::resource('auctions', AuctionsController::class)->only('index','show');
 
 //Search for all Entities
 Route::get('/categories-search', [CategoriesController::class, 'search']);

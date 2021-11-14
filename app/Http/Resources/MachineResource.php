@@ -2,6 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Category;
+use App\Models\MachineModel;
+use App\Models\Manufacture;
+use App\Models\SubCategory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MachineResource extends JsonResource
@@ -14,6 +18,7 @@ class MachineResource extends JsonResource
      */
     public function toArray($request)
     {
+        $selected_columns = ['id','title_en','title_ar'];
         $data = [
             "id" => $this->id,
             'year' => $this->year,
@@ -28,10 +33,10 @@ class MachineResource extends JsonResource
             'images' => $this->images,
             'approved' => $this->approved,
             'seller_id' => $this->seller_id,
-            'category_id' => $this->category_id,
-            'sub_category_id' => $this->sub_category_id,
-            'manufacture_id' => $this->manufacture_id,
-            'model_id' => $this->model_id,
+            'category_id' => Category::find($this->category_id,$selected_columns),
+            'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
+            'manufacture_id' => Manufacture::find($this->manufacture_id,$selected_columns),
+            'model_id' => MachineModel::find($this->model_id,$selected_columns),
         ];
         return $data;
     }
