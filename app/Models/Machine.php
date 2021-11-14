@@ -22,6 +22,8 @@ class Machine extends Model
         'slug',
         'images',
         'approved',
+        'skq',
+        'price',
         'seller_id',
         'category_id',
         'sub_category_id',

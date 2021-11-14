@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         $this->call(SubCategorySeeder::class);
         $this->call(ManufactureSeeder::class);
-        MachineModel::factory()->count(100)->create();
-        Machine::factory()->count(100)->create();
+        MachineModel::factory()->count(500)->create();
+        Machine::factory()->count(1000)->create();
     }
 }
