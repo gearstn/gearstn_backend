@@ -11,6 +11,7 @@ use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -28,7 +29,13 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 Route::get('/auth/login',[AuthController::class, 'login'])->name('login');
 
 // FORGET PASSWORD
-Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
+// Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
+// Route::post('/auth/reset-password-token',[AuthController::class, 'resetPassword'])->name('reset-password-token');
+// Route::post('/auth/new-password',[AuthController::class, 'newPassword'])->name('new-password');
+// Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('/auth/forget-password', [ForgotPasswordController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+Route::get('reset-password/{token}', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('/auth/reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 

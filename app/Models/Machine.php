@@ -22,7 +22,7 @@ class Machine extends Model
         'slug',
         'images',
         'approved',
-        'skq',
+        'sku',
         'price',
         'seller_id',
         'category_id',

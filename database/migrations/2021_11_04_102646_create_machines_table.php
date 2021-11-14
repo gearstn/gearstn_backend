@@ -26,7 +26,7 @@ class CreateMachinesTable extends Migration
             $table->string('slug');
             $table->longText('images');
             $table->boolean('approved');
-            $table->string('skq')->nullable();
+            $table->string('sku')->nullable();
             $table->BigInteger('price')->nullable();
 
             $table->unsignedBigInteger('model_id');

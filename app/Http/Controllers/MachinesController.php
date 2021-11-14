@@ -85,10 +85,14 @@ class MachinesController extends Controller
     public function search(Request $request)
     {
         $filtered_machine_models = QueryBuilder::for(Machine::class,$request)
-            ->allowedFilters('description','model_id','category_id','subcategory_id','manufacture_id','seller_id')
-            ->allowedSorts('id','year','condition')
-            ->get();
-
-        return response()->json($filtered_machine_models,200);
+            ->allowedFilters('description','model_id','category_id','subcategory_id',
+                             'manufacture_id','seller_id','category.title_en','category.title_ar',
+                             'sub_category.title_en','sub_category.title_ar',
+                             'manufacture.title_en','manufacture.title_ar',
+                             'machine_model.title_en','machine_model.title_ar')
+            ->allowedIncludes('category','sub_category','manufacture','machine_model')
+            ->allowedSorts('id','year','price')
+            ->paginate(number_in_page());
+        return MachineResource::collection($filtered_machine_models)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 }

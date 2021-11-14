@@ -32,6 +32,7 @@ class MachineResource extends JsonResource
             'slug' => $this->slug,
             'images' => $this->images,
             'approved' => $this->approved,
+            'price' => $this->price,
             'seller_id' => $this->seller_id,
             'category_id' => Category::find($this->category_id,$selected_columns),
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
