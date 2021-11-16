@@ -63,8 +63,8 @@ Route::resource('news', NewsController::class)->only('index','show');
 Route::resource('auctions', AuctionsController::class)->only('index','show');
 
 //Search for all Entities
-Route::get('/categories-search', [CategoriesController::class, 'search']);
-Route::get('/sub-categories-search', [SubCategoriesController::class, 'search']);
-Route::get('/manufactures-search', [ManufacturesController::class, 'search']);
-Route::get('/machine-models-search', [MachineModelsController::class, 'search']);
+// Route::get('/categories-search', [CategoriesController::class, 'search']);
+// Route::get('/sub-categories-search', [SubCategoriesController::class, 'search']);
+// Route::get('/manufactures-search', [ManufacturesController::class, 'search']);
+// Route::get('/machine-models-search', [MachineModelsController::class, 'search']);
 Route::get('/machines-search', [MachinesController::class, 'search']);
