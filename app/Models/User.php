@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens;
-
+    use HasFactory, Notifiable, HasApiTokens , SoftDeletes;
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +25,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'tax_license',
+        'tax_license_image',
         'commercial_license',
+        'commercial_license_image',
         'country',
     ];
 
@@ -43,9 +46,18 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    // ];
+
+
+    // public static $cast = [
+    //     'first_name' => 'required|unique:news',
+    //     'last_name' => 'required',
+    //     'company_name' => 'required',
+    //     'email' => 'required',
+    //     'slug' => 'required',
+    // ];
 
     public function machines()
     {
