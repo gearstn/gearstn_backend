@@ -18,14 +18,16 @@ class CreateMachinesTable extends Migration
             $table->integer('year');
             $table->string('sn');
             $table->string('condition');
-            $table->string('hours');
+            $table->string('hours')->nullable();
             $table->longText('description');
             $table->string('sell_type');
             $table->string('rent_hours');
             $table->string('country');
+            $table->string('city');
             $table->string('slug');
             $table->longText('images');
             $table->boolean('approved');
+            $table->boolean('featured');
             $table->string('skq')->nullable();
             $table->BigInteger('price')->nullable();
 
