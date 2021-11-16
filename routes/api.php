@@ -11,6 +11,7 @@ use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -32,10 +33,11 @@ Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    Route::post('/auth/change-password',[AuthController::class, 'change_password']);
-    Route::get('/me', function (Request $request) {
-        return auth()->user();
-    });
+    Route::post('/users/change-password',[UsersController::class, 'change_password']);
+    Route::get('/users/NormalUser/{id}',[UsersController::class, 'getNormalUser']);
+    Route::get('/users/FullUser/{id}',[UsersController::class, 'getFullUser']);
+    Route::resource('users',UsersController::class)->only('update','destroy');
+
     Route::post('/auth/logout',[AuthController::class, 'logout']);
 
     //Verification Routes

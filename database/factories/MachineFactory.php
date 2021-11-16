@@ -24,6 +24,7 @@ class MachineFactory extends Factory
                     "https://s3.eu-central-1.amazonaws.com/gears-tn-bucket/uploads/0d4c5eaf-e3dd-4a28-bb9a-8c54afdd33194.jpg"];
         $model = MachineModel::all()->random();
         $condition = $this->faker->randomElement(['new', 'used']);
+        $price = $this->faker->numberBetween(0,1000000);
         return [
             'year' => $this->faker->year($max = 'now'),
             'sn' => $this->faker->bothify('???????'),
@@ -39,7 +40,7 @@ class MachineFactory extends Factory
             'approved' => $this->faker->numberBetween(0,1),
             'featured' => $this->faker->numberBetween(0,1),
             'skq' => $this->faker->bothify('?????????'),
-            'price' => $this->faker->numberBetween(0,1000000),
+            'price' => $price <= 100000 ? 0 : $price,
             'model_id' => $model->id,
             'category_id' => $model->category_id,
             'sub_category_id' => $model->sub_category_id,
