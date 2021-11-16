@@ -23,18 +23,21 @@ class MachineFactory extends Factory
                     "https://s3.eu-central-1.amazonaws.com/gears-tn-bucket/uploads/c890a047-e71c-4758-a3a2-b0744ad290ca3.jpg",
                     "https://s3.eu-central-1.amazonaws.com/gears-tn-bucket/uploads/0d4c5eaf-e3dd-4a28-bb9a-8c54afdd33194.jpg"];
         $model = MachineModel::all()->random();
+        $condition = $this->faker->randomElement(['new', 'used']);
         return [
             'year' => $this->faker->year($max = 'now'),
             'sn' => $this->faker->bothify('???????'),
-            'condition' => $this->faker->randomElement(['new', 'used']),
-            'hours' => $this->faker->numberBetween(1,80),
+            'condition' => $condition,
+            'hours' => $condition == 'new'? null : $this->faker->numberBetween(1,80),
             'description' => $this->faker->realText($maxNbChars = 200, $indexSize = 2) ,
             'sell_type' => $this->faker->randomElement(['sell', 'rent']),
             'rent_hours' => $this->faker->numberBetween(1,80),
             'country' => $this->faker->country(),
+            'city' => $this->faker->city(),
             'slug' => $this->faker->url(),
             'images' => $this->faker->randomElement($images),
             'approved' => $this->faker->numberBetween(0,1),
+            'featured' => $this->faker->numberBetween(0,1),
             'skq' => $this->faker->bothify('?????????'),
             'price' => $this->faker->numberBetween(0,1000000),
             'model_id' => $model->id,
