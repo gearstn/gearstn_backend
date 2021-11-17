@@ -34,11 +34,13 @@ Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
+    //User profile routes
     Route::post('/users/change-password',[UsersController::class, 'change_password']);
     Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
     Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
     Route::resource('users',UsersController::class)->only('update','destroy');
 
+    //Logout User
     Route::post('/auth/logout',[AuthController::class, 'logout']);
 
     //Verification Routes
