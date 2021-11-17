@@ -59,7 +59,7 @@ class Machine extends Model
         return $this->belongsTo(Manufacture::class);
     }
 
-    public function machine_model()
+    public function model()
     {
         return $this->belongsTo(MachineModel::class);
     }
@@ -67,7 +67,7 @@ class Machine extends Model
     //User how want to sell a machine
     public function seller()
     {
-        return $this->belongsTo(MachineModel::class);
+        return $this->belongsTo(User::class);
     }
 
         /**
@@ -97,7 +97,8 @@ class Machine extends Model
             'sub_category_title_ar' => $this->sub_category['title_ar'],
             'manufacture_title_en' => $this->manufacture['title_en'],
             'manufacture_title_ar' => $this->manufacture['title_ar'],
-            'model' => $this->machine_model,
+            'model_title_en' => $this->model['title_en'],
+            'model_title_ar' => $this->model['title_ar'],
         ];
     }
 
