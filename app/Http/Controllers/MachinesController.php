@@ -127,7 +127,7 @@ class MachinesController extends Controller
         });
 
         //Sort the collection of machines if requested
-        $q = $q->when($inputs['sort_by'] != null , function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['sort_by']) && $inputs['sort_by'] != null , function ($q) use ($inputs) {
             if($inputs['sort_order'] == 'asce')
                 return $q->sortBy($inputs['sort_by']);
             else
