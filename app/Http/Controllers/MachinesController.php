@@ -95,34 +95,34 @@ class MachinesController extends Controller
         MachineResource::collection($q);
 
         //Filter for every attribute we want to filter
-        $q = $q->when($inputs['category_id'] != null, function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['category_id']) && $inputs['category_id'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { if($item->category_id == $inputs['category_id'] )return true;});
         });
-        $q = $q->when($inputs['sub_category_id'] != null, function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['sub_category_id']) && $inputs['sub_category_id'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) {  return $item->sub_category_id == $inputs['sub_category_id']; });
         });
-        $q = $q->when($inputs['manufacture_id'] != null, function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['manufacture_id']) && $inputs['manufacture_id'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->manufacture_id == $inputs['manufacture_id']; });
         });
-        $q = $q->when($inputs['model_id'] != null, function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['model_id']) && $inputs['model_id'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->model_id == $inputs['model_id']; });
         });
-        $q = $q->when($inputs['sell_type'] != null, function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['sell_type']) && $inputs['sell_type'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->sell_type == $inputs['sell_type']; });
         });
-        $q = $q->when($inputs['condition'] != null, function ($q) use ($inputs) {
+        $q = $q->when(isset($inputs['condition']) && $inputs['condition'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->condition == $inputs['condition']; });
         });
-        $q = $q->when($inputs['country'] != null, function ($q) use ($inputs) {
+        $q = $q->when( isset($inputs['country']) && $inputs['country'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->country == $inputs['country']; });
         });
-        $q = $q->when($inputs['min_price'] != null || $inputs['max_price'] != null, function ($q) use ($inputs) {
+        $q = $q->when( ( isset($inputs['min_price']) || isset($inputs['max_price']) )  && ($inputs['min_price'] != null || $inputs['max_price'] != null), function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->price >= $inputs['min_price'] && $inputs['max_price'] >= $item->price ; });
         });
-        $q = $q->when($inputs['min_year'] != null || $inputs['max_year'], function ($q) use ($inputs) {
+        $q = $q->when( ( isset($inputs['min_year']) || isset($inputs['max_year'])) && ($inputs['min_year'] != null || $inputs['max_year']) , function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->year >= $inputs['min_year'] && $inputs['max_year'] >= $item->year; });
         });
-        $q = $q->when($inputs['min_hours'] != null || $inputs['max_hours'] != null, function ($q) use ($inputs) {
+        $q = $q->when( ( isset($inputs['min_hours'] ) || isset($inputs['max_hours']) ) && ($inputs['min_hours'] != null || $inputs['max_hours'] != null) , function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->hours >= $inputs['min_hours'] && $inputs['max_hours'] >= $item->hours; });
         });
 

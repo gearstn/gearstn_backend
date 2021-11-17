@@ -15,11 +15,11 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return Response
      */
-    public function getNormalUser($id)
+    public function getNormalUser()
     {
+        $id  = Auth::user()->id;
         $user = User::findOrFail($id);
         return response()->json(new NormalUserResource($user), 200);
     }
@@ -27,11 +27,11 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return Response
      */
-    public function getFullUser($id)
+    public function getFullUser()
     {
+        $id  = Auth::user()->id;
         $user = User::findOrFail($id);
         return response()->json(new FullUserResource($user), 200);
     }

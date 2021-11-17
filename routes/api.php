@@ -11,6 +11,7 @@ use App\Http\Controllers\VerificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,8 +35,8 @@ Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/users/change-password',[UsersController::class, 'change_password']);
-    Route::get('/users/NormalUser/{id}',[UsersController::class, 'getNormalUser']);
-    Route::get('/users/FullUser/{id}',[UsersController::class, 'getFullUser']);
+    Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
+    Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
     Route::resource('users',UsersController::class)->only('update','destroy');
 
     Route::post('/auth/logout',[AuthController::class, 'logout']);
@@ -53,6 +54,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('machines', MachinesController::class)->except('create','edit','index','show');
     Route::resource('news', NewsController::class)->except('create','edit','index','show');
     Route::resource('auctions', AuctionsController::class)->except('create','edit','index','show');
+
+    Route::get('/cart', [CartsController::class,'getCart'])->name('cart');
+    Route::post('/cart/add', [CartsController::class,'addToCart'])->name('cart.add');
+    Route::get('/cart/remove/{$id}', [CartsController::class,'removeItem'])->name('cart.remove');
+    Route::post('/cart/clear', [CartsController::class,'clearCart'])->name('cart.clear');
 });
 
 //Index & Show of all Entities
