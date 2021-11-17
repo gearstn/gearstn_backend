@@ -86,8 +86,8 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
         //Full Search in all fields
-        if($inputs['search_query'] != null )
-            $q = Machine::search($inputs['search_query'])->get();
+        if($inputs['query'] != null )
+            $q = Machine::search($inputs['query'])->get();
         else
             $q = Machine::all();
 
@@ -96,7 +96,7 @@ class MachinesController extends Controller
 
         //Filter for every attribute we want to filter
         $q = $q->when($inputs['category_id'] != null, function ($q) use ($inputs) {
-           return $q->filter(function ($item) use ($inputs) { if($item->category_id == $inputs['category_id'] )return true;});
+            return $q->filter(function ($item) use ($inputs) { if($item->category_id == $inputs['category_id'] )return true;});
         });
         $q = $q->when($inputs['sub_category_id'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) {  return $item->sub_category_id == $inputs['sub_category_id']; });
@@ -136,7 +136,7 @@ class MachinesController extends Controller
 
 
         //Adding Pagination to a collection
-        $paginatedResult = CollectionPaginate::paginate($q, 1000);
+        $paginatedResult = CollectionPaginate::paginate($q, 10);
         return MachineResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 }
