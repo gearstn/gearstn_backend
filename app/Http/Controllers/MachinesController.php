@@ -139,4 +139,17 @@ class MachinesController extends Controller
         $paginatedResult = CollectionPaginate::paginate($q, 10);
         return MachineResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
+
+
+
+    public function getMinMaxOfField(){
+        $results =[];
+        $results['max_price'] = Machine::max('price');
+        $results['min_price'] = Machine::min('price');
+        $results['max_year'] = Machine::max('year');
+        $results['min_year'] = Machine::min('year');
+        $results['max_hours'] = Machine::max('hours');
+        $results['min_hours'] = Machine::min('hours');
+        return response()->json($results,200);
+    }
 }
