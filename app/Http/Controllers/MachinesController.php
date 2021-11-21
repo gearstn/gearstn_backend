@@ -86,7 +86,7 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
         //Full Search in all fields
-        if($inputs['query'] != null )
+        if( isset($inputs['query']) && $inputs['query'] != null )
             $q = Machine::search($inputs['query'])->get();
         else
             $q = Machine::all();
