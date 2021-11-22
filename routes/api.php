@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartsController;
+use App\Http\Controllers\SavedListController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 
@@ -57,10 +58,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('news', NewsController::class)->except('create','edit','index','show');
     Route::resource('auctions', AuctionsController::class)->except('create','edit','index','show');
 
-    Route::get('/cart', [CartsController::class,'getCart'])->name('cart');
-    Route::post('/cart/add', [CartsController::class,'addToCart'])->name('cart.add');
-    Route::get('/cart/remove/{$id}', [CartsController::class,'removeItem'])->name('cart.remove');
-    Route::post('/cart/clear', [CartsController::class,'clearCart'])->name('cart.clear');
+    Route::get('/list', [SavedListController::class,'getList'])->name('list');
+    Route::post('/list/add', [SavedListController::class,'addToList'])->name('list.add');
+    Route::post('/list/remove', [SavedListController::class,'removeItem'])->name('list.remove');
+    Route::get('/list/clear', [SavedListController::class,'clearList'])->name('list.clear');
 });
 
 //Index & Show of all Entities

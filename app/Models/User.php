@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use LamaLama\Wishlist\HasWishlists;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens , SoftDeletes;
+    use HasWishlists;
+
     protected $dates = ['deleted_at'];
     /**
      * The attributes that are mass assignable.

@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use LamaLama\Wishlist\Wishlistable;
 
 class Machine extends Model
 {
-
     use HasFactory;
     use Searchable;
+    use Wishlistable;
     protected $table = 'machines';
     protected $fillable = [
         'year',
