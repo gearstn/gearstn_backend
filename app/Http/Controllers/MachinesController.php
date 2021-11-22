@@ -86,8 +86,8 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
         //Full Search in all fields
-        if( isset($inputs['query']) && $inputs['query'] != null )
-            $q = Machine::search($inputs['query'])->get();
+        if( isset($inputs['search_query']) && $inputs['search_query'] != null )
+            $q = Machine::search($inputs['search_query'])->get();
         else
             $q = Machine::all();
 
@@ -116,6 +116,9 @@ class MachinesController extends Controller
         $q = $q->when( isset($inputs['country']) && $inputs['country'] != null, function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->country == $inputs['country']; });
         });
+        $q = $q->when( isset($inputs['city']) && $inputs['city'] != null, function ($q) use ($inputs) {
+            return $q->filter(function ($item) use ($inputs) { return $item->city == $inputs['city']; });
+        });
         $q = $q->when( ( isset($inputs['min_price']) || isset($inputs['max_price']) )  && ($inputs['min_price'] != null || $inputs['max_price'] != null), function ($q) use ($inputs) {
             return $q->filter(function ($item) use ($inputs) { return $item->price >= $inputs['min_price'] && $inputs['max_price'] >= $item->price ; });
         });
@@ -128,12 +131,12 @@ class MachinesController extends Controller
 
         //Sort the collection of machines if requested
         $q = $q->when( isset($inputs['sort_by']) && $inputs['sort_by'] != null , function ($q) use ($inputs) {
-            if($inputs['sort_order'] == 'asce')
-                return $q->sortBy($inputs['sort_by']);
+            $sort = explode( '_', $inputs['sort_by'] );
+            if($sort[1] == 'asc')
+                return $q->sortBy($sort[0]);
             else
-                return $q->SortByDesc($inputs['sort_by']);
+                return $q->SortByDesc($sort[0]);
         });
-
 
         //Adding Pagination to a collection
         $paginatedResult = CollectionPaginate::paginate($q, 10);

@@ -25,8 +25,11 @@ class MachineFactory extends Factory
         $model = MachineModel::all()->random();
         $condition = $this->faker->randomElement(['new', 'used']);
         $price = $this->faker->numberBetween(0,1000000);
+        $year = $this->faker->year($max = 'now');
+        $sku = $this->faker->bothify('######');
+        $manufacture = Manufacture::find($model->manufacture_id)->first()->title_en;
         return [
-            'year' => $this->faker->year($max = 'now'),
+            'year' => $year,
             'sn' => $this->faker->bothify('???????'),
             'condition' => $condition,
             'hours' => $condition == 'new'? null : $this->faker->numberBetween(1,80),
@@ -35,11 +38,12 @@ class MachineFactory extends Factory
             'rent_hours' => $this->faker->numberBetween(1,80),
             'country' => $this->faker->country(),
             'city' => $this->faker->city(),
-            'slug' => $this->faker->url(),
+            'slug' => $year.'-'.$manufacture.'-'.$model->title_en.'-'.$sku,
             'images' => $this->faker->randomElement($images),
             'approved' => $this->faker->numberBetween(0,1),
             'featured' => $this->faker->numberBetween(0,1),
-            'skq' => $this->faker->bothify('?????????'),
+            'verified' => $this->faker->numberBetween(0,1),
+            'sku' => $sku,
             'price' => $price <= 100000 ? 0 : $price,
             'model_id' => $model->id,
             'category_id' => $model->category_id,
