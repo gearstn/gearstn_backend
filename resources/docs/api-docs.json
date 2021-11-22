@@ -1754,27 +1754,6 @@
         },
 
 
-        "/Cart/": {
-            "get": {
-                "tags": [
-                    "Cart"
-                ],
-                "summary": "Get list of Cart",
-                "description": "Returns list of Auctions",
-                "operationId": "getAuctionsList",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    }
-                }
-            }
-        },
         "/auctions": {
             "post": {
                 "tags": [
@@ -1971,11 +1950,11 @@
         "/cart": {
             "get": {
                 "tags": [
-                    "Cart"
+                    "Save List"
                 ],
-                "summary": "Get list of Cart",
-                "description": "Returns list of Cart",
-                "operationId": "getCartList",
+                "summary": "Get saved list ",
+                "description": "Returns Saved list",
+                "operationId": "getSavedList",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -1989,14 +1968,14 @@
                 }
             }
         },
-        "/cart/add": {
+        "/list/add": {
             "post": {
                 "tags": [
-                    "Cart"
+                    "Save List"
                 ],
-                "summary": "Store a Cart",
-                "description": "Store in a Cart and return Cart list",
-                "operationId": "storeCart",
+                "summary": "Store a Machine in save list",
+                "description": "Store in a Save list and return list",
+                "operationId": "storeSavedList",
                 "parameters": [
                     {
                         "name": "Authorization",
@@ -2006,7 +1985,7 @@
                         "value": "bearer"
                     },
                     {
-                        "name": "id",
+                        "name": "machine_id",
                         "in": "query",
                         "required": true,
                         "value": "machine_id",
@@ -2028,14 +2007,32 @@
                 }
             }
         },
-        "/cart/remove/{id}": {
+        "/list/remove": {
             "post": {
                 "tags": [
-                    "Cart"
+                    "Save List"
                 ],
-                "summary": "remove from Cart",
-                "description": "remove from Cart and return Cart list",
-                "operationId": "removeCart",
+                "summary": "remove from saved list",
+                "description": "remove from saved list and return saved list",
+                "operationId": "removeSavedList",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "value": "bearer"
+                    },
+                    {
+                        "name": "machine_id",
+                        "in": "query",
+                        "required": true,
+                        "value": "machine_id",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -2049,14 +2046,14 @@
                 }
             }
         },
-        "/cart/clear": {
+        "/list/clear": {
             "get": {
                 "tags": [
-                    "Cart"
+                    "Save List"
                 ],
-                "summary": "clear cart list",
-                "description": "clear cart list",
-                "operationId": "clearCartList",
+                "summary": "clear Saved list",
+                "description": "clear Saved list",
+                "operationId": "clearSavedList",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
