@@ -46,9 +46,9 @@ class MachinesController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $machine = Machine::findOrFail($id);
+        $machine = Machine::where('slug', '=', $slug)->firstOrFail();
         return response()->json(new MachineResource($machine), 200);
     }
 
@@ -78,7 +78,6 @@ class MachinesController extends Controller
         $machine = Machine::findOrFail($id);
         $machine->delete();
         return response()->json(new MachineResource($machine), 200);
-
     }
 
 
@@ -102,7 +101,7 @@ class MachinesController extends Controller
         $q =  machines_filter($q, isset( $inputs['sell_type'] ) ? $inputs['sell_type'] : null,'sell_type');
         $q =  machines_filter($q, isset( $inputs['condition'] ) ? $inputs['condition'] : null,'condition');
         $q =  machines_filter($q, isset( $inputs['country'] ) ? $inputs['country'] : null,'country');
-        $q =  machines_filter($q, isset( $inputs['city'] ) ? $inputs['city'] : null,'city');
+        $q =  machines_filter($q, isset( $inputs['city_id'] ) ? $inputs['city_id'] : null,'city_id');
         $q =  machines_range_filter($q, isset($inputs['min_price'] ) ? $inputs['min_price'] : null , isset($inputs['max_price'] ) ? $inputs['max_price'] : null , 'price');
         $q =  machines_range_filter($q, isset($inputs['min_year'] ) ? $inputs['min_year'] : null , isset($inputs['max_year'] ) ? $inputs['max_year'] : null , 'year');
         $q =  machines_range_filter($q, isset($inputs['min_hours'] ) ? $inputs['min_hours'] : null , isset($inputs['max_hours'] ) ? $inputs['max_hours'] : null , 'hours');
