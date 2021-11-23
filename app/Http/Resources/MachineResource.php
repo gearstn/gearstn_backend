@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Category;
+use App\Models\City;
 use App\Models\MachineModel;
 use App\Models\Manufacture;
 use App\Models\SubCategory;
@@ -35,6 +36,7 @@ class MachineResource extends JsonResource
             'price' => $this->price,
             'approved' => $this->approved,
             'seller_id' => $this->seller_id,
+            'city_id' => City::find($this->city_id,$selected_columns),
             'category_id' => Category::find($this->category_id,$selected_columns),
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
             'manufacture_id' => Manufacture::find($this->manufacture_id,$selected_columns),
