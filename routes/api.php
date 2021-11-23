@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartsController;
+use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\SavedListController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +50,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
     Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
 
-
     Route::resource('categories',CategoriesController::class)->except('create','edit','index','show');
     Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit','index','show');
     Route::resource('manufactures',ManufacturesController::class)->except('create','edit','index','show');
@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('machines', MachinesController::class)->except('create','edit','index','show');
     Route::resource('news', NewsController::class)->except('create','edit','index','show');
     Route::resource('auctions', AuctionsController::class)->except('create','edit','index','show');
+    Route::resource('cities', CitiesController::class)->except('create','edit','index','show');
 
     Route::get('/list', [SavedListController::class,'getList'])->name('list');
     Route::post('/list/add', [SavedListController::class,'addToList'])->name('list.add');
@@ -72,6 +73,7 @@ Route::resource('machine-models', MachineModelsController::class)->only('index',
 Route::resource('machines', MachinesController::class)->only('index','show');
 Route::resource('news', NewsController::class)->only('index','show');
 Route::resource('auctions', AuctionsController::class)->only('index','show');
+Route::resource('cities', CitiesController::class)->only('index','show');
 
 //Search for all Entities
 // Route::get('/categories-search', [CategoriesController::class, 'search']);
