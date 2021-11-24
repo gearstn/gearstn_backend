@@ -176,7 +176,11 @@ return [
         App\Providers\RouteServiceProvider::class,
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
-        // Darryldecode\Cart\Facades\CartFacade::class
+
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Yajra\DataTables\EditorServiceProvider::class,
+        Yajra\DataTables\ButtonsServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class
     ],
 
     /*
@@ -228,7 +232,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Cart' => Darryldecode\Cart\Facades\CartFacade::class
+        'Datatables' => Yajra\DataTables\Facades\DataTables::class,
+        'form' => Collective\Html\FormFacade::class,
     ],
 
 ];

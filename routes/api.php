@@ -1,21 +1,18 @@
 <?php
 
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\SubCategoriesController;
-use App\Http\Controllers\MachineModelsController;
-use App\Http\Controllers\MachinesController;
-use App\Http\Controllers\ManufacturesController;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\AuctionsController;
-use App\Http\Controllers\VerificationController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Frontend\CategoriesController;
+use App\Http\Controllers\Frontend\SubCategoriesController;
+use App\Http\Controllers\Frontend\MachineModelsController;
+use App\Http\Controllers\Frontend\MachinesController;
+use App\Http\Controllers\Frontend\ManufacturesController;
+use App\Http\Controllers\Frontend\NewsController;
+use App\Http\Controllers\Frontend\AuctionsController;
+use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CartsController;
-use App\Http\Controllers\CitiesController;
-use App\Http\Controllers\SavedListController;
-use App\Http\Controllers\UsersController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Frontend\CitiesController;
+use App\Http\Controllers\Frontend\SavedListController;
+use App\Http\Controllers\Frontend\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,57 +25,54 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::post('/auth/register', [AuthController::class, 'register']);
-Route::get('/auth/login',[AuthController::class, 'login'])->name('login');
 
-// FORGET PASSWORD
-Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
+//Routes for frontend
+Route::prefix('/')->group(function () {
+    //Login & register Frontend
+    Route::post('/auth/register', [AuthController::class, 'register']);
+    Route::get('/auth/login',[AuthController::class, 'login'])->name('frontend_login');
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+    // FORGET PASSWORD
+    Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
 
-    //User profile routes
-    Route::post('/users/change-password',[UsersController::class, 'change_password']);
-    Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
-    Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
-    Route::resource('users',UsersController::class)->only('update','destroy');
+    //Auth routes
+    Route::group(['middleware' => ['auth:sanctum']], function () {
 
-    //Logout User
-    Route::post('/auth/logout',[AuthController::class, 'logout']);
+        //User profile routes
+        Route::post('/users/change-password',[UsersController::class, 'change_password']);
+        Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
+        Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
+        Route::resource('users',UsersController::class)->only('update','destroy');
 
-    //Verification Routes
-    Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
-    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
-    Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
+        //Logout User
+        Route::post('/auth/logout',[AuthController::class, 'logout']);
 
-    Route::resource('categories',CategoriesController::class)->except('create','edit','index','show');
-    Route::resource('sub-categories',SubCategoriesController::class)->except('create','edit','index','show');
-    Route::resource('manufactures',ManufacturesController::class)->except('create','edit','index','show');
-    Route::resource('machine-models', MachineModelsController::class)->except('create','edit','index','show');
-    Route::resource('machines', MachinesController::class)->except('create','edit','index','show');
-    Route::resource('news', NewsController::class)->except('create','edit','index','show');
-    Route::resource('auctions', AuctionsController::class)->except('create','edit','index','show');
-    Route::resource('cities', CitiesController::class)->except('create','edit','index','show');
+        //Verification Routes
+        Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+        Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+        Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
 
-    Route::get('/list', [SavedListController::class,'getList'])->name('list');
-    Route::post('/list/add', [SavedListController::class,'addToList'])->name('list.add');
-    Route::post('/list/remove', [SavedListController::class,'removeItem'])->name('list.remove');
-    Route::get('/list/clear', [SavedListController::class,'clearList'])->name('list.clear');
+        //Store Update Destroy routes for Machines and Models
+        Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('store','update','destroy');
+        Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->only('store','update','destroy');
+
+        Route::get('/list', [SavedListController::class,'getList'])->name('list');
+        Route::post('/list/add', [SavedListController::class,'addToList'])->name('list.add');
+        Route::post('/list/remove', [SavedListController::class,'removeItem'])->name('list.remove');
+        Route::get('/list/clear', [SavedListController::class,'clearList'])->name('list.clear');
+    });
+
+    //Index & Show of all Entities
+    Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('sub-categories',SubCategoriesController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('manufactures',ManufacturesController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
+    Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('cities', CitiesController::class ,['as' => 'frontend'])->only('index','show');
+
+    //Search for all Entities
+    Route::get('/machines-search', [MachinesController::class, 'search_filter']);
+    Route::get('/machines-filter-data', [MachinesController::class, 'getMinMaxOfField']);
 });
-
-//Index & Show of all Entities
-Route::resource('categories',CategoriesController::class)->only('index','show');
-Route::resource('sub-categories',SubCategoriesController::class)->only('index','show');
-Route::resource('manufactures',ManufacturesController::class)->only('index','show');
-Route::resource('machine-models', MachineModelsController::class)->only('index','show');
-Route::resource('machines', MachinesController::class)->only('index','show');
-Route::resource('news', NewsController::class)->only('index','show');
-Route::resource('auctions', AuctionsController::class)->only('index','show');
-Route::resource('cities', CitiesController::class)->only('index','show');
-
-//Search for all Entities
-// Route::get('/categories-search', [CategoriesController::class, 'search']);
-// Route::get('/sub-categories-search', [SubCategoriesController::class, 'search']);
-// Route::get('/manufactures-search', [ManufacturesController::class, 'search']);
-// Route::get('/machine-models-search', [MachineModelsController::class, 'search']);
-Route::get('/machines-search', [MachinesController::class, 'search_filter']);
-Route::get('/machines-filter-data', [MachinesController::class, 'getMinMaxOfField']);
