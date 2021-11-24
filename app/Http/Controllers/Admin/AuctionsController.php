@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\AuctionCollection;
+use App\DataTables\AuctionsDataTable;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\AuctionResource;
 use App\Models\Auction;
 use Illuminate\Http\Request;
@@ -13,12 +14,24 @@ class AuctionsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param AuctionsDataTable $auctionDataTable
+     * @return Application|Factory|View
+     */
+    public function index(AuctionsDataTable $auctionDataTable)
+    {
+        return $auctionDataTable->render('admin.components.auction.datatable');
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function create()
     {
-        $auctions = Auction::paginate(number_in_page());
-        return AuctionResource::collection($auctions)->additional(['status' => 200, 'message' => 'Auctions fetched successfully']);
+        $auction = new Auction();
+        return view('admin.components.auction.create', compact('auction'));
     }
 
     /**
@@ -32,10 +45,10 @@ class AuctionsController extends Controller
         $inputs = $request->all();
         $validator = Validator::make($inputs, Auction::$cast);
         if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
+            return redirect()->route('auctions.create')->withErrors($validator)->withInput();
         }
         $auction = Auction::create($inputs);
-        return response()->json(new AuctionResource($auction), 200);
+        return redirect()->route('auctions.index')->with(['success' => 'Auction ' . __("messages.add")]);
 
     }
 
@@ -48,10 +61,23 @@ class AuctionsController extends Controller
     public function show($id)
     {
         $auction = Auction::findOrFail($id);
-        return response()->json(new AuctionResource($auction), 200);
+        $auction = new AuctionResource($auction);
+        return view('admin.components.auction.show', compact('auction'));
     }
 
     /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $auction = Auction::findOrFail($id);
+        return view('admin.components.auction.edit', compact('auction'));
+    }
+
+   /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -63,7 +89,7 @@ class AuctionsController extends Controller
         $inputs = $request->all();
         $auction = Auction::find($id);
         $auction->update($inputs);
-        return response()->json(new AuctionResource($auction), 200);
+        return redirect()->route('auctions.index')->with(['success' => 'Auction ' . __("messages.update")]);
     }
 
     /**
@@ -76,6 +102,6 @@ class AuctionsController extends Controller
     {
         $auction = Auction::findOrFail($id);
         $auction->delete();
-        return response()->json(new AuctionResource($auction), 200);
+        return redirect()->back()->with(['success' => 'Auction ' . __("messages.delete")]);
     }
 }

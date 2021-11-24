@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\NewsCollection;
-use App\Http\Resources\NewsResource;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\News;
-use Illuminate\Support\Facades\Validator;
 
 class NewsController extends Controller
 {
@@ -17,9 +14,17 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::paginate(number_in_page());
-        return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
+        //
+    }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -30,13 +35,7 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs = $request->all();
-        $validator = Validator::make($inputs, News::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-        $news = News::create($inputs);
-        return response()->json(new NewsResource($news), 200);
+        //
     }
 
     /**
@@ -47,8 +46,18 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        $news = News::findOrFail($id);
-        return response()->json(new NewsResource($news), 200);
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -60,10 +69,7 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $inputs = $request->all();
-        $news = News::find($id);
-        $news->update($inputs);
-        return response()->json(new NewsResource($news), 200);
+        //
     }
 
     /**
@@ -74,8 +80,6 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        $news = News::findOrFail($id);
-        $news->delete();
-        return response()->json(new NewsResource($news), 200);
+        //
     }
 }

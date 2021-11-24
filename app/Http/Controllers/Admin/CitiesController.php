@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\CityResource;
-use App\Models\City;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class CitiesController extends Controller
 {
@@ -16,8 +14,17 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        $cities = City::all();
-        return CityResource::collection($cities)->additional(['status' => 200, 'message' => 'Cities fetched successfully']);
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -28,13 +35,7 @@ class CitiesController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs = $request->all();
-        $validator = Validator::make($inputs, City::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-        $city = City::create($inputs);
-        return response()->json(new CityResource($city), 200);
+        //
     }
 
     /**
@@ -45,8 +46,18 @@ class CitiesController extends Controller
      */
     public function show($id)
     {
-        $city = City::findOrFail($id);
-        return response()->json(new CityResource($city), 200);
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
     }
 
     /**
@@ -58,10 +69,7 @@ class CitiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $inputs = $request->all();
-        $city = City::find($id);
-        $city->update($inputs);
-        return response()->json(new CityResource($city), 200);
+        //
     }
 
     /**
@@ -72,8 +80,6 @@ class CitiesController extends Controller
      */
     public function destroy($id)
     {
-        $city = City::findOrFail($id);
-        $city->delete();
-        return response()->json(new CityResource($city), 200);
+        //
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
+use App\Http\Controllers\Controller;
 
 use App\Http\Resources\MachineResource;
 use Illuminate\Database\Eloquent\Collection;

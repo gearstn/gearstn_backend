@@ -1,25 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Resources\SubCategoryCollection;
+use App\DataTables\SubCategoriesDataTable;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\SubCategoryResource;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param SubCategoriesDataTable $subCategoriesDataTable
+     * @return Application|Factory|View
+     *
+     */
+    public function index(SubCategoriesDataTable $subCategoriesDataTable)
+    {
+        return $subCategoriesDataTable->render('admin.components.sub_category.datatable');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function create()
     {
-        $sub_categories = SubCategory::paginate(number_in_page());
-        return SubCategoryResource::collection($sub_categories)->additional(['status' => 200, 'message' => 'SubCategories fetched successfully']);
+        $sub_category = new SubCategory();
+        return view('admin.components.sub_category.create', compact('sub_category'));
     }
 
     /**
@@ -33,10 +45,10 @@ class SubCategoriesController extends Controller
         $inputs = $request->all();
         $validator = Validator::make($inputs, SubCategory::$cast);
         if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
+            return redirect()->route('sub-categories.create')->withErrors($validator)->withInput();
         }
         $sub_category = SubCategory::create($inputs);
-        return response()->json(new SubCategoryResource($sub_category),200);
+        return redirect()->route('sub-categories.index')->with(['success' => 'SubCategory ' . __("messages.add")]);
     }
 
     /**
@@ -49,8 +61,20 @@ class SubCategoriesController extends Controller
     {
         $sub_category = SubCategory::findOrFail($id);
         return response()->json(new SubCategoryResource($sub_category),200);
+
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $sub_category = SubCategory::findOrFail($id);
+        return view('admin.components.sub_category.edit', compact('sub_category'));
+    }
 
     /**
      * Update the specified resource in storage.
@@ -64,7 +88,7 @@ class SubCategoriesController extends Controller
         $inputs = $request->all();
         $sub_category = SubCategory::find($id);
         $sub_category->update($inputs);
-        return response()->json(new SubCategoryResource($sub_category),200);
+        return redirect()->route('sub-categories.index')->with(['success' => 'SubCategory ' . __("messages.update")]);
     }
 
     /**
@@ -77,20 +101,7 @@ class SubCategoriesController extends Controller
     {
         $sub_category = SubCategory::findOrFail($id);
         $sub_category->delete();
-        return response()->json(new SubCategoryResource($sub_category),200);
+        return redirect()->back()->with(['success' => 'SubCategory ' . __("messages.delete")]);
     }
 
-    public function search(Request $request)
-    {
-        $inputs = $request->all();
-        $inputs = searchable_lang($inputs,'title');
-        $request->merge($inputs);
-
-        $filtered_sub_categories = QueryBuilder::for(SubCategory::class,$request)
-            ->allowedFilters('title_en', 'title_ar','category_id')
-            ->allowedSorts('id')
-            ->get();
-
-        return response()->json($filtered_sub_categories,200);
-    }
 }
