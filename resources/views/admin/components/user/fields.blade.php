@@ -25,22 +25,28 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="form-group">
             {{ form::label('tax_license','Tax License')}}
             {{form::text('tax_license', $user->tax_license ,['class'=>'form-control','placeholder'=>'Tax License'])}}
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="form-group">
             {{ form::label('commercial_license','Commercial License')}}
             {{form::text('commercial_license', $user->commercial_license ,['class'=>'form-control','placeholder'=>'Commercial License'])}}
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
         <div class="form-group">
             {{ form::label('email','Email')}}
             {{form::text('email', $user->email ,['class'=>'form-control','placeholder'=>'Email'])}}
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+            {{ form::label('user_type','User Type')}}
+            {{ form::select('role_id', $roles, $user->getRoleNames(),['class'=>'select2 form-control', 'id' =>'user_type_select']) }}
         </div>
     </div>
 </div>
