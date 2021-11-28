@@ -1,5 +1,15 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Admin\AuctionsController;
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\CitiesController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MachineModelsController;
+use App\Http\Controllers\Admin\MachinesController;
+use App\Http\Controllers\Admin\ManufacturesController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\SubCategoriesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +23,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Admin routes
+Route::prefix('admin')->group(function () {
+    Auth::routes(['register' => false]);
 });
+
+    // Route::post('/auth/register', [AuthController::class, 'register']);
+    // Route::get('/auth/login',[AuthController::class, 'login_admin'])->name('login_admin');
+
+    //Auth for admin routes
+    Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
+
+        Route::get('/',[DashboardController::class, 'index'])->name("dashboard");
+        Route::resource('categories',CategoriesController::class);
+        Route::resource('sub-categories',SubCategoriesController::class);
+        Route::resource('manufactures',ManufacturesController::class);
+        Route::resource('machine-models', MachineModelsController::class);
+        Route::resource('machines', MachinesController::class);
+        Route::get('fetchSubCategories', [ MachinesController::class,'fetchSubCategories' ])->name('fetchSubCategories');
+        Route::get('fetchMachineModels', [ MachinesController::class,'fetchMachineModels' ])->name('fetchMachineModels');
+        Route::resource('news', NewsController::class);
+        Route::resource('auctions', AuctionsController::class);
+        Route::resource('cities', CitiesController::class);
+    });
+
+
+

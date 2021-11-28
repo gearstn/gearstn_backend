@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\MachineModel;
 use App\Models\Manufacture;
 use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MachineResource extends JsonResource
@@ -35,7 +36,7 @@ class MachineResource extends JsonResource
             'skq' => $this->skq,
             'price' => $this->price,
             'approved' => $this->approved,
-            'seller_id' => $this->seller_id,
+            'seller_id' => User::find($this->seller_id,['first_name', 'last_name', 'company_name', 'country', 'email']),
             'city_id' => City::find($this->city_id,$selected_columns),
             'category_id' => Category::find($this->category_id,$selected_columns),
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),

@@ -18,10 +18,9 @@ class News extends Model
         'slug',
     ];
     public static $cast = [
-        'title' => 'required|unique:news',
+        'title' => 'required',
         'post_date' => 'required',
         'image_url' => 'required',
         'bodytext' => 'required',
-        'slug' => 'required',
     ];
 }

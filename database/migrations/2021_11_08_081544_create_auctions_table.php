@@ -18,8 +18,8 @@ class CreateAuctionsTable extends Migration
             $table->string('title_en');
             $table->string('title_ar');
             $table->string('country');
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->timestamps();
         });
     }

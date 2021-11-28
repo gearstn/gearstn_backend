@@ -32,6 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'commercial_license',
         'commercial_license_image',
         'country',
+        'is_admin'
     ];
 
     /**

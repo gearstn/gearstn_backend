@@ -1,4 +1,7 @@
 <?php
+use Illuminate\Support\Facades\Route;
+
+
 if (!function_exists("searchable_lang")) {
 
     function searchable_lang($inputs, $search_by)
@@ -37,5 +40,39 @@ if (!function_exists("machines_range_filter")) {
         return $q->when( ( isset($min ) || isset($max) ) && ($min != null || $max != null) , function ($q) use ($min,$max,$field) {
             return $q->filter(function ($item) use ($min,$max,$field) { return $item->$field >= $min && $max >= $item->$field; });
         });
+    }
+}
+
+
+if (!function_exists("title")) {
+    /**
+     * @param string $title
+     * @return string
+     */
+    function title($title = "")
+    {
+        if (isset($title) && $title != "") {
+            return env("SITE_NAME", "GearsTN Admin") . " | " . $title;
+        } else {
+            $routeArray = app('request')->route()->getAction();
+            $controllerAction = class_basename($routeArray['controller']);
+            list($controller, $action) = explode('@', $controllerAction);
+            $controller = str_replace("Controller", "", $controller);
+            return env("SITE_NAME", "GearsTN Admin") . " | " . $controller;
+        }
+    }
+}
+
+if (!function_exists('areActiveRoutes')) {
+    function areActiveRoutes(array $routes, $output = "active")
+    {
+        foreach ($routes as $route) {
+            if (Route::currentRouteName() == $route) return $output;
+            if (str_contains($route, "*")) {
+                $params = explode(".", $route);
+                $currentRouteParams = explode(".", Route::currentRouteName());
+                if ($params[0] == $currentRouteParams[0] && $params[1] == '*') return $output;
+            }
+        }
     }
 }
