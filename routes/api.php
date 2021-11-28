@@ -42,7 +42,8 @@ Route::prefix('/')->group(function () {
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
         Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
         Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
-        Route::resource('users',UsersController::class)->only('update','destroy');
+        Route::put('/users',[UsersController::class, 'update'])->name('users.update');
+        Route::resource('users',UsersController::class)->only('destroy');
 
         //Logout User
         Route::post('/auth/logout',[AuthController::class, 'logout']);

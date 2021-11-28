@@ -41,13 +41,12 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $inputs = $request->all();
-        $user = User::find($id);
+        $user = Auth::user();
         $user->update($inputs);
         return response()->json(['message' => 'Profile Updated Successfully'], 200);
     }
