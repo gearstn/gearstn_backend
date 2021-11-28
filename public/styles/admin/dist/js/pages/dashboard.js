@@ -322,33 +322,40 @@ $(function () {
     // })
 
 
-    // $.fn.datetimepicker.Constructor.Default = $.extend({},
-    //     $.fn.datetimepicker.Constructor.Default,
-    //     { icons:
-    //             { time: 'fas fa-clock',
-    //                 date: 'fas fa-calendar',
-    //                 up: 'fas fa-arrow-up',
-    //                 down: 'fas fa-arrow-down',
-    //                 previous: 'fas fa-arrow-circle-left',
-    //                 next: 'fas fa-arrow-circle-right',
-    //                 today: 'far fa-calendar-check-o',
-    //                 clear: 'fas fa-trash',
-    //                 close: 'far fa-times' } });
+    $.fn.datetimepicker.Constructor.Default = $.extend({},
+        $.fn.datetimepicker.Constructor.Default,
+        { icons:
+                { time: 'fas fa-clock',
+                    date: 'fas fa-calendar',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                    previous: 'fas fa-arrow-circle-left',
+                    next: 'fas fa-arrow-circle-right',
+                    today: 'far fa-calendar-check-o',
+                    clear: 'fas fa-trash',
+                    close: 'far fa-times' } });
 
-    //     $(this).data('#reservationdate').datetimepicker({
-    //         format: 'L'
-    //     });
-    //     //Date and time picker
-    //     $(this).data('#reservationdatetime').datetimepicker({icons: {time: 'fa fa-clock'}});
+        $('#start_date').datetimepicker({
+            format: 'L'
+        });
+        $('#end_date').datetimepicker({
+            format: 'L'
+        });
+        $('#reservationdate').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+        // //Date and time picker
+        // $('#reservationdatetime').datetimepicker({icons: {time: 'fa fa-clock'}});
 
-    //     //Date range picker
-    //     $(this).data('#reservation').daterangepicker()
-    //     //Date range picker with time picker
-    //     $(this).data('#reservationtime').daterangepicker({
-    //         timePicker: true,
-    //         timePickerIncrement: 30,
-    //         locale: {
-    //             format: 'YYYY/DD/MM hh:mm A'
-    //         }
-    //     })
+        //Date range picker
+        $('#reservation').daterangepicker()
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePicker24Hour: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'DD-MM-YYYY H:mm'
+            }
+        })
 })

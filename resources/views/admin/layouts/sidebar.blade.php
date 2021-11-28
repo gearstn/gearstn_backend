@@ -44,6 +44,41 @@
                             <p>SubCategories</p>
                         </a>
                     </li>
+                     <li class="nav-item">
+                        <a href="{{route('auctions.index')}}"
+                           class="nav-link" {{areActiveRoutes(['auctions.*'])}}>
+                            <i class="fas fa-list-alt nav-icon"></i>
+                            <p>Auctions</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('news.index')}}"
+                           class="nav-link" {{areActiveRoutes(['news.*'])}}>
+                            <i class="fas fa-list-alt nav-icon"></i>
+                            <p>News</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('cities.index')}}"
+                           class="nav-link" {{areActiveRoutes(['cities.*'])}}>
+                            <i class="fas fa-list-alt nav-icon"></i>
+                            <p>Cities</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('manufactures.index')}}"
+                           class="nav-link" {{areActiveRoutes(['manufactures.*'])}}>
+                            <i class="fas fa-list-alt nav-icon"></i>
+                            <p>Manufactures</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('machine-models.index')}}"
+                           class="nav-link" {{areActiveRoutes(['machine-models.*'])}}>
+                            <i class="fas fa-list-alt nav-icon"></i>
+                            <p>Machine Models</p>
+                        </a>
+                    </li>
 
             </ul>
         </nav>

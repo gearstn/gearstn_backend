@@ -14,39 +14,21 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <div class="form-group">
             {{ form::label('country','Country')}}
             {{form::text('country', $auction->country ,['class'=>'form-control','placeholder'=>'Country'])}}
         </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
         <div class="form-group">
-            <div class="form-group" id="start_date" >
-                <label>Start Date</label>
-                <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                    <input type="text" name="start_date" class="form-control datetimepicker-input" data-target="#reservationdate">
-                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
+            {{ form::label('start_end_date','Start End Date')}}
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="form-group">
-            <div class="form-group" id="end_date" >
-                <label>End Date</label>
-                <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                    <input type="text" name="end_date" class="form-control datetimepicker-input" data-target="#reservationdate">
-                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                </div>
+                {{form::text('reservationtime', $auction->reservationtime ,['class'=>'form-control float-right','id'=>'reservationtime'])}}
             </div>
         </div>
     </div>
 </div>
-
-
-
