@@ -40,35 +40,35 @@
                      <li class="nav-item">
                         <a href="{{route('sub-categories.index')}}"
                            class="nav-link" {{areActiveRoutes(['sub-categories.*'])}}>
-                            <i class="fas fa-list-alt nav-icon"></i>
+                           <i class="fas fa-sitemap nav-icon"></i>
                             <p>SubCategories</p>
                         </a>
                     </li>
                      <li class="nav-item">
                         <a href="{{route('auctions.index')}}"
                            class="nav-link" {{areActiveRoutes(['auctions.*'])}}>
-                            <i class="fas fa-list-alt nav-icon"></i>
+                            <i class="fas fa-gavel nav-icon"></i>
                             <p>Auctions</p>
                         </a>
                     </li>
                      <li class="nav-item">
                         <a href="{{route('news.index')}}"
                            class="nav-link" {{areActiveRoutes(['news.*'])}}>
-                            <i class="fas fa-list-alt nav-icon"></i>
+                            <i class="fas fa-newspaper nav-icon"></i>
                             <p>News</p>
                         </a>
                     </li>
                      <li class="nav-item">
                         <a href="{{route('cities.index')}}"
                            class="nav-link" {{areActiveRoutes(['cities.*'])}}>
-                            <i class="fas fa-list-alt nav-icon"></i>
+                            <i class="fas fa-city nav-icon"></i>
                             <p>Cities</p>
                         </a>
                     </li>
                      <li class="nav-item">
                         <a href="{{route('manufactures.index')}}"
                            class="nav-link" {{areActiveRoutes(['manufactures.*'])}}>
-                            <i class="fas fa-list-alt nav-icon"></i>
+                            <i class="fas fa-industry nav-icon"></i>
                             <p>Manufactures</p>
                         </a>
                     </li>
@@ -77,6 +77,20 @@
                            class="nav-link" {{areActiveRoutes(['machine-models.*'])}}>
                             <i class="fas fa-list-alt nav-icon"></i>
                             <p>Machine Models</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('machines.index')}}"
+                           class="nav-link" {{areActiveRoutes(['machines.*'])}}>
+                            <i class="fas fa-tag nav-icon"></i>
+                            <p>Machines</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('users.index')}}"
+                           class="nav-link" {{areActiveRoutes(['users.*'])}}>
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>Users</p>
                         </a>
                     </li>
 

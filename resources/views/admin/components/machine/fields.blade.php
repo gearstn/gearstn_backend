@@ -151,6 +151,7 @@
                 }
             });
         });
+
         $('#manufacture_select').on('select2:select', function (e) {
             var id = e.params.data.id;
             $.ajax({
