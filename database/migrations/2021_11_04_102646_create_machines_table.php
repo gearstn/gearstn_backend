@@ -25,9 +25,9 @@ class CreateMachinesTable extends Migration
             $table->string('country');
             $table->string('slug');
             $table->longText('images');
-            $table->boolean('approved');
-            $table->boolean('featured');
-            $table->boolean('verified');
+            $table->boolean('approved')->default(0);
+            $table->boolean('featured')->default(0);
+            $table->boolean('verified')->default(0);
             $table->string('sku');
             $table->BigInteger('price')->nullable();
 
