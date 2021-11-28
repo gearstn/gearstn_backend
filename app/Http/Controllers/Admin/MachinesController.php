@@ -26,7 +26,7 @@ class MachinesController extends Controller
      */
     public function index(MachinesDataTable $machinesDataTable)
     {
-        return $machinesDataTable->render('admin.components.manufacture.datatable');
+        return $machinesDataTable->render('admin.components.machine.datatable');
     }
 
     /**
@@ -37,7 +37,7 @@ class MachinesController extends Controller
     public function create()
     {
         $machine = new Machine();
-
+        $machine->country = 'Egypt';
         $categories = Category::all()->pluck("title_en", "id")->toArray();
         $categories[0] = 'Choose Category';
         ksort($categories);
@@ -71,13 +71,15 @@ class MachinesController extends Controller
         //Create the slug
         $inputs = $request->all();
         $inputs['sku'] = random_int(10000000, 99999999);
-        $model_title = MachineModel::findorFail($inputs['model_id'])->title_en;
-        $inputs['slug'] = $inputs['year'].'-'.$inputs['manufacture_id'].'-'.$model_title.'-'.$inputs['sku'];
 
         $validator = Validator::make($inputs, Machine::$cast);
         if ($validator->fails()) {
             return redirect()->route('machines.create')->withErrors($validator)->withInput();
         }
+
+        $model_title = MachineModel::findorFail($inputs['model_id'])->title_en;
+        $inputs['slug'] = $inputs['year'].'-'.$inputs['manufacture_id'].'-'.$model_title.'-'.$inputs['sku'];
+
         $machine = Machine::create($inputs);
         // $machine->save();
         return redirect()->route('machines.index')->with(['success' => 'Machine ' . __("messages.add")]);
@@ -178,5 +180,34 @@ class MachinesController extends Controller
         unset($input['token']);
         $models = MachineModel::where('manufacture_id', $input['id'])->pluck("title_en", "id")->toArray();
         return $models;
+    }
+
+
+    public function approveMachine(Request $request)
+    {
+        $inputs = $request->all();
+        unset($inputs['token']);
+        $machine = Machine::find($inputs['id'])->first();
+        $machine->approved = !$machine->approved;
+        $machine->save();
+        return true;
+    }
+    public function featureMachine(Request $request)
+    {
+        $inputs = $request->all();
+        unset($inputs['token']);
+        $machine = Machine::find($inputs['id'])->first();
+        $machine->featured = !$machine->featured;
+        $machine->save();
+        return true;
+    }
+    public function verifyMachine(Request $request)
+    {
+        $inputs = $request->all();
+        unset($inputs['token']);
+        $machine = Machine::find($inputs['id'])->first();
+        $machine->verified = !$machine->verified;
+        $machine->save();
+        return true;
     }
 }

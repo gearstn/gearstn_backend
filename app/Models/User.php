@@ -9,11 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use LamaLama\Wishlist\HasWishlists;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens , SoftDeletes;
-    use HasWishlists;
+    use HasFactory, Notifiable, HasApiTokens , SoftDeletes, HasWishlists , HasRoles;
 
     protected $dates = ['deleted_at'];
     /**
@@ -32,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'commercial_license',
         'commercial_license_image',
         'country',
-        'is_admin'
+        'is_admin',
+        'panned'
     ];
 
     /**
@@ -55,13 +56,15 @@ class User extends Authenticatable implements MustVerifyEmail
     // ];
 
 
-    // public static $cast = [
-    //     'first_name' => 'required|unique:news',
-    //     'last_name' => 'required',
-    //     'company_name' => 'required',
-    //     'email' => 'required',
-    //     'slug' => 'required',
-    // ];
+    public static $cast = [
+        'first_name' => 'required',
+        'last_name' => 'required',
+        'company_name' => 'required',
+        'email' => 'required|unique:users',
+        'tax_license' => 'required|unique:users',
+        'commercial_license' => 'required|unique:users',
+        'role_id' => 'required',
+    ];
 
     public function machines()
     {

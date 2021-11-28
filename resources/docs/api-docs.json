@@ -155,7 +155,7 @@
             }
         },
         "/api/auth/forgot-password": {
-            "get": {
+            "post": {
                 "tags": [
                     "Auth"
                 ],
@@ -176,7 +176,7 @@
         },
 
 
-        "/users/update/{id}": {
+        "/users/update": {
             "put": {
                 "tags": [
                     "Users"
@@ -277,7 +277,7 @@
             }
         },
         "/users/change-password": {
-            "delete": {
+            "post": {
                 "tags": [
                     "Users"
                 ],
@@ -331,7 +331,7 @@
             }
         },
         "/users/profile": {
-            "delete": {
+            "get": {
                 "tags": [
                     "Users"
                 ],
@@ -361,7 +361,7 @@
             }
         },
         "/users/full-profile": {
-            "delete": {
+            "get": {
                 "tags": [
                     "Users"
                 ],
@@ -391,7 +391,7 @@
             }
         },
         "/auth/logout": {
-            "delete": {
+            "post": {
                 "tags": [
                     "Users"
                 ],

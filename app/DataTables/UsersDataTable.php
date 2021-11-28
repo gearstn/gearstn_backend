@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Machine;
+use App\Models\User;
 use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class MachinesDataTable extends DataTable
+class UsersDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -20,44 +20,17 @@ class MachinesDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $page = "machines";
+        $page = "users";
         return datatables()
             ->eloquent($query)
             ->addColumn('action', function ($data) use ($page) {
                 return view('admin/components/datatable/actions', compact("data", "page"));
             })
-            ->addColumn("category", function ($data) {
-                $category = $data->category()->pluck("title_en")->toArray();
-                return ucfirst($category[0]);
-            })
-            ->addColumn("sub_category", function ($data) {
-                $sub_category = $data->sub_category()->pluck("title_en")->toArray();
-                return ucfirst($sub_category[0]);
-            })
-            ->addColumn("manufacture", function ($data) {
-                $manufacture = $data->manufacture()->pluck("title_en")->toArray();
-                return ucfirst($manufacture[0]);
-            })
-            ->addColumn("model", function ($data) {
-                $model = $data->model()->pluck("title_en")->toArray();
-                return ucfirst($model[0]);
-            })
             ->editColumn("created_at", function ($data) {
                 return Carbon::parse($data->created_at)->diffForHumans();
             })
-            ->editColumn("title_en", function ($data) {
-                return ucfirst($data->title_en);
-            })
-            ->editColumn("approved", function ($data) {
-                if($data->approved) return 'Yes';
-                else return 'No';
-            })
-            ->editColumn("featured", function ($data) {
-                if($data->featured) return 'Yes';
-                else return 'No';
-            })
-            ->editColumn("verified", function ($data) {
-                if($data->verified) return 'Yes';
+            ->editColumn("panned", function ($data) {
+                if($data->panned) return 'Yes';
                 else return 'No';
             });
     }
@@ -65,12 +38,12 @@ class MachinesDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Machine $model
+     * @param \App\Models\User $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Machine $model)
+    public function query(User $model)
     {
-        return $model->newQuery()->where('approved',1);
+        return $model->newQuery()->where('is_admin',0);
     }
 
     /**
@@ -104,16 +77,14 @@ class MachinesDataTable extends DataTable
     {
         return [
             Column::make('id')->title("ID"),
-            Column::make('model'),
-            Column::make('manufacture'),
-            Column::make('sub_category'),
-            Column::make('category'),
-            Column::make('year'),
-            Column::make('sell_type'),
-            Column::make('price'),
-            Column::make('approved'),
-            Column::make('featured'),
-            Column::make('verified'),
+            Column::make('email'),
+            Column::make('first_name'),
+            Column::make('last_name'),
+            Column::make('company_name'),
+            Column::make('country'),
+            Column::make('tax_license'),
+            Column::make('commercial_license'),
+            Column::make('panned'),
             Column::make('created_at'),
             Column::computed('action')
                 ->exportable(false)
@@ -129,6 +100,6 @@ class MachinesDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Machines_' . date('YmdHis');
+        return 'Users_' . date('YmdHis');
     }
 }

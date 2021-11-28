@@ -25,6 +25,7 @@ class FullUserResource extends JsonResource
             "commercial_license" => $this->commercial_license,
             "commercial_license_image" => $this->commercial_license_image,
             "country" => $this->country,
+            "role" => $this->getRoleNames(),
         ];
         return $data;
     }
