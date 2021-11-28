@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\News;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -19,9 +20,21 @@ class NewsDataTable extends DataTable
      */
     public function dataTable($query)
     {
+        $page = "news";
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'news.action');
+            ->addColumn('action', function ($data) use ($page) {
+                return view('admin/components/datatable/actions', compact("data", "page"));
+            })
+            ->editColumn('slug', function ($data) use ($page) {
+                return view("admin/components/datatable/link_news")->with("link", env('APP_URL'). "/news/" . $data->slug);
+            })
+            ->editColumn("created_at", function ($data) {
+                return Carbon::parse($data->created_at)->diffForHumans();
+            })
+            ->editColumn("title", function ($data) {
+                return ucfirst($data->title);
+            });
     }
 
     /**
@@ -43,18 +56,18 @@ class NewsDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('news-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('datatable')
+            ->rowId("id")
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Blfrtip')
+            ->lengthMenu([5, 10, 25, 50, 100])
+            ->pageLength(25)
+            ->orderBy(0, "asce")
+            ->buttons(
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -65,15 +78,17 @@ class NewsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
+            Column::make('id')->title("ID"),
+            Column::make('title'),
+            Column::make('post_date'),
+            Column::make('image_url')->title('Image Link'),
+            Column::make('bodytext')->title('Body Text'),
+            Column::make('slug'),
             Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->addClass('text-center'),
         ];
     }
 

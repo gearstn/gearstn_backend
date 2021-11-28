@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Machine;
+use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -19,9 +20,34 @@ class MachinesDataTable extends DataTable
      */
     public function dataTable($query)
     {
+        $page = "machines";
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'machines.action');
+            ->addColumn('action', function ($data) use ($page) {
+                return view('admin/components/datatable/actions', compact("data", "page"));
+            })
+            ->addColumn("category", function ($data) {
+                $category = $data->category()->pluck("title_en")->toArray();
+                return ucfirst($category[0]);
+            })
+            ->addColumn("sub_category", function ($data) {
+                $sub_category = $data->sub_category()->pluck("title_en")->toArray();
+                return ucfirst($sub_category[0]);
+            })
+            ->addColumn("manufacture", function ($data) {
+                $manufacture = $data->manufacture()->pluck("title_en")->toArray();
+                return ucfirst($manufacture[0]);
+            })
+            ->addColumn("model", function ($data) {
+                $model = $data->model()->pluck("title_en")->toArray();
+                return ucfirst($model[0]);
+            })
+            ->editColumn("created_at", function ($data) {
+                return Carbon::parse($data->created_at)->diffForHumans();
+            })
+            ->editColumn("title_en", function ($data) {
+                return ucfirst($data->title_en);
+            });
     }
 
     /**
@@ -43,18 +69,18 @@ class MachinesDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('machines-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('datatable')
+            ->rowId("id")
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Blfrtip')
+            ->lengthMenu([5, 10, 25, 50, 100])
+            ->pageLength(25)
+            ->orderBy(0, "asce")
+            ->buttons(
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -65,15 +91,22 @@ class MachinesDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
+            Column::make('id')->title("ID"),
+            Column::make('model'),
+            Column::make('manufacture'),
+            Column::make('sub_category'),
+            Column::make('category'),
+            Column::make('year'),
+            Column::make('sell_type'),
+            Column::make('price'),
+            Column::make('approved'),
+            Column::make('featured'),
+            Column::make('verified'),
             Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->addClass('text-center'),
         ];
     }
 
