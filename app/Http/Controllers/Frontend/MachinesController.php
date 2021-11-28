@@ -22,7 +22,7 @@ class MachinesController extends Controller
      */
     public function index()
     {
-        $machines = Machine::paginate(number_in_page());
+        $machines = Machine::where('approved', '=', 1)->paginate(number_in_page());
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
@@ -100,6 +100,7 @@ class MachinesController extends Controller
         MachineResource::collection($q);
 
         //Filter for every attribute we want to filter
+        $q =  machines_filter($q, 1 ,'approved'); // To get approved
         $q =  machines_filter($q, isset( $inputs['category_id'] ) ? $inputs['category_id'] : null,'category_id');
         $q =  machines_filter($q, isset( $inputs['sub_category_id'] ) ? $inputs['sub_category_id'] : null,'sub_category_id');
         $q =  machines_filter($q, isset( $inputs['manufacture_id'] ) ? $inputs['manufacture_id'] : null,'manufacture_id');
@@ -122,7 +123,7 @@ class MachinesController extends Controller
         });
 
         //Adding Pagination to a collection
-        $paginatedResult = CollectionPaginate::paginate($q, 10);
+        $paginatedResult = CollectionPaginate::paginate($q, 1000);
         return MachineResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
@@ -137,5 +138,10 @@ class MachinesController extends Controller
         $results['max_hours'] = Machine::max('hours');
         $results['min_hours'] = Machine::min('hours');
         return response()->json($results,200);
+    }
+    public function getRelatedMachines(Request $request){
+        $inputs = $request->all();
+        $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
+        return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 }

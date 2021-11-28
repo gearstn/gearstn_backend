@@ -75,4 +75,5 @@ Route::prefix('/')->group(function () {
     //Search for all Entities
     Route::get('/machines-search', [MachinesController::class, 'search_filter']);
     Route::get('/machines-filter-data', [MachinesController::class, 'getMinMaxOfField']);
+    Route::get('/related-machines', [MachinesController::class, 'getRelatedMachines']);
 });
