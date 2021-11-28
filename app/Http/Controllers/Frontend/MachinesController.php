@@ -38,11 +38,13 @@ class MachinesController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
+
         $machine = Machine::create($inputs);
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;
         $machine->slug = $machine->year.'-'.$machine->manufacture.'-'.$model_title.'-'.$machine->sku;
         $machine->save();
+
         return response()->json(new MachineResource($machine), 200);
     }
 
@@ -123,7 +125,7 @@ class MachinesController extends Controller
         });
 
         //Adding Pagination to a collection
-        $paginatedResult = CollectionPaginate::paginate($q, 1000);
+        $paginatedResult = CollectionPaginate::paginate($q, 10);
         return MachineResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 

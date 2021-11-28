@@ -47,6 +47,18 @@ class MachinesDataTable extends DataTable
             })
             ->editColumn("title_en", function ($data) {
                 return ucfirst($data->title_en);
+            })
+            ->editColumn("approved", function ($data) {
+                if($data->approved) return 'Yes';
+                else return 'No';
+            })
+            ->editColumn("featured", function ($data) {
+                if($data->featured) return 'Yes';
+                else return 'No';
+            })
+            ->editColumn("verified", function ($data) {
+                if($data->verified) return 'Yes';
+                else return 'No';
             });
     }
 
@@ -58,7 +70,7 @@ class MachinesDataTable extends DataTable
      */
     public function query(Machine $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->where('approved',1);
     }
 
     /**
