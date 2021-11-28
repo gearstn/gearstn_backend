@@ -34,15 +34,14 @@ Route::prefix('admin')->group(function () {
     //Auth for admin routes
     Route::group(['prefix' => 'admin','middleware' => 'auth'], function () {
 
-        //Logout
-        // Route::post('/auth/logout',[AuthController::class, 'logout']);
-
         Route::get('/',[DashboardController::class, 'index'])->name("dashboard");
         Route::resource('categories',CategoriesController::class);
         Route::resource('sub-categories',SubCategoriesController::class);
         Route::resource('manufactures',ManufacturesController::class);
         Route::resource('machine-models', MachineModelsController::class);
         Route::resource('machines', MachinesController::class);
+        Route::get('fetchSubCategories', [ MachinesController::class,'fetchSubCategories' ])->name('fetchSubCategories');
+        Route::get('fetchMachineModels', [ MachinesController::class,'fetchMachineModels' ])->name('fetchMachineModels');
         Route::resource('news', NewsController::class);
         Route::resource('auctions', AuctionsController::class);
         Route::resource('cities', CitiesController::class);
