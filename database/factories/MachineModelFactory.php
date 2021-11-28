@@ -24,12 +24,15 @@ class MachineModelFactory extends Factory
     public function definition()
     {
         $title = $this->faker->bothify('???#');
+        $manufacture_id = Manufacture::all()->random()->id;
+        $sub_category_id = Manufacture::find($manufacture_id)->sub_category_id;
+        $category_id = SubCategory::find($sub_category_id)->category_id;
         return [
             'title_en' => $title,
             'title_ar' => $title,
-            'category_id' => Category::all()->random()->id,
-            'sub_category_id' => SubCategory::all()->random()->id,
-            'manufacture_id' => Manufacture::all()->random()->id,
+            'category_id' => $category_id,
+            'sub_category_id' => $sub_category_id,
+            'manufacture_id' => $manufacture_id,
         ];
     }
 }
