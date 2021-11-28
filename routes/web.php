@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\MachinesController;
 use App\Http\Controllers\Admin\ManufacturesController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\SubCategoriesController;
+use App\Http\Controllers\Admin\UsersControllers;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,9 +43,14 @@ Route::prefix('admin')->group(function () {
         Route::resource('machines', MachinesController::class);
         Route::get('fetchSubCategories', [ MachinesController::class,'fetchSubCategories' ])->name('fetchSubCategories');
         Route::get('fetchMachineModels', [ MachinesController::class,'fetchMachineModels' ])->name('fetchMachineModels');
+        Route::post('machines/approve',  [ MachinesController::class,'approveMachine' ])->name('machines.approve');
+        Route::post('machines/feature',  [ MachinesController::class,'featureMachine' ])->name('machines.feature');
+        Route::post('machines/verify',  [ MachinesController::class,'verifyMachine' ])->name('machines.verify');
+
         Route::resource('news', NewsController::class);
         Route::resource('auctions', AuctionsController::class);
         Route::resource('cities', CitiesController::class);
+        Route::resource('users', UsersControllers::class);
     });
 
 
