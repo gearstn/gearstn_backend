@@ -10,7 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
-
+use Spatie\Permission\Models\Role;
 class AuthController extends Controller
 {
     use ApiResponser;
@@ -23,13 +23,17 @@ class AuthController extends Controller
             'last_name' => 'string|max:255',
             'company_name' => 'string|max:255',
             'email' => 'required|string|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required|string|min:8|confirmed',
+            'role_id' => 'required'
         ]);
+
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
         $inputs['password'] = bcrypt($inputs['password']);
+        $role = Role::find($inputs['role_id'])->first();
         $user = User::create($inputs);
+        $user->assignRole($role);
         event(new Registered($user));
 
         // $token = $user->createToken('API Token')->plainTextToken;

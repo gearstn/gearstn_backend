@@ -8,6 +8,7 @@ use App\Http\Resources\FullUserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class UsersControllers extends Controller
 {
@@ -30,7 +31,8 @@ class UsersControllers extends Controller
     public function create()
     {
         $user = new User();
-        return view('admin.components.user.create', compact('user'));
+        $roles = Role::all()->pluck('name','id');
+        return view('admin.components.user.create', compact('user','roles'));
     }
 
     /**
@@ -46,7 +48,10 @@ class UsersControllers extends Controller
         if ($validator->fails()) {
             return redirect()->route('users.create')->withErrors($validator)->withInput();
         }
+
+        $role = Role::find($inputs['role_id'])->first();
         $user = User::create($inputs);
+        $user->assignRole($role);
 
         return redirect()->route('users.index')->with(['success' => 'User ' . __("messages.add")]);
     }
@@ -73,7 +78,8 @@ class UsersControllers extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.components.user.edit', compact('user'));
+        $roles = Role::all()->pluck('name','id');
+        return view('admin.components.user.edit', compact('user','roles'));
     }
 
     /**
@@ -88,6 +94,10 @@ class UsersControllers extends Controller
         $inputs = $request->all();
         $user = User::find($id);
         $user->update($inputs);
+        $user->roles()->detach();
+        $role = Role::find($inputs['role_id'])->first();
+        $user->assignRole($role);
+
         return redirect()->route('users.index')->with(['success' => 'User ' . __("messages.update")]);
     }
 
@@ -100,6 +110,7 @@ class UsersControllers extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $user->roles()->detach();
         $user->delete();
         return redirect()->back()->with(['success' => 'User ' . __("messages.delete")]);
     }

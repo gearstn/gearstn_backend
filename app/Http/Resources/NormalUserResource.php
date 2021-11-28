@@ -21,6 +21,7 @@ class NormalUserResource extends JsonResource
             "company_name" => $this->company_name,
             "email" => $this->email,
             "country" => $this->country,
+            "role" => $this->getRoleNames(),
         ];
         return $data;
     }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Classes\CollectionPaginate;
 use App\Models\MachineModel;
 use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\Permission\Models\Role;
 
 class MachinesController extends Controller
 {
