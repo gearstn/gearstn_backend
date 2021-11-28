@@ -24,24 +24,6 @@ class MachineModelsController extends Controller
         return MachineModelResource::collection($models)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
 
     }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param Request $request
-    //  * @return Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $inputs = $request->all();
-    //     $validator = Validator::make($inputs, MachineModel::$cast);
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->messages(), 400);
-    //     }
-    //     $models = MachineModel::create($inputs);
-    //     return response()->json(new MachineModelResource($models),200);
-    // }
-
     /**
      * Display the specified resource.
      *
@@ -53,32 +35,4 @@ class MachineModelsController extends Controller
         $models = MachineModel::findOrFail($id);
         return response()->json(new MachineModelResource($models),200);
     }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param Request $request
-    //  * @param  int  $id
-    //  * @return Response
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     $inputs = $request->all();
-    //     $models = MachineModel::find($id);
-    //     $models->update($inputs);
-    //     return response()->json(new MachineModelResource($models),200);
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return Response
-    //  */
-    // public function destroy($id)
-    // {
-    //     $models = MachineModel::findOrFail($id);
-    //     $models->delete();
-    //     return response()->json(new MachineModelResource($models),200);
-    // }
 }

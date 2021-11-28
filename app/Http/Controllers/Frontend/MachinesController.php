@@ -10,6 +10,7 @@ use App\Models\Machine;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\CollectionPaginate;
+use App\Models\MachineModel;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class MachinesController extends Controller
@@ -38,6 +39,10 @@ class MachinesController extends Controller
             return response()->json($validator->messages(), 400);
         }
         $machine = Machine::create($inputs);
+        $machine->sku = random_int(10000000, 99999999);
+        $model_title = MachineModel::findorFail($machine->model_id)->title_en;
+        $machine->slug = $machine->year.'-'.$machine->manufacture.'-'.$model_title.'-'.$machine->sku;
+        $machine->save();
         return response()->json(new MachineResource($machine), 200);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\SubCategoriesDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubCategoryResource;
+use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -31,7 +32,8 @@ class SubCategoriesController extends Controller
     public function create()
     {
         $sub_category = new SubCategory();
-        return view('admin.components.sub_category.create', compact('sub_category'));
+        $categories = Category::all()->pluck("title_en", "id");
+        return view('admin.components.sub_category.create', compact('sub_category','categories'));
     }
 
     /**
@@ -60,8 +62,7 @@ class SubCategoriesController extends Controller
     public function show($id)
     {
         $sub_category = SubCategory::findOrFail($id);
-        return response()->json(new SubCategoryResource($sub_category),200);
-
+        return view('admin.components.sub_category.show', compact('sub_category'));
     }
 
     /**
@@ -73,7 +74,8 @@ class SubCategoriesController extends Controller
     public function edit($id)
     {
         $sub_category = SubCategory::findOrFail($id);
-        return view('admin.components.sub_category.edit', compact('sub_category'));
+        $categories = Category::all()->pluck("title_en", "id");
+        return view('admin.components.sub_category.edit', compact('sub_category','categories'));
     }
 
     /**

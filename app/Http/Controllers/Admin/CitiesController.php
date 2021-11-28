@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DataTables\CitiesDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CityResource;
+use App\Models\City;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CitiesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param CitiesDataTable $categoriesDataTable
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index(CitiesDataTable $citiesDataTable)
     {
-        //
+        return $citiesDataTable->render('admin.components.city.datatable');
     }
 
     /**
@@ -24,7 +29,9 @@ class CitiesController extends Controller
      */
     public function create()
     {
-        //
+        $city = new City();
+        return view('admin.components.city.create', compact('city'));
+
     }
 
     /**
@@ -35,7 +42,14 @@ class CitiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, City::$cast);
+        if ($validator->fails()) {
+            return redirect()->route('cities.create')->withErrors($validator)->withInput();
+        }
+        $city = City::create($inputs);
+
+        return redirect()->route('cities.index')->with(['success' => 'City ' . __("messages.add")]);
     }
 
     /**
@@ -46,7 +60,9 @@ class CitiesController extends Controller
      */
     public function show($id)
     {
-        //
+        $city = City::findOrFail($id);
+        $city = new CityResource($city);
+        return view('admin.components.city.show', compact('city'));
     }
 
     /**
@@ -57,7 +73,8 @@ class CitiesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $city = City::findOrFail($id);
+        return view('admin.components.city.edit', compact('city'));
     }
 
     /**
@@ -69,7 +86,10 @@ class CitiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $inputs = $request->all();
+        $city = City::find($id);
+        $city->update($inputs);
+        return redirect()->route('cities.index')->with(['success' => 'City ' . __("messages.update")]);
     }
 
     /**
@@ -80,6 +100,8 @@ class CitiesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $city = City::findOrFail($id);
+        $city->delete();
+        return redirect()->back()->with(['success' => 'City ' . __("messages.delete")]);
     }
 }

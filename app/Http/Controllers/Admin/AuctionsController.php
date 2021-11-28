@@ -6,6 +6,8 @@ use App\DataTables\AuctionsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AuctionResource;
 use App\Models\Auction;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,6 +45,12 @@ class AuctionsController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
+        $dates =  explode(" - ",$inputs['reservationtime']);
+        $inputs['start_date'] = Carbon::parse($dates[0]);
+        $inputs['end_date'] = Carbon::parse($dates[1]);
+        unset($inputs['reservation']);
+
         $validator = Validator::make($inputs, Auction::$cast);
         if ($validator->fails()) {
             return redirect()->route('auctions.create')->withErrors($validator)->withInput();
@@ -74,6 +82,7 @@ class AuctionsController extends Controller
     public function edit($id)
     {
         $auction = Auction::findOrFail($id);
+        $auction->reservationtime =  $auction->start_date . ' - ' . $auction->end_date;
         return view('admin.components.auction.edit', compact('auction'));
     }
 
@@ -87,6 +96,12 @@ class AuctionsController extends Controller
     public function update(Request $request, $id)
     {
         $inputs = $request->all();
+
+        $dates =  explode(" - ",$inputs['reservationtime']);
+        $inputs['start_date'] = Carbon::parse($dates[0]);
+        $inputs['end_date'] = Carbon::parse($dates[1]);
+        unset($inputs['reservation']);
+
         $auction = Auction::find($id);
         $auction->update($inputs);
         return redirect()->route('auctions.index')->with(['success' => 'Auction ' . __("messages.update")]);
