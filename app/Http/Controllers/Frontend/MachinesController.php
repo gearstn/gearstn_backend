@@ -10,9 +10,10 @@ use App\Models\Machine;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\CollectionPaginate;
+use App\Http\Controllers\UploadsController;
 use App\Models\MachineModel;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class MachinesController extends Controller
 {
@@ -35,6 +36,13 @@ class MachinesController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
+        //Uploads route to upload images and get arroy of ids
+        $uploads_requests = Request::create(route('uploads.store'), 'POST', ['data' => $inputs['photos']]);
+        $response = Route::dispatch($uploads_requests);
+        $inputs['images'] = $response->getContent();
+        unset($inputs['photos']);
+
         $validator = Validator::make($inputs, Machine::$cast);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -43,7 +51,7 @@ class MachinesController extends Controller
         $machine = Machine::create($inputs);
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;
-        $machine->slug = $machine->year.'-'.$machine->manufacture.'-'.$model_title.'-'.$machine->sku;
+        $machine->slug = $machine->year.'-'.$machine->manufacture->title_en.'-'.$model_title.'-'.$machine->sku;
         $machine->save();
 
         return response()->json(new MachineResource($machine), 200);
