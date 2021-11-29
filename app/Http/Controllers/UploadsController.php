@@ -54,8 +54,8 @@ class UploadsController extends Controller
         foreach ($inputs['photos'] as $image) {
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
-            $path = /*Storage::disk('s3')->put('images', $image)*/'path';
-            $url = /*Storage::disk('s3')->url($path)*/ 'url';
+            $path = Storage::disk('s3')->put('images', $image);
+            $url = Storage::disk('s3')->url($path);
             $photo = [
                 'user_id' => Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
