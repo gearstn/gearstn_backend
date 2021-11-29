@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\CitiesController;
 use App\Http\Controllers\Frontend\SavedListController;
 use App\Http\Controllers\Frontend\UsersController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\UploadsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,10 @@ Route::prefix('/')->group(function () {
         Route::post('/list/add', [SavedListController::class,'addToList'])->name('list.add');
         Route::post('/list/remove', [SavedListController::class,'removeItem'])->name('list.remove');
         Route::get('/list/clear', [SavedListController::class,'clearList'])->name('list.clear');
+
+        Route::resource('uploads', UploadsController::class );
+        Route::delete('uploads', [UploadsController::class , 'destroy']);
+
     });
 
     //Index & Show of all Entities
@@ -77,4 +83,5 @@ Route::prefix('/')->group(function () {
     Route::get('/machines-search', [MachinesController::class, 'search_filter']);
     Route::get('/machines-filter-data', [MachinesController::class, 'getMinMaxOfField']);
     Route::get('/related-machines', [MachinesController::class, 'getRelatedMachines']);
+
 });

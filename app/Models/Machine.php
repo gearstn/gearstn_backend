@@ -38,10 +38,15 @@ class Machine extends Model
         'model_id',
     ];
     public static $cast = [
+        'year' => 'required',
+        'country' => 'required',
+        'sn' => 'required',
+        'rent_hours' => 'required',
         'description' => 'required',
         'condition' => 'required',
         'sell_type' => 'required',
         'seller_id' => 'required',
+        'category_id' => 'required',
         'sub_category_id' => 'required',
         'manufacture_id' => 'required',
         'model_id' => 'required',

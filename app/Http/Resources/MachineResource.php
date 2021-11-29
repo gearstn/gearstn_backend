@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\MachineModel;
 use App\Models\Manufacture;
 use App\Models\SubCategory;
+use App\Models\Upload;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,7 +33,7 @@ class MachineResource extends JsonResource
             'rent_hours' => $this->rent_hours,
             'country' => $this->country,
             'slug' => $this->slug,
-            'images' => $this->images,
+            'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
             'skq' => $this->skq,
             'price' => $this->price,
             'approved' => $this->approved,

@@ -24,7 +24,7 @@ class CreateMachinesTable extends Migration
             $table->string('rent_hours');
             $table->string('country');
             $table->string('slug');
-            $table->longText('images');
+            $table->json('images')->nullable();
             $table->boolean('approved')->default(0);
             $table->boolean('featured')->default(0);
             $table->boolean('verified')->default(0);
