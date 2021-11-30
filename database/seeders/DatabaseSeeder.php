@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         if (User::all()->count() == 0) $this->call(UserSeeder::class);
+        $this->call(UploadSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(SubCategorySeeder::class);
         $this->call(ManufactureSeeder::class);

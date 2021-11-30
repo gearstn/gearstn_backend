@@ -10,9 +10,7 @@ use App\Models\Machine;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\CollectionPaginate;
-use App\Http\Controllers\UploadsController;
 use App\Models\MachineModel;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class MachinesController extends Controller
@@ -142,17 +140,19 @@ class MachinesController extends Controller
 
     public function getMinMaxOfField(){
         $results =[];
-        $results['max_price'] = Machine::max('price');
-        $results['min_price'] = Machine::min('price');
-        $results['max_year'] = Machine::max('year');
-        $results['min_year'] = Machine::min('year');
-        $results['max_hours'] = Machine::max('hours');
-        $results['min_hours'] = Machine::min('hours');
+        $results[ 'max_price'] = Machine::max('price');
+        $results[ 'min_price'] = Machine::min('price');
+        $results[ 'max_year' ] = Machine::max('year' );
+        $results[ 'min_year' ] = Machine::min('year' );
+        $results[ 'max_hours'] = Machine::max('hours');
+        $results[ 'min_hours'] = Machine::min('hours');
         return response()->json($results,200);
     }
+
     public function getRelatedMachines(Request $request){
         $inputs = $request->all();
         $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
+
 }

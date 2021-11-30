@@ -41,7 +41,7 @@ class MachineFactory extends Factory
             'country' => $this->faker->country(),
             'city_id' => City::all()->random()->id,
             'slug' => $year.'-'.$manufacture.'-'.$model->title_en.'-'.$sku,
-            // 'images' => $this->faker->randomElement($images),
+            'images' => json_encode([1,2,3,4]),
             'approved' => $this->faker->numberBetween(0,1),
             'featured' => $this->faker->numberBetween(0,1),
             'verified' => $this->faker->numberBetween(0,1),
