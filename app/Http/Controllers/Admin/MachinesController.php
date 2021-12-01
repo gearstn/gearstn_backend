@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\MachinesDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MachineResource;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Machine;
@@ -12,6 +13,7 @@ use App\Models\Manufacture;
 use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -70,6 +72,14 @@ class MachinesController extends Controller
     {
         //Create the slug
         $inputs = $request->all();
+        $inputs['images'] = $inputs['photos'];
+        //Uploads route to upload images and get arroy of ids
+        // $uploads_requests = Request::create( route('uploads-store'), 'POST', ['data' => $inputs['photos']]);
+        // $response = Route::dispatch($uploads_requests);
+        // $inputs['images'] = $response->getContent();
+        // dd($response);
+        // unset($inputs['photos']);
+
         $inputs['sku'] = random_int(10000000, 99999999);
 
         $validator = Validator::make($inputs, Machine::$cast);
@@ -107,6 +117,8 @@ class MachinesController extends Controller
     public function edit($id)
     {
         $machine = Machine::findOrFail($id);
+        $machine_resource  = (new MachineResource($machine))->resolve();
+        $images = $machine_resource['images'];
         $categories = Category::all()->pluck("title_en", "id")->toArray();
         $categories[0] = 'Choose Category';
         ksort($categories);
@@ -126,7 +138,7 @@ class MachinesController extends Controller
         $cities[0] = 'Choose City';
         ksort($cities);
 
-        return view('admin.components.machine.edit', compact('machine','categories','manufactures','sub_categories','models','sellers','cities'));
+        return view('admin.components.machine.edit', compact('images','machine','categories','manufactures','sub_categories','models','sellers','cities'));
     }
 
     /**

@@ -22,7 +22,9 @@
                             @method('POST')
                             {{csrf_field()}}
                             @include('admin.components.machine.fields')
+                            <input type="hidden" id="photos" name="photos" value="{{ $machine->images }}">
                             {!!form::close()!!}
+                            @include('admin.widgets.uploader.dragdrop')
                             <button type="submit" class="btn btn-block btn-success" onclick="$('#form-data').submit()">Submit</button>
                         </div>
                     </div>

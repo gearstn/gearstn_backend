@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\SubCategoriesController;
 use App\Http\Controllers\Admin\UsersControllers;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\UploadsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,7 +53,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('auctions', AuctionsController::class);
         Route::resource('cities', CitiesController::class);
         Route::resource('users', UsersControllers::class);
-    Route::post('/image-uploader', [ImageUploadController::class, 'imageUploadPost'])->name('upload');
+        Route::post('uploads', [UploadsController::class,'store'] )->name('uploads-store');
+        Route::delete('uploads', [UploadsController::class , 'destroy']);
 
     });
 
