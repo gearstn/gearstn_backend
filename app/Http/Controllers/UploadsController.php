@@ -43,6 +43,8 @@ class UploadsController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
+
         $validator = Validator::make($inputs, [
             "photos" => ["required","array","min:1","max:5"],
             "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:500"],
