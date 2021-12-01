@@ -38,9 +38,11 @@ class AuthController extends Controller
 
         // $token = $user->createToken('API Token')->plainTextToken;
         return response()->json([
-            'message' => 'You Have registered successfully',
-            'email_verification' => 'Please, check your Email to verify your Email',
-        ]);
+            'message_en' => 'You Have registered successfully',
+            'message_ar' => 'لقد تم تسجيل الحساب بنجاح',
+            'email_verification_en' => 'Please, check your Email to verify your Email',
+            'email_verification_ar' => 'من فضلك تحقق من البريد الاكترونى الخاص بك لتاكيد الحساب',
+        ],200);
     }
 
 
@@ -48,13 +50,15 @@ class AuthController extends Controller
     {
         $attr = $request->validate([
             'email' => 'required|string|email',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string'
         ]);
-
         if (!Auth::attempt($attr)) {
             return $this->error('Credentials not match', 401);
         }
-
+        if (Auth::user()->email_verified_at == null) {
+            return $this->error( 'Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
+                                              'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
+        }
         return response()->json([
             'token' => auth()->user()->createToken('API Token')->plainTextToken
         ]);
