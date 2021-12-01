@@ -30,7 +30,9 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->group(function () {
     Auth::routes(['register' => false]);
 });
-
+Route::get('/', function () {
+    return view('welcome');
+});
     // Route::post('/auth/register', [AuthController::class, 'register']);
     // Route::get('/auth/login',[AuthController::class, 'login_admin'])->name('login_admin');
 

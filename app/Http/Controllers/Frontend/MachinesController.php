@@ -41,6 +41,22 @@ class MachinesController extends Controller
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
+        //If the client wants to create a non existing model
+        if($inputs['model_id'] == null && isset($inputs['new_model'])){
+            $models_controller = new MachineModelsController();
+            $request = new Request([
+                'title_en' => $inputs['new_model'],
+                'title_ar' => $inputs['new_model'],
+                'category_id' => $inputs['category_id'],
+                'sub_category_id' => $inputs['sub_category_id'],
+                'manufacture_id' => $inputs['manufacture_id'],
+            ]);
+            $response = $models_controller->store($request);
+            if($response->status() != 200)
+                return $response;
+            $inputs['model_id'] = json_decode($response->getContent())->id;
+        }
+
         $validator = Validator::make($inputs, Machine::$cast);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);

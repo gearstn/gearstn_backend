@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -44,27 +44,22 @@ class LoginController extends Controller
         return view('admin.auth.login');
     }
 
-    // public function login(Request $request)
-    // {
-    //     $input = $request->all();
+    public function login(Request $request)
+    {
+        $input = $request->all();
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    //     $this->validate($request, [
-    //         'email' => 'required|email',
-    //         'password' => 'required',
-    //     ]);
+        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'],'is_admin' => 1)) )
+        {
+            return redirect()->route('dashboard');
+        }else{
+            return redirect()->route('login')
+                ->with('error','Email-Address And Password Are Wrong.');
+        }
 
-    //     if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
-    //     {
-    //         if (auth()->user()->is_admin == 1) {
-    //             return redirect()->route('dashboard');
-    //         }else{
-    //             return redirect()->route('home');
-    //         }
-    //     }else{
-    //         return redirect()->route('login_admin')
-    //             ->with('error','Email-Address And Password Are Wrong.');
-    //     }
-
-    // }
+    }
 
 }
