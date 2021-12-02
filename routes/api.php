@@ -36,7 +36,6 @@ Route::prefix('/')->group(function () {
 
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
-
     //Auth routes
     Route::group(['middleware' => ['auth:sanctum']], function () {
 
@@ -52,8 +51,9 @@ Route::prefix('/')->group(function () {
 
         //Verification Routes
         Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
-        Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+        Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
         Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
+
 
         //Store Update Destroy routes for Machines and Models
         Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('store','update','destroy');

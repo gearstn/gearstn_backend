@@ -52,7 +52,6 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-dd(Auth::attempt(array('email' => $input['email'], 'password' => $input['password'])));
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'],'is_admin' => 1)) )
         {
             return redirect()->route('dashboard');
