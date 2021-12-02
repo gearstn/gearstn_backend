@@ -12,14 +12,14 @@ class SavedListController extends Controller
 {
     public function getList()
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find(auth()->user()->id);
         return response()->json($user->wishlist($user->id),200);
     }
 
     public function addToList(Request $request)
     {
         $inputs = $request->all();
-        $user = User::find(Auth::user()->id);
+        $user = User::find(auth()->user()->id);
         $machine = Machine::find($inputs['machine_id']);
         $user->wish($machine,$user->id);
         return response()->json($user->wishlist($user->id),200);
@@ -29,7 +29,7 @@ class SavedListController extends Controller
     public function removeItem(Request $request)
     {
         $inputs = $request->all();
-        $user = User::find(Auth::user()->id);
+        $user = User::find(auth()->user()->id);
         $machine = Machine::find($inputs['machine_id']);
         $user->unwish($machine,$user->id);
         return response()->json($user->wishlist($user->id),200);
@@ -37,7 +37,7 @@ class SavedListController extends Controller
 
     public function clearList()
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find(auth()->user()->id);
         $machines_whislist = $user->wishlist($user->id);
         foreach($machines_whislist as $machine)
         {
