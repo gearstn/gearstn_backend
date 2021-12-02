@@ -40,9 +40,8 @@ class AuthServiceProvider extends ServiceProvider
             return (new MailMessage)
                 ->subject('Verify Email Address')
                 ->line('Click the button below to verify your email address.')
-                ->action('Verify Email Address', 'https://127.0.0.1::3000');
+                ->action('Verify Email Address', env('APP_URL').'/verfiy-email?email='.$notifiable->email);
         });
 
-        //
     }
 }
