@@ -17,8 +17,8 @@ class ManufactureSeeder extends Seeder
     {
         $manufactures = [
             [
-                'title_en' => 'cat',
-                'title_ar' => 'كات',
+                'title_en' => 'caterpillar',
+                'title_ar' => 'كاتربيلر',
                 'sub_category_id' => SubCategory::all()->random()->id,
             ],
             [
@@ -58,7 +58,7 @@ class ManufactureSeeder extends Seeder
             ],
             [
                 'title_en' => 'jcb',
-                'title_ar' => 'جسب',
+                'title_ar' => 'ج سى بي',
                 'sub_category_id' => SubCategory::all()->random()->id,
             ],
             [
