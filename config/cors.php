@@ -33,9 +33,11 @@ return [
 
     'paths' => ['api/*'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['*'],
-    'allowed_origins_patterns' => ['*'],
+    // 'allowed_origins' => ['http://127.0.0.1:8080/', 'http://localhost:8080/'], <-- doesn't work, still gets CORS error
+    'allowed_origins' => ['*'],  // <-- it works but it should not be like that
+    'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
+    // 'allowed_headers' => ['*'],
     'exposed_headers' => false,
     'max_age' => 0,
     'supports_credentials' => false,
