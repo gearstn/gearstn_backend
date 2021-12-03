@@ -37,7 +37,7 @@ Route::prefix('/')->group(function () {
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
     //Auth routes
-    Route::group(['middleware' => ['auth:sanctum','cors']], function () {
+    Route::group(['middleware' => ['auth:sanctum']], function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
