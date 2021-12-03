@@ -41,8 +41,8 @@ Route::prefix('/')->group(function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
-        Route::get('/users/profile',[UsersController::class, 'getNormalUser'])->middleware('cors');
-        Route::get('/users/full-profile',[UsersController::class, 'getFullUser'])->middleware('cors');
+        Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
+        Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
         Route::put('/users',[UsersController::class, 'update'])->name('users.update');
         Route::resource('users',UsersController::class)->only('destroy');
 
