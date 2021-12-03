@@ -9,7 +9,7 @@ class Category extends Model
     use HasFactory;
 
     protected $table = 'categories';
-    protected $fillable = ['title_en','title_ar'];
+    protected $fillable = ['title_en','title_ar','image_url'];
 
     public static $cast = [
         'title_en' => 'required|unique:categories',
