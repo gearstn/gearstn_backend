@@ -41,7 +41,7 @@ Route::prefix('/')->group(function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
-        Route::get('/users/profile',[UsersController::class, 'getNormalUser'])->middleware('cors');
+        Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
         Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
         Route::put('/users',[UsersController::class, 'update'])->name('users.update');
         Route::resource('users',UsersController::class)->only('destroy');
@@ -70,7 +70,7 @@ Route::prefix('/')->group(function () {
     });
 
     //Index & Show of all Entities
-    Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show')->middleware('cors');
     Route::resource('sub-categories',SubCategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('manufactures',ManufacturesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('index','show');
