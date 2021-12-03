@@ -37,7 +37,7 @@ Route::prefix('/')->group(function () {
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
     //Auth routes
-    Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['middleware' => ['auth:sanctum','cors']], function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
@@ -70,7 +70,7 @@ Route::prefix('/')->group(function () {
     });
 
     //Index & Show of all Entities
-    Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show')->middleware('cors');
+    Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('sub-categories',SubCategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('manufactures',ManufacturesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('index','show');
