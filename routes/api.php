@@ -29,7 +29,7 @@ use App\Http\Controllers\UploadsController;
 
 
 //Routes for frontend
-Route::prefix('/')->group(function () {
+Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     //Login & register Frontend
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::get('/auth/login',[AuthController::class, 'login'])->name('frontend_login');
@@ -37,7 +37,7 @@ Route::prefix('/')->group(function () {
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
     //Auth routes
-    Route::group(['middleware' => ['auth:sanctum','cors']], function () {
+    Route::group(['middleware' => ['auth:sanctum']], function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
