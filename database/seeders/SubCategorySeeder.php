@@ -39,6 +39,11 @@ class SubCategorySeeder extends Seeder
                 'category_id' => Category::all()->random()->id,
             ],
             [
+                'title_en' => 'motor grader',
+                'title_ar' => 'ممهدة الطرق',
+                'category_id' => Category::all()->random()->id,
+            ],
+            [
                 'title_en' => 'roller',
                 'title_ar' => 'أسطوانة',
                 'category_id' => Category::all()->random()->id,
