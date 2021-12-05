@@ -66,6 +66,11 @@ class ManufactureSeeder extends Seeder
                 'title_ar' => 'نيوهولاند',
                 'sub_category_id' => SubCategory::all()->random()->id,
             ],
+            [
+                'title_en' => 'ingresrol rand',
+                'title_ar' => 'انجريرول',
+                'sub_category_id' => SubCategory::all()->random()->id,
+            ],
        ];
 
        foreach ($manufactures as $manufacture) {
