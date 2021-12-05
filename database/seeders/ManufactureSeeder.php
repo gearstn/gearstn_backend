@@ -42,8 +42,8 @@ class ManufactureSeeder extends Seeder
                 'sub_category_id' => SubCategory::all()->random()->id,
             ],
             [
-                'title_en' => 'komaysu',
-                'title_ar' => 'كومايسو',
+                'title_en' => 'komatsu',
+                'title_ar' => 'كومتسو',
                 'sub_category_id' => SubCategory::all()->random()->id,
             ],
             [
