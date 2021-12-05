@@ -73,7 +73,10 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('sub-categories',SubCategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('manufactures',ManufacturesController::class ,['as' => 'frontend'])->only('index','show');
+
     Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('index','show');
+    Route::get('/filter_models', [ MachineModelsController::class , 'filter_models' ])->name('machine-models.filter_models');
+
     Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');

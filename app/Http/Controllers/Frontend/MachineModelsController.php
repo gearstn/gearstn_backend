@@ -24,7 +24,6 @@ class MachineModelsController extends Controller
     {
         $models = MachineModel::paginate(number_in_page());
         return MachineModelResource::collection($models)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
-
     }
 
 
@@ -58,5 +57,22 @@ class MachineModelsController extends Controller
     {
         $models = MachineModel::findOrFail($id);
         return response()->json(new MachineModelResource($models),200);
+    }
+
+    //Get models based on sub_category_id && manufacture_id
+    public function filter_models(Request $request)
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'sub_category_id' => 'required',
+            'manufacture_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $models = MachineModel::where('sub_category_id',$inputs['sub_category_id'])->where('manufacture_id',$inputs['manufacture_id'])->get();
+        // dd($models);
+        return MachineModelResource::collection($models)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
     }
 }
