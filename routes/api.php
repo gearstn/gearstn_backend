@@ -29,14 +29,13 @@ use App\Http\Controllers\UploadsController;
 
 
 //Routes for frontend
-Route::prefix('/')->group(function () {
+Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     //Login & register Frontend
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::get('/auth/login',[AuthController::class, 'login'])->name('frontend_login');
 
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
-
     //Auth routes
     Route::group(['middleware' => ['auth:sanctum']], function () {
 
@@ -44,16 +43,17 @@ Route::prefix('/')->group(function () {
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
         Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
         Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
-        Route::put('/users',[UsersController::class, 'update'])->name('users.update');
-        Route::resource('users',UsersController::class)->only('destroy');
+       // Route::put('/users',[UsersController::class, 'update'])->name('users.update');
+        Route::resource('users',UsersController::class)->only('destroy','update');
 
         //Logout User
         Route::post('/auth/logout',[AuthController::class, 'logout']);
 
         //Verification Routes
         Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
-        Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+        Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
         Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
+
 
         //Store Update Destroy routes for Machines and Models
         Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('store','update','destroy');
@@ -73,7 +73,10 @@ Route::prefix('/')->group(function () {
     Route::resource('categories',CategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('sub-categories',SubCategoriesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('manufactures',ManufacturesController::class ,['as' => 'frontend'])->only('index','show');
+
     Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('index','show');
+    Route::get('/filter_models', [ MachineModelsController::class , 'filter_models' ])->name('machine-models.filter_models');
+
     Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');

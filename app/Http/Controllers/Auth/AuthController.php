@@ -55,10 +55,10 @@ class AuthController extends Controller
         if (!Auth::attempt($attr)) {
             return $this->error('Credentials not match', 401);
         }
-        if (Auth::user()->email_verified_at == null) {
+        /*if (Auth::user()->email_verified_at == null) {
             return $this->error( 'Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
                                               'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
-        }
+        }*/
         return response()->json([
             'token' => auth()->user()->createToken('API Token')->plainTextToken
         ]);
