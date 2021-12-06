@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\AuctionsController;
 use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\CitiesController;
+use App\Http\Controllers\Frontend\MailsController;
 use App\Http\Controllers\Frontend\SavedListController;
 use App\Http\Controllers\Frontend\UsersController;
 use App\Http\Controllers\ImageUploadController;
@@ -37,7 +38,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
     //Auth routes
-    Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::middleware('auth:sanctum')->group( function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
@@ -66,6 +67,9 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
 
         Route::resource('uploads', UploadsController::class );
         Route::delete('uploads', [UploadsController::class , 'destroy']);
+
+        //Mails Routes
+        Route::get('/contact-seller', [MailsController::class, 'contact_seller']);
 
     });
 
