@@ -51,26 +51,28 @@ class UsersController extends Controller
             //Uploads route to upload images and get array of ids
             $uploads_controller = new UploadsController();
             $request = new Request([
-                'photos' => $inputs['tax_license_image'],
+                'photos' => [$inputs['tax_license_image']],
                 'seller_id' => $user->id,
             ]);
             $response = $uploads_controller->store($request);
             if($response->status() != 200) { return $response; }
-            $inputs['tax_license_image'] = $response->getContent();
+            $inputs['tax_license_image'] = json_decode($response->getContent())[0];
         }
 
         if(isset($inputs['commercial_license_image'])) {
             //Uploads route to upload images and get array of ids
             $uploads_controller = new UploadsController();
             $request = new Request([
-                'photos' => $inputs['commercial_license_image'],
+                'photos' => [$inputs['commercial_license_image']],
                 'seller_id' => $user->id,
             ]);
             $response = $uploads_controller->store($request);
             if($response->status() != 200) { return $response; }
-            $inputs['tax_license_image'] = $response->getContent();
+            $inputs['commercial_license_image'] = json_decode($response->getContent())[0];
         }
+        // dd($inputs);
         $user->update($inputs);
+        $user->save();
         return response()->json(['message' => 'Profile Updated Successfully'], 200);
     }
 
