@@ -41,7 +41,7 @@ class Machine extends Model
         'year' => 'required',
         'country' => 'required',
         'sn' => 'required',
-        'rent_hours' => 'required',
+        // 'rent_hours' => 'required',
         'description' => 'required',
         'condition' => 'required',
         'sell_type' => 'required',
@@ -50,6 +50,7 @@ class Machine extends Model
         'sub_category_id' => 'required',
         'manufacture_id' => 'required',
         'model_id' => 'required',
+        'city_id' => 'required',
     ];
 
     public function category()
