@@ -29,6 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CitySeeder::class);
         $this->call(MachineModelSeeder::class);
         // MachineModel::factory()->count(50)->create();
-        Machine::factory()->count(100)->create();
+        Machine::factory()->count(1000)->create();
     }
 }
