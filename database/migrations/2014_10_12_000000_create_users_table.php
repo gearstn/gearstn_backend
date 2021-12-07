@@ -20,9 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('company_name')->nullable();
             $table->string('country')->nullable();
             $table->string('tax_license')->nullable()->unique();
-            $table->string('tax_license_image')->nullable();
+            $table->unsignedBigInteger('tax_license_image')->nullable();
             $table->string('commercial_license')->nullable()->unique();
-            $table->string('commercial_license_image')->nullable();
+            $table->unsignedBigInteger('commercial_license_image')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

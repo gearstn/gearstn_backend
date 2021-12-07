@@ -13,7 +13,7 @@ class UploadsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:sanctum');
     }
     /**
      * Display a listing of the resource.
@@ -59,7 +59,7 @@ class UploadsController extends Controller
             $path = Storage::disk('s3')->put('images', $image);
             $url = Storage::disk('s3')->url($path);
             $photo = [
-                'user_id' => Auth::user()->id,
+                'user_id' => $inputs['seller_id'],
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
                 'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
                 'file_name' => $newFileName,
@@ -69,7 +69,7 @@ class UploadsController extends Controller
             ];
             $images[] = Upload::create($photo)->id;
         }
-        return $images;
+        return response()->json($images,200);
     }
 
     /**

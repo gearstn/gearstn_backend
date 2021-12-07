@@ -10,6 +10,7 @@ use App\Models\Machine;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\CollectionPaginate;
+use App\Http\Controllers\UploadsController;
 use App\Models\MachineModel;
 use Illuminate\Support\Facades\Route;
 
@@ -35,27 +36,16 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
 
-        //Uploads route to upload images and get arroy of ids
-        $uploads_requests = Request::create(route('uploads.store'), 'POST', ['data' => $inputs['photos']]);
-        $response = Route::dispatch($uploads_requests);
+        //Uploads route to upload images and get array of ids
+        $uploads_controller = new UploadsController();
+        $request = new Request([
+            'photos' => $inputs['photos'],
+            'seller_id' => $inputs['seller_id'],
+        ]);
+        $response = $uploads_controller->store($request);
+        if($response->status() != 200) { return $response; }
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
-
-        //If the client wants to create a non existing model
-        if($inputs['model_id'] == null && isset($inputs['new_model'])){
-            $models_controller = new MachineModelsController();
-            $request = new Request([
-                'title_en' => $inputs['new_model'],
-                'title_ar' => $inputs['new_model'],
-                'category_id' => $inputs['category_id'],
-                'sub_category_id' => $inputs['sub_category_id'],
-                'manufacture_id' => $inputs['manufacture_id'],
-            ]);
-            $response = $models_controller->store($request);
-            if($response->status() != 200)
-                return $response;
-            $inputs['model_id'] = json_decode($response->getContent())->id;
-        }
 
         $validator = Validator::make($inputs, Machine::$cast);
         if ($validator->fails()) {

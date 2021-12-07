@@ -41,7 +41,7 @@ class Machine extends Model
         'year' => 'required',
         'country' => 'required',
         'sn' => 'required',
-        'rent_hours' => 'required',
+        // 'rent_hours' => 'required',
         'description' => 'required',
         'condition' => 'required',
         'sell_type' => 'required',
@@ -50,6 +50,7 @@ class Machine extends Model
         'sub_category_id' => 'required',
         'manufacture_id' => 'required',
         'model_id' => 'required',
+        'city_id' => 'required',
     ];
 
     public function category()
@@ -87,18 +88,7 @@ class Machine extends Model
     {
         return [
             'id' => $this->id,
-            // 'year' => $this->year,
             'sn' => $this->sn,
-            // 'condition' => $this->condition,
-            // 'hours' => $this->hours,
-            // 'description' => $this->description,
-            // 'sell_type' => $this->sell_type,
-            // 'rent_hours' => $this->rent_hours,
-            // 'country' => $this->country,
-            // 'city' => $this->city,
-            // 'price' => $this->price,
-            // 'sku' => $this->sku,
-            // 'country' => $this->country,
             'category_title_en' => $this->category['title_en'],
             'category_title_ar' => $this->category['title_ar'],
             'sub_category_title_en' => $this->sub_category['title_en'],
@@ -106,7 +96,7 @@ class Machine extends Model
             'manufacture_title_en' => $this->manufacture['title_en'],
             'manufacture_title_ar' => $this->manufacture['title_ar'],
             'model_title_en' => $this->model['title_en'],
-            'model_title_ar' => $this->model['title_ar'],
+            'model_title_ar' => $this->model['title_ar']
         ];
     }
 

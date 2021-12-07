@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
-
+use App\Http\Resources\MachineResource;
 use App\Models\Machine;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class SavedListController extends Controller
     public function getList()
     {
         $user = User::find(auth()->user()->id);
-        return response()->json($user->wishlist($user->id),200);
+        return response()->json(MachineResource::collection($user->wishlist($user->id)),200);
     }
 
     public function addToList(Request $request)
@@ -32,7 +32,7 @@ class SavedListController extends Controller
         $user = User::find(auth()->user()->id);
         $machine = Machine::find($inputs['machine_id']);
         $user->unwish($machine,$user->id);
-        return response()->json($user->wishlist($user->id),200);
+        return response()->json(MachineResource::collection($user->wishlist($user->id)),200);
     }
 
     public function clearList()
