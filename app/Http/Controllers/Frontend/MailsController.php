@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ContactBuyerMail;
 use App\Mail\ContactSellerMail;
 use App\Models\Machine;
 use App\Models\User;
@@ -17,13 +18,23 @@ class MailsController extends Controller
         $inputs = $request->all();
         $machine = Machine::find($inputs['machine_id']);
         $seller = User::find($machine->seller_id);
-        $details = [
+
+        $seller_details = [
             'title' => 'Request price for '.$machine->slug,
+            'machine' => $machine,
             'body' => $inputs['message'],
-            'buyer'=> auth()->user()->email
+            'seller'=> $seller,
+            'buyer'=> auth()->user()
         ];
 
-        Mail::to($seller->email)->send(new ContactSellerMail($details));
+        $buyer_details = [
+            'title' => 'You have requested price for '.$machine->slug,
+            'seller'=> $seller,
+            'buyer'=> auth()->user()
+        ];
+
+        Mail::to($seller->email)->send(new ContactSellerMail($seller_details));
+        Mail::to(auth()->user()->email)->send(new ContactBuyerMail($buyer_details));
         return response('Email sent Successfully',200);
     }
 }
