@@ -15,13 +15,13 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user1 = [
+        /*$user1 = [
             'first_name' => 'User',
             'last_name' => 'User',
             'company_name' => 'Company',
             'email' => 'user@user.com',
             'password' => bcrypt('12345678'),
-        ];
+        ];*/
         $admin = [
             'first_name' => 'admin',
             'last_name' => 'admin',
@@ -30,11 +30,11 @@ class UserSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ];
         $admin = User::create($admin);
-        $user = User::create($user1);
+        //$user = User::create($user1);
 
 
         $role = Role::find(1)->first();
-        $user->assignRole($role);
+        //$user->assignRole($role);
         $admin->assignRole($role);
     }
 }
