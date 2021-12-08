@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Mail\ContactBuyerMail;
 use App\Mail\ContactSellerMail;
+use App\Mail\StoreMachineMail;
 use App\Models\Machine;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,6 +36,22 @@ class MailsController extends Controller
 
         Mail::to($seller->email)->send(new ContactSellerMail($seller_details));
         Mail::to(auth()->user()->email)->send(new ContactBuyerMail($buyer_details));
+        return response('Email sent Successfully',200);
+    }
+
+
+    public function store_machine(Request $request)
+    {
+        $inputs = $request->all();
+        $machine = Machine::find($inputs['machine_id']);
+        $seller = User::find($machine->seller_id);
+
+        $details = [
+            'title' => 'You have stored machine '.$machine->slug,
+            'seller'=> $seller,
+        ];
+
+        Mail::to($seller->email)->send(new StoreMachineMail($details));
         return response('Email sent Successfully',200);
     }
 }
