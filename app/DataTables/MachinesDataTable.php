@@ -70,7 +70,7 @@ class MachinesDataTable extends DataTable
      */
     public function query(Machine $model)
     {
-        return $model->newQuery()->where('approved',1);
+        return $model->newQuery();
     }
 
     /**
