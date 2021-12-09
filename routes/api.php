@@ -54,9 +54,9 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         Route::post('/auth/logout',[AuthController::class, 'logout']);
 
         //Verification Routes
-        // Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
-        // Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
-        // Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
+        Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+        Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+        Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
 
 
         //Store Update Destroy routes for Machines and Models
