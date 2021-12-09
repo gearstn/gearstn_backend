@@ -21,7 +21,7 @@ class CreateMachinesTable extends Migration
             $table->BigInteger('hours')->nullable();
             $table->longText('description');
             $table->string('sell_type');
-            $table->string('rent_hours');
+            $table->string('rent_hours')->nullable();
             $table->string('country');
             $table->string('slug');
             $table->json('images')->nullable();
