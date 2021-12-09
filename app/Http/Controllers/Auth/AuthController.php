@@ -32,7 +32,7 @@ class AuthController extends Controller
             return response()->json($validator->messages(), 400);
         }
         $inputs['password'] = bcrypt($inputs['password']);
-        $role = Role::find($inputs['role_id'])->first();
+        $role = Role::find($inputs['role_id']);
         $user = User::create($inputs);
         $user->assignRole($role);
         event(new Registered($user));
