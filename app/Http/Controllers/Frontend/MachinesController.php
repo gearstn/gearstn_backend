@@ -42,7 +42,7 @@ class MachinesController extends Controller
             'photos' => $inputs['photos'],
             'seller_id' => $inputs['seller_id'],
         ]);
-        if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = null;
+        if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $response = $uploads_controller->store($request);
         if($response->status() != 200) { return $response; }
         $inputs['images'] = $response->getContent();
