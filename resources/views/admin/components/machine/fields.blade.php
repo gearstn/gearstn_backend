@@ -43,12 +43,12 @@
             {{form::text('country', $machine->country ,['class'=>'form-control','placeholder'=>'Country'])}}
         </div>
     </div>
-    <div class="col-sm-3">
+    {{-- <div class="col-sm-3">
         <div class="form-group">
             {{ form::label('images','Images Link')}}
             {{form::text('images', $machine->images ,['class'=>'form-control','placeholder'=>'Images Link'])}}
         </div>
-    </div>
+    </div> --}}
 </div>
 <div class="row">
     <div class="col-sm-3">

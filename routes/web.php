@@ -55,8 +55,8 @@ Route::get('/', function () {
         Route::resource('auctions', AuctionsController::class);
         Route::resource('cities', CitiesController::class);
         Route::resource('users', UsersControllers::class);
-        Route::post('uploads', [UploadsController::class,'store'] )->name('uploads-store');
-        Route::delete('uploads', [UploadsController::class , 'destroy']);
+        Route::post('uploads', [UploadsController::class,'store'] )->name('uploads.store');
+        Route::post('uploads', [UploadsController::class , 'destroy'])->name('uploads.destroy');
 
     });
 

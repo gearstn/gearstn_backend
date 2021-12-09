@@ -24,26 +24,33 @@
                             @method('PATCH')
                             {{csrf_field()}}
                             @include('admin.components.machine.fields')
+                            <input type="hidden" id="photos" name="photos" value="{{ $machine->images }}">
                             {!!form::close()!!}
 
-                            <button type="submit" class="btn btn-block btn-success" onclick="$('#form-data').submit()">
-                                Submit
-                            </button>
+                            <label> Upload New Imgaes </label>
+                            @include('admin.widgets.uploader.dragdrop' , $attr=['route' => 'edit'] )
+
+                            <label> Stored Images </label>
                             <div class="row mt-3">
                                 @foreach( $images as $image )
                                     <div class="col-sm-3">
                                         <img src="{{ $image->url }}"  width="100%" height="100%" style="object-fit: cover">
 
-                                        <form action="{{route("{$page}.destroy", $data->id)}}" method="POST" onsubmit="return confirm('Are you sure?')"
+                                        <form action="{{route("uploads.destroy")}}" method="POST" onsubmit="return confirm('Are you sure?')"
                                             style="display: inline-block;">
                                           @csrf
-                                          <input type="hidden" name="_method" value="DELETE">
+                                          <input type="hidden" name="_method" value="POST">
+                                          <input type="hidden" name="ids" value=" {{ $image->id }} ">
                                           <input type="submit" class="btn btn-xs btn-danger" value="Delete">
                                         </form>
-
                                     </div>
                                 @endforeach
                             </div>
+
+                            <button type="submit" class="btn btn-block btn-success" onclick="$('#form-data').submit()">
+                                Submit Changes
+                            </button>
+
                         </div>
                     </div>
                 </div>
