@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Upload;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FullUserResource extends JsonResource
@@ -21,9 +22,9 @@ class FullUserResource extends JsonResource
             "company_name" => $this->company_name,
             "email" => $this->email,
             "tax_license" => $this->tax_license,
-            "tax_license_image" => $this->tax_license_image,
+            "tax_license_image" => Upload::find($this->tax_license_image,['id', 'url']),
             "commercial_license" => $this->commercial_license,
-            "commercial_license_image" => $this->commercial_license_image,
+            "commercial_license_image" => Upload::find($this->commercial_license_image,['id', 'url']),
             "country" => $this->country,
             "role" => $this->getRoleNames(),
         ];

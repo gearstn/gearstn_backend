@@ -58,6 +58,15 @@ class MachinesController extends Controller
         $machine->slug = $machine->year.'-'.$machine->manufacture->title_en.'-'.$model_title.'-'.$machine->sku;
         $machine->save();
 
+        //Send Mail To the machine owner
+        $mails_controller = new MailsController();
+        $request = new Request([
+            'machine_id' => $machine->id,
+            'seller_id' => $inputs['seller_id'],
+        ]);
+        $response = $mails_controller->store_machine($request);
+        if($response->status() != 200) { return $response; }
+
         return response()->json(new MachineResource($machine), 200);
     }
 

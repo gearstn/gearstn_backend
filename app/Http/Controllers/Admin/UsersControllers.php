@@ -95,7 +95,7 @@ class UsersControllers extends Controller
         $user = User::find($id);
         $user->update($inputs);
         $user->roles()->detach();
-        $role = Role::find($inputs['role_id'])->first();
+        $role = Role::find($inputs['role_id']);
         $user->assignRole($role);
 
         return redirect()->route('users.index')->with(['success' => 'User ' . __("messages.update")]);

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use App\Traits\ApiResponser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -55,10 +56,10 @@ class AuthController extends Controller
         if (!Auth::attempt($attr)) {
             return $this->error('Credentials not match', 401);
         }
-        /*if (Auth::user()->email_verified_at == null) {
+        if (Auth::user()->email_verified_at == null) {
             return $this->error( 'Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
                                               'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
-        }*/
+        }
         return response()->json([
             'token' => auth()->user()->createToken('API Token')->plainTextToken
         ]);
@@ -85,6 +86,22 @@ class AuthController extends Controller
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
     }
+
+
+
+    public function verify(Request $request)
+    {
+        $inputs = $request->validate([
+            'email' => 'required',
+        ]);
+        $user = User::where('email',$inputs['email'])->first();
+        $user->email_verified_at = now();
+        $user->save();
+        return response()->json([
+            'message' => 'Email verified successfully',
+        ],200);
+    }
+
 
     public function __invoke()
     {
