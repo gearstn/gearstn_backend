@@ -79,7 +79,8 @@ class NewsDataTable extends DataTable
     {
         return [
             Column::make('id')->title("ID"),
-            Column::make('title'),
+            Column::make('title_en'),
+            Column::make('title_ar'),
             Column::make('post_date'),
             Column::make('image_url')->title('Image Link'),
             Column::make('bodytext')->title('Body Text'),

@@ -53,7 +53,7 @@ class NewsController extends Controller
             return redirect()->route('news.create')->withErrors($validator)->withInput();
         }
         $news = News::create($inputs);
-        $news->slug = Str::slug($inputs['title'], '-') .'-'. $news->created_at->timestamp;
+        $news->slug = Str::slug($inputs['title_en'], '-') .'-'. $news->created_at->timestamp;
         $news->save();
 
         return redirect()->route('news.index')->with(['success' => 'News ' . __("messages.add")]);
@@ -96,7 +96,7 @@ class NewsController extends Controller
         $inputs = $request->all();
         $news = News::find($id);
         $news->update($inputs);
-        $news->slug = Str::slug($inputs['title'], '-') .'-'. $news->created_at->timestamp;
+        $news->slug = Str::slug($inputs['title_en'], '-') .'-'. $news->created_at->timestamp;
         $news->save();
 
         return redirect()->route('news.index')->with(['success' => 'News ' . __("messages.update")]);
