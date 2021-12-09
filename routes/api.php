@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\AuctionsController;
 use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\CitiesController;
+use App\Http\Controllers\Frontend\MailsController;
 use App\Http\Controllers\Frontend\SavedListController;
 use App\Http\Controllers\Frontend\UsersController;
 use App\Http\Controllers\ImageUploadController;
@@ -34,25 +35,28 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::get('/auth/login',[AuthController::class, 'login'])->name('frontend_login');
 
+    //Verification Routes
+    Route::post('/email/verify', [AuthController::class, 'verify']);
+
     // FORGET PASSWORD
     Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
     //Auth routes
-    Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::middleware('auth:sanctum')->group( function () {
 
         //User profile routes
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
         Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
         Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
-       // Route::put('/users',[UsersController::class, 'update'])->name('users.update');
-        Route::resource('users',UsersController::class)->only('destroy','update');
+        Route::post('/users',[UsersController::class, 'update'])->name('users.update');
+        Route::resource('users',UsersController::class)->only('destroy');
 
         //Logout User
         Route::post('/auth/logout',[AuthController::class, 'logout']);
 
         //Verification Routes
-        Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
-        Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
-        Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
+        // Route::get('/email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+        // Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify')->middleware(['signed']);
+        // Route::post('/email/resend',[VerificationController::class, 'resend'])->name('verification.resend');
 
 
         //Store Update Destroy routes for Machines and Models
@@ -66,6 +70,9 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
 
         Route::resource('uploads', UploadsController::class );
         Route::delete('uploads', [UploadsController::class , 'destroy']);
+
+        //Mails Routes
+        Route::get('/contact-seller', [MailsController::class, 'contact_seller']);
 
     });
 

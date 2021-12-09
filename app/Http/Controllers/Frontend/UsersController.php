@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
-
+use App\Http\Controllers\UploadsController;
 use App\Http\Resources\FullUserResource;
 use App\Http\Resources\NormalUserResource;
 use App\Models\User;
@@ -47,7 +47,32 @@ class UsersController extends Controller
     {
         $inputs = $request->all();
         $user = Auth::user();
+        if(isset($inputs['tax_license_image'])) {
+            //Uploads route to upload images and get array of ids
+            $uploads_controller = new UploadsController();
+            $request = new Request([
+                'photos' => [$inputs['tax_license_image']],
+                'seller_id' => $user->id,
+            ]);
+            $response = $uploads_controller->store($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['tax_license_image'] = json_decode($response->getContent())[0];
+        }
+
+        if(isset($inputs['commercial_license_image'])) {
+            //Uploads route to upload images and get array of ids
+            $uploads_controller = new UploadsController();
+            $request = new Request([
+                'photos' => [$inputs['commercial_license_image']],
+                'seller_id' => $user->id,
+            ]);
+            $response = $uploads_controller->store($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['commercial_license_image'] = json_decode($response->getContent())[0];
+        }
+        // dd($inputs);
         $user->update($inputs);
+        $user->save();
         return response()->json(['message' => 'Profile Updated Successfully'], 200);
     }
 
