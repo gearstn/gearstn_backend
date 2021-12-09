@@ -200,7 +200,7 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
         unset($inputs['token']);
-        $machine = Machine::find($inputs['id'])->first();
+        $machine = Machine::find($inputs['id']);
         $machine->approved = !$machine->approved;
         $machine->save();
         return true;
@@ -209,7 +209,7 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
         unset($inputs['token']);
-        $machine = Machine::find($inputs['id'])->first();
+        $machine = Machine::find($inputs['id']);
         $machine->featured = !$machine->featured;
         $machine->save();
         return true;
@@ -218,7 +218,7 @@ class MachinesController extends Controller
     {
         $inputs = $request->all();
         unset($inputs['token']);
-        $machine = Machine::find($inputs['id'])->first();
+        $machine = Machine::find($inputs['id']);
         $machine->verified = !$machine->verified;
         $machine->save();
         return true;
