@@ -39,7 +39,12 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::post('/email/verify', [AuthController::class, 'verify']);
 
     // FORGET PASSWORD
-    Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
+    // Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
+
+	Route::post('/password/email', [AuthController::class, 'sendPasswordResetLinkEmail'])->middleware('throttle:5,1')->name('password.email');
+	Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
+
+
     //Auth routes
     Route::middleware('auth:sanctum')->group( function () {
 

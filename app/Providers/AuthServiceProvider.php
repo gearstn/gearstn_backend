@@ -6,6 +6,8 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Auth\Notifications\ResetPassword;
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -24,17 +26,21 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // $this->registerPolicies();
+        // // the gate checks if the user is an admin or a superadmin
+        // Gate::define('accessAdminpanel', function($user) {
+        //     return $user->role(['superadmin', 'admin']);
+        // });
+
+        // // the gate checks if the user is a member
+        // Gate::define('accessProfile', function($user) {
+        //     return $user->role('member');
+        // });
+
         $this->registerPolicies();
-        // the gate checks if the user is an admin or a superadmin
-        Gate::define('accessAdminpanel', function($user) {
-            return $user->role(['superadmin', 'admin']);
-        });
 
-        // the gate checks if the user is a member
-        Gate::define('accessProfile', function($user) {
-            return $user->role('member');
-        });
-
+        $frontEndUrl = env('APP_URL');
+        $this->setFrontEndUrlInResetPasswordEmail($frontEndUrl);
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             return (new MailMessage)
@@ -44,4 +50,15 @@ class AuthServiceProvider extends ServiceProvider
         });
 
     }
+
+
+    protected function setFrontEndUrlInResetPasswordEmail($frontEndUrl = '')
+    {
+        // update url in ResetPassword Email to frontend url
+        ResetPassword::createUrlUsing(function ($user, string $token) use ($frontEndUrl) {
+            return $frontEndUrl . '/password/email/reset?token=' . $token;
+        });
+    }
+
+
 }
