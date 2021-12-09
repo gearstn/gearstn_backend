@@ -59,7 +59,7 @@ class UploadsController extends Controller
             $path = Storage::disk('s3')->put('images', $image);
             $url = Storage::disk('s3')->url($path);
             $photo = [
-                'user_id' => $inputs['seller_id'],
+                'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
                 'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
                 'file_name' => $newFileName,
@@ -113,11 +113,11 @@ class UploadsController extends Controller
     public function destroy(Request $request)
     {
         $inputs = $request->all();
-        foreach($inputs['ids'] as $id){
-            $image = Upload::find($id);
+        // foreach($inputs['ids'] as $id){
+            $image = Upload::find($inputs['ids']);
             Storage::disk('s3')->delete($image->file_path);
             $image->delete();
-        }
-        return response()->json("SUCCESS", 200);
+        // }
+        return redirect()->back();
     }
 }

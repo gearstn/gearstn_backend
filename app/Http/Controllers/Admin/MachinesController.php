@@ -73,7 +73,7 @@ class MachinesController extends Controller
         //Create the slug
         $inputs = $request->all();
         $inputs['images'] = $inputs['photos'];
-        //Uploads route to upload images and get arroy of ids
+        // Uploads route to upload images and get arroy of ids
         // $uploads_requests = Request::create( route('uploads-store'), 'POST', ['data' => $inputs['photos']]);
         // $response = Route::dispatch($uploads_requests);
         // $inputs['images'] = $response->getContent();
@@ -151,6 +151,7 @@ class MachinesController extends Controller
     public function update(Request $request, $id)
     {
         $inputs = $request->all();
+        $inputs['images'] = $inputs['photos']; 
         $machine = Machine::find($id);
         $machine->update($inputs);
         return redirect()->route('machines.index')->with(['success' => 'Machine ' . __("messages.update")]);
