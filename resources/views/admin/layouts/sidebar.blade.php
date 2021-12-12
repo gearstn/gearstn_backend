@@ -93,7 +93,20 @@
                             <p>Users</p>
                         </a>
                     </li>
-
+                     <li class="nav-item">
+                        <a href="{{route('settings.index')}}"
+                           class="nav-link" {{areActiveRoutes(['settings.*'])}}>
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>Settings</p>
+                        </a>
+                    </li>
+                     <li class="nav-item">
+                        <a href="{{route('employees.index')}}"
+                           class="nav-link" {{areActiveRoutes(['employees.*'])}}>
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>Employees</p>
+                        </a>
+                    </li>
             </ul>
         </nav>
     </div>

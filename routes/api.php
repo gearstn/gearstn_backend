@@ -11,8 +11,10 @@ use App\Http\Controllers\Frontend\AuctionsController;
 use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\CitiesController;
+use App\Http\Controllers\Frontend\EmployeesController;
 use App\Http\Controllers\Frontend\MailsController;
 use App\Http\Controllers\Frontend\SavedListController;
+use App\Http\Controllers\Frontend\SettingsController;
 use App\Http\Controllers\Frontend\UsersController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\UploadsController;
@@ -39,7 +41,10 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::post('/email/verify', [AuthController::class, 'verify']);
 
     // FORGET PASSWORD
-    Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('forgot-password');
+	Route::post('/password/email', [AuthController::class, 'sendPasswordResetLinkEmail'])->middleware('throttle:5,1')->name('password.email');
+	Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('password.reset');
+
+
     //Auth routes
     Route::middleware('auth:sanctum')->group( function () {
 
@@ -88,6 +93,8 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('cities', CitiesController::class ,['as' => 'frontend'])->only('index','show');
+    Route::resource('settings', SettingsController::class ,['as' => 'frontend'])->only('index');
+    Route::resource('employees', EmployeesController::class ,['as' => 'frontend'])->only('index');
 
     //Search for all Entities
     Route::get('/machines-search', [MachinesController::class, 'search_filter']);

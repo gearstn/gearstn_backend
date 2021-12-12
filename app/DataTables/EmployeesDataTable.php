@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\News;
+use App\Models\Employee;
 use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class NewsDataTable extends DataTable
+class EmployeesDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -20,30 +20,27 @@ class NewsDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $page = "news";
+        $page = "employees";
         return datatables()
             ->eloquent($query)
             ->addColumn('action', function ($data) use ($page) {
                 return view('admin/components/datatable/actions', compact("data", "page"));
             })
-            ->editColumn('slug', function ($data) use ($page) {
-                return view("admin/components/datatable/link_news")->with("link", env('APP_URL'). "/news/" . $data->slug);
-            })
             ->editColumn("created_at", function ($data) {
                 return Carbon::parse($data->created_at)->diffForHumans();
             })
-            ->editColumn("title", function ($data) {
-                return ucfirst($data->title);
+            ->editColumn("title_en", function ($data) {
+                return ucfirst($data->title_en);
             });
-    }
+        }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\News $model
+     * @param \App\Models\Employee $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(News $model)
+    public function query(Employee $model)
     {
         return $model->newQuery();
     }
@@ -81,10 +78,8 @@ class NewsDataTable extends DataTable
             Column::make('id')->title("ID"),
             Column::make('title_en'),
             Column::make('title_ar'),
-            Column::make('post_date'),
-            Column::make('image_url')->title('Image Link'),
-            Column::make('bodytext')->title('Body Text'),
-            Column::make('slug'),
+            Column::make('name_en'),
+            Column::make('name_ar'),
             Column::make('created_at'),
             Column::computed('action')
                 ->exportable(false)
@@ -100,6 +95,6 @@ class NewsDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'News_' . date('YmdHis');
+        return 'Employees_' . date('YmdHis');
     }
 }

@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 class AuthController extends Controller
 {
     use ApiResponser;
@@ -54,10 +60,12 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
         if (!Auth::attempt($attr)) {
-            return $this->error('Credentials not match', 401);
-        }
+
+            return $this->error('Credentials Error',401,['message_en' => 'Incorrect email or password',
+                                              'message_ar' => 'خطء فى البريد الالكترونى او كلمة السر' ]);
+        }        
         if (Auth::user()->email_verified_at == null) {
-            return $this->error( 'Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
+            return $this->error('Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
                                               'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
         }
         return response()->json([
@@ -75,20 +83,6 @@ class AuthController extends Controller
         ];
     }
 
-    public function forgotPassword(Request $request)
-    {
-        // dd($request->all());
-        $request->validate(['email' => 'required|email']);
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
-    }
-
-
-
     public function verify(Request $request)
     {
         $inputs = $request->validate([
@@ -98,9 +92,58 @@ class AuthController extends Controller
         $user->email_verified_at = now();
         $user->save();
         return response()->json([
-            'message' => 'Email verified successfully',
+            'message_en' => 'Email verified successfully',
+            'message_ar' => 'تم التحقق من البريد الإلكتروني بنجاح',
         ],200);
     }
+
+
+    public function sendPasswordResetLinkEmail(Request $request) {
+		$request->validate(['email' => 'required|email']);
+
+		$status = Password::sendResetLink(
+			$request->only('email')
+		);
+
+		if($status === Password::RESET_LINK_SENT) {
+			return response()->json(['message_en' => __($status),'message_ar' => 'لقد تواصلنا معك عبر بريدك الالكترونى' ], 200);
+		} 
+        else {
+			throw ValidationException::withMessages([
+				'message_en' => __($status),
+				'message_ar' => 'رجاء الانتظار قبل المحاولة مرة اخرى'
+			]);
+		}
+	}
+
+	public function resetPassword(Request $request) {
+		$request->validate([
+			'token' => 'required',
+			'email' => 'required|email',
+			'password' => 'required|min:8|confirmed',
+		]);
+
+		$status = Password::reset(
+			$request->only('email', 'password', 'password_confirmation', 'token'),
+			function ($user, $password) use ($request) {
+				$user->forceFill([
+					'password' => Hash::make($password)
+				])->setRememberToken(Str::random(60));
+
+				$user->save();
+
+				event(new PasswordReset($user));
+			}
+		);
+
+		if($status == Password::PASSWORD_RESET) {
+			return response()->json(['message' => __($status)], 200);
+		} else {
+			throw ValidationException::withMessages([
+				'email' => __($status)
+			]);
+		}
+	}
 
 
     public function __invoke()

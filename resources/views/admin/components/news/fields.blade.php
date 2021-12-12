@@ -2,7 +2,21 @@
     <div class="col-sm-6">
         <div class="form-group">
             {{ form::label('title','English Title')}}
-            {{form::text('title', $news->title ,['class'=>'form-control','placeholder'=>'English Title'])}}
+            {{form::text('title_en', $news->title_en ,['class'=>'form-control','placeholder'=>'English Title'])}}
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            {{ form::label('title','English Title')}}
+            {{form::text('title_ar', $news->title_ar ,['class'=>'form-control','placeholder'=>'Arabic Title'])}}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            {{ form::label('image_url','Image Link')}}
+            {{form::text('image_url', $news->image_url ,['class'=>'form-control','placeholder'=>'Image Link'])}}
         </div>
     </div>
     <div class="col-sm-6">
@@ -14,14 +28,6 @@
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12">
-        <div class="form-group">
-            {{ form::label('image_url','Image Link')}}
-            {{form::text('image_url', $news->image_url ,['class'=>'form-control','placeholder'=>'Image Link'])}}
         </div>
     </div>
 </div>

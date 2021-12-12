@@ -5,24 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class News extends Model
+class Employee extends Model
 {
-
     use HasFactory;
-    protected $table = 'news';
+
+    protected $table = 'employees';
+
     protected $fillable = [
         'title_en',
         'title_ar',
-        'post_date',
+        'name_en',
+        'name_ar',
         'image_url',
-        'bodytext',
-        'slug',
     ];
     public static $cast = [
         'title_en' => 'required',
         'title_ar' => 'required',
-        'post_date' => 'required',
-        'image_url' => 'required',
-        'bodytext' => 'required',
+        'name_en' => 'required',
+        'name_ar' => 'required',
     ];
 }

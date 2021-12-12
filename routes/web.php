@@ -5,10 +5,12 @@ use App\Http\Controllers\Admin\AuctionsController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\CitiesController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmployeesController;
 use App\Http\Controllers\Admin\MachineModelsController;
 use App\Http\Controllers\Admin\MachinesController;
 use App\Http\Controllers\Admin\ManufacturesController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\SubCategoriesController;
 use App\Http\Controllers\Admin\UsersControllers;
 use App\Http\Controllers\ImageUploadController;
@@ -55,8 +57,12 @@ Route::get('/', function () {
         Route::resource('auctions', AuctionsController::class);
         Route::resource('cities', CitiesController::class);
         Route::resource('users', UsersControllers::class);
+        Route::resource('employees', EmployeesController::class);
         Route::post('uploads', [UploadsController::class,'store'] )->name('uploads.store');
         Route::post('uploads', [UploadsController::class , 'destroy'])->name('uploads.destroy');
+
+        Route::resource('settings', SettingsController::class)->except(['update', 'destroy', 'edit', 'store', 'create']);
+        Route::post("settings", [SettingsController::class,'update'])->name("settings.update");
 
     });
 
