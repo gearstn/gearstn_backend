@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSettingsController extends Migration
+class CreateSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateSettingsController extends Migration
      */
     public function up()
     {
-        Schema::create('settings_controller', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->longText('key');
+            $table->string("type", 30);
             $table->longText('value');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateSettingsController extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('settings_controller');
+        Schema::dropIfExists('settings');
     }
 }

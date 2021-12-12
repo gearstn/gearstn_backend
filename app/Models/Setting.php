@@ -12,11 +12,11 @@ class Setting extends Model
     protected $table = 'settings';
 
     protected $fillable = [
-        'key',
+        'type',
         'value',
     ];
     public static $cast = [
-        'key' => 'required|unique:settings',
+        'type' => 'required|unique:settings',
         'value' => 'required',
     ];
 }
