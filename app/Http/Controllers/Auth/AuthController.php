@@ -106,10 +106,12 @@ class AuthController extends Controller
 		);
 
 		if($status === Password::RESET_LINK_SENT) {
-			return response()->json(['message' => __($status)], 200);
-		} else {
+			return response()->json(['message_en' => __($status),'message_ar' => 'لقد تواصلنا معك عبر بريدك الالكترونى' ], 200);
+		} 
+        else {
 			throw ValidationException::withMessages([
-				'email' => __($status)
+				'message_en' => __($status),
+				'message_ar' => 'رجاء الانتظار قبل المحاولة مرة اخرى'
 			]);
 		}
 	}
