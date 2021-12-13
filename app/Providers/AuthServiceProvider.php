@@ -56,7 +56,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         // update url in ResetPassword Email to frontend url
         ResetPassword::createUrlUsing(function ($user, string $token) use ($frontEndUrl) {
-            return $frontEndUrl . '/password/email/reset?token=' . $token .'&email=' . $user->email;
+            return $frontEndUrl . '/reset-password?token=' . $token .'&email=' . $user->email;
         });
     }
 
