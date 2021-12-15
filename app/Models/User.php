@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\PasswordReset;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -69,5 +70,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function machines()
     {
         return $this->hasMany(Machine::class);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new PasswordReset($token));
     }
 }
