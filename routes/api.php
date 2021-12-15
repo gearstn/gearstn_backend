@@ -66,7 +66,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
 
         //Store Update Destroy routes for Machines and Models
         Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('store','update','destroy');
-        Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->only('store','update','destroy');
+        // Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->only('store','update','destroy');
 
         Route::get('/list', [SavedListController::class,'getList'])->name('list');
         Route::post('/list/add', [SavedListController::class,'addToList'])->name('list.add');
@@ -89,7 +89,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::resource('machine-models', MachineModelsController::class ,['as' => 'frontend'])->only('index','show');
     Route::get('/filter_models', [ MachineModelsController::class , 'filter_models' ])->name('machine-models.filter_models');
 
-    Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
+    // Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('cities', CitiesController::class ,['as' => 'frontend'])->only('index','show');
@@ -97,8 +97,8 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::resource('employees', EmployeesController::class ,['as' => 'frontend'])->only('index');
 
     //Search for all Entities
-    Route::get('/machines-search', [MachinesController::class, 'search_filter']);
-    Route::get('/machines-filter-data', [MachinesController::class, 'getMinMaxOfField']);
-    Route::get('/related-machines', [MachinesController::class, 'getRelatedMachines']);
+    // Route::get('/machines-search', [MachinesController::class, 'search_filter']);
+    // Route::get('/machines-filter-data', [MachinesController::class, 'getMinMaxOfField']);
+    // Route::get('/related-machines', [MachinesController::class, 'getRelatedMachines']);
 
 });
