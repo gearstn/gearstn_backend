@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Mail\VerificationMail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Mail;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -43,10 +45,13 @@ class AuthServiceProvider extends ServiceProvider
         $this->setFrontEndUrlInResetPasswordEmail($frontEndUrl);
 
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            return (new MailMessage)
-                ->subject('Verify Email Address')
-                ->line('Click the button below to verify your email address.')
-                ->action('Verify Email Address', env('APP_URL').'/verfiy-email?email='.$notifiable->email);
+
+            $details = [ 
+                'title' => 'Verify Email Address',
+                'user' => $notifiable , 
+                'link' => env('APP_URL').'/verfiy-email?email='.$notifiable->email
+             ];
+            return (new MailMessage())->view("emails.verification",compact('details'));
         });
 
     }
