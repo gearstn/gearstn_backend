@@ -3,9 +3,9 @@
 namespace Modules\Machine\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Config;
-
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 class MachineServiceProvider extends ServiceProvider
 {
     /**
@@ -29,6 +29,11 @@ class MachineServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+        Factory::guessFactoryNamesUsing(function (string $modelName) {
+            $moduleNamespace = Str::before($modelName,  '\\Entities');
+      
+            return sprintf("%s\\Database\\factories\\%sFactory", $moduleNamespace, class_basename($modelName));
+          });
     }
 
     /**
@@ -97,7 +102,9 @@ class MachineServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return [];
+        return [
+            Modules\Machine\Database\factories\MachineFactory::class
+        ];
     }
 
     private function getPublishableViewPaths(): array
@@ -110,4 +117,5 @@ class MachineServiceProvider extends ServiceProvider
         }
         return $paths;
     }
+    
 }

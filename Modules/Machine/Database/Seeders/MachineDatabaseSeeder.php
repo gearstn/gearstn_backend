@@ -4,6 +4,7 @@ namespace Modules\Machine\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Machine\Entities\Machine as Machine;
 
 class MachineDatabaseSeeder extends Seeder
 {
@@ -15,7 +16,5 @@ class MachineDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        // $this->call("OthersTableSeeder");
     }
 }

@@ -2,14 +2,17 @@
 
 namespace Modules\Machine\Entities;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use LamaLama\Wishlist\Wishlistable;
+use Modules\Category\Entities\Category;
+use Modules\MachineModel\Entities\MachineModel;
+use Modules\Manufacture\Entities\Manufacture;
+use Modules\SubCategory\Entities\SubCategory;
+use Modules\User\Entities\User;
 
 class Machine extends Model
 {
-    use HasFactory;
     use Searchable;
     use Wishlistable;
 
@@ -105,6 +108,6 @@ class Machine extends Model
     
     protected static function newFactory()
     {
-        // return \Modules\Machine\Database\factories\MachineFactory::new();
+        return \Modules\Machine\Database\factories\MachineFactory::new();
     }
 }

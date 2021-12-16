@@ -4,13 +4,13 @@ namespace Modules\Machine\Http\Controllers;
 
 use App\Classes\CollectionPaginate;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Frontend\MailsController;
-use App\Http\Controllers\UploadsController;
-use App\Models\MachineModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Resources\MachineResource;
+use Modules\MachineModel\Entities\MachineModel;
+use Modules\Mail\Http\Controllers\MailController;
+use Modules\Upload\Http\Controllers\UploadController;
 
 class MachineController extends Controller
 {
@@ -35,7 +35,7 @@ class MachineController extends Controller
         $inputs = $request->all();
 
         //Uploads route to upload images and get array of ids
-        $uploads_controller = new UploadsController();
+        $uploads_controller = new UploadController();
         $request = new Request([
             'photos' => $inputs['photos'],
             'seller_id' => $inputs['seller_id'],
@@ -58,7 +58,7 @@ class MachineController extends Controller
         $machine->save();
 
         //Send Mail To the machine owner
-        $mails_controller = new MailsController();
+        $mails_controller = new MailController();
         $request = new Request([
             'machine_id' => $machine->id,
             'seller_id' => $inputs['seller_id'],

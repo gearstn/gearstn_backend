@@ -2,16 +2,23 @@
 
 namespace Modules\Machine\Database\factories;
 
-use App\Models\Category;
-use App\Models\City;
-use App\Models\MachineModel;
-use App\Models\Manufacture;
-use App\Models\SubCategory;
-use App\Models\User;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\City\Entities\City;
+use Modules\MachineModel\Entities\MachineModel;
+use Modules\Manufacture\Entities\Manufacture;
+use Modules\User\Entities\User;
 
 class MachineFactory extends Factory
 {
+    
+        /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = \Modules\Machine\Entities\Machine::class;
+
     /**
      * Define the model's default state.
      *

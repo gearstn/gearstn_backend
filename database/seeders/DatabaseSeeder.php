@@ -2,10 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Machine;
-use App\Models\MachineModel;
-use App\Models\User;
 use Illuminate\Database\Seeder;
+use Modules\Category\Database\Seeders\CategorySeeder;
+use Modules\City\Database\Seeders\CitySeeder;
+use Modules\Machine\Entities\Machine;
+use Modules\MachineModel\Database\Seeders\MachineModelSeeder;
+use Modules\Manufacture\Database\Seeders\ManufactureSeeder;
+use Modules\SubCategory\Database\Seeders\SubCategorySeeder;
+use Modules\Upload\Database\Seeders\UploadSeeder;
+use Modules\User\Database\Seeders\UserSeeder;
+use Modules\User\Entities\User;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
@@ -29,6 +35,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CitySeeder::class);
         $this->call(MachineModelSeeder::class);
         // MachineModel::factory()->count(50)->create();
-        Machine::factory()->count(100)->create();
+        Machine::newFactory()->count(100)->create();
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Auction\Http\Controllers\AuctionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/auction', function (Request $request) {
-    return $request->user();
+
+//Routes for frontend
+Route::group(['prefix' => '/','middleware' => 'cors'], function () {
+    Route::resource('auctions', 'AuctionController' ,['as' => 'frontend'])->only('index','show');
 });
