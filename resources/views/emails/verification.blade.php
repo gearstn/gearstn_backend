@@ -33,10 +33,10 @@
                 <table role="presentation"
                     style="width:602px;border-collapse:collapse;border:1px solid #ccc;border-spacing:0;text-align:left;">
                     <tr>
-                        {{-- <td align="center" style="padding:10px 0;  height: 50px;">
+                        <td align="center" style="padding:10px 0;  height: 50px;">
                             <img src="https://gearstn.com/images/logo.png" alt="" width="20%"
                                 style="height:auto;display:block;" />
-                        </td> --}}
+                        </td>
                     </tr>
                     <tr>
                         <td style="padding:15px 30px 35px 30px;">
@@ -48,11 +48,11 @@
                                         your email address.
                                     </p>
 
-                                    {{-- <a href="{{$details['link']}}"
+                                    <a href="{{$details['link']}}"
                                         style="margin: 20px 0; display: block; width: fit-content; text-align: center; background-color: #172c54; 
                                         color: #fafafa; padding: 10px 25px; border-radius: 5px; text-decoration: none;">
                                         Verify your Email
-                                    </a> --}}
+                                    </a>
                                     <p style="margin: 10px 0; color: #718096;">
                                         Regards,
                                     </p>
@@ -71,7 +71,7 @@
                                     <td style="color: #fff; font-size: 16px;">
                                         © 2021 GearsTN. All rights reserved.
                                     </td>
-                                    {{-- <td style="padding:0;width:50%;" align="right">
+                                    <td style="padding:0;width:50%;" align="right">
                                         <table role="presentation"
                                             style="border-collapse:collapse;border:0;border-spacing:0;">
                                             <tr>
@@ -96,7 +96,7 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                    </td> --}}
+                                    </td>
                                 </tr>
                             </table>
                         </td>
