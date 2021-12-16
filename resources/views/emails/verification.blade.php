@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
 <head>
@@ -48,11 +48,11 @@
                                         your email address.
                                     </p>
 
-                                    <a href="{{$details['link']}}"
+                                    {{-- <a href="{{$details['link']}}"
                                         style="margin: 20px 0; display: block; width: fit-content; text-align: center; background-color: #172c54; 
                                         color: #fafafa; padding: 10px 25px; border-radius: 5px; text-decoration: none;">
                                         Verify your Email
-                                    </a>
+                                    </a> --}}
                                     <p style="margin: 10px 0; color: #718096;">
                                         Regards,
                                     </p>
@@ -107,13 +107,4 @@
     </table>
 </body>
 
-</html> --}}
-
-    Hello  {{$details['user']->company_name}} 
-    Click the button below to verify
-        your email address.
-
-        Click To Verify your Email : {{$details['link']}}
-
-        Regards,
-        GearsTN
+</html>
