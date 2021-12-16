@@ -33,10 +33,10 @@
                 <table role="presentation"
                     style="width:602px;border-collapse:collapse;border:1px solid #ccc;border-spacing:0;text-align:left;">
                     <tr>
-                        <td align="center" style="padding:10px 0;  height: 50px;">
+                        {{-- <td align="center" style="padding:10px 0;  height: 50px;">
                             <img src="https://gearstn.com/images/logo.png" alt="" width="20%"
                                 style="height:auto;display:block;" />
-                        </td>
+                        </td> --}}
                     </tr>
                     <tr>
                         <td style="padding:15px 30px 35px 30px;">
