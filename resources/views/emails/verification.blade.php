@@ -109,24 +109,11 @@
 
 </html> --}}
 
-<table role="presentation"
-style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
-<tr>
-    <p style="margin: 20px 0; color: #718096;">Hello  {{$details['user']->company_name}} </p>
-    <p style="margin: 20px 0; color: #718096;">Click the button below to verify
+    Hello  {{$details['user']->company_name}} 
+    Click the button below to verify
         your email address.
-    </p>
 
-    <a href="{{$details['link']}}"
-        style="margin: 20px 0; display: block; width: fit-content; text-align: center; background-color: #172c54; 
-        color: #fafafa; padding: 10px 25px; border-radius: 5px; text-decoration: none;">
-        Verify your Email
-    </a>
-    <p style="margin: 10px 0; color: #718096;">
+        Click To Verify your Email : {{$details['link']}}
+
         Regards,
-    </p>
-    <p style="margin: 10px 0; color: #718096;">
         GearsTN
-    </p>
-</tr>
-</table>
