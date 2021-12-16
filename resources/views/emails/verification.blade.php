@@ -113,7 +113,7 @@
     Click the button below to verify
         your email address.
 
-        Click To Verify your Email :
+        Click To Verify your Email : {{$details['link']}}
 
         Regards,
         GearsTN
