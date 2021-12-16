@@ -109,7 +109,7 @@
 
 </html> --}}
 
-    Hello 
+    Hello  {{$details['user']->company_name}} 
     Click the button below to verify
         your email address.
 
