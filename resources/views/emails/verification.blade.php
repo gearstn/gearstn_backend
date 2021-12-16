@@ -71,7 +71,7 @@
                                     <td style="color: #fff; font-size: 16px;">
                                         © 2021 GearsTN. All rights reserved.
                                     </td>
-                                    <td style="padding:0;width:50%;" align="right">
+                                    {{-- <td style="padding:0;width:50%;" align="right">
                                         <table role="presentation"
                                             style="border-collapse:collapse;border:0;border-spacing:0;">
                                             <tr>
@@ -96,7 +96,7 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             </table>
                         </td>
