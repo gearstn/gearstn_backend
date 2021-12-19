@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use LamaLama\Wishlist\HasWishlists;
 use Modules\Machine\Entities\Machine;
+use Modules\Subscription\Entities\Subscription;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -73,6 +74,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Machine::class);
     }
 
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
     /**
      * Send the password reset notification.
      *
@@ -83,7 +88,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new PasswordReset($token));
     }
-    
+
     protected static function newFactory()
     {
         //return \Modules\User\Database\factories\UserFactory::new();
