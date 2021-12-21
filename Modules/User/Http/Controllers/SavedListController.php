@@ -2,12 +2,12 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Resources\MachineResource;
-use Modules\User\Entities\User;
 
 class SavedListController extends Controller
 {

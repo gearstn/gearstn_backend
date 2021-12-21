@@ -3,10 +3,10 @@
 namespace Modules\User\Http\Controllers;
 
 use App\Http\Controllers\UploadsController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-use Modules\User\Entities\User;
 use Modules\User\Http\Resources\FullUserResource;
 use Modules\User\Http\Resources\NormalUserResource;
 use Illuminate\Support\Facades\Hash;

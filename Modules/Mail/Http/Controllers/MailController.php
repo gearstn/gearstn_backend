@@ -2,6 +2,7 @@
 
 namespace Modules\Mail\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -10,7 +11,6 @@ use Modules\Machine\Entities\Machine;
 use Modules\Mail\Emails\ContactBuyerMail;
 use Modules\Mail\Emails\ContactSellerMail;
 use Modules\Mail\Emails\StoreMachineMail;
-use Modules\User\Entities\User;
 
 class MailController extends Controller
 {

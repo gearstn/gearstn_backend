@@ -2,6 +2,7 @@
 
 namespace Modules\Machine\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Category\Entities\Category;
 use Modules\City\Entities\City;
@@ -9,7 +10,6 @@ use Modules\MachineModel\Entities\MachineModel;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SubCategory\Entities\SubCategory;
 use Modules\Upload\Entities\Upload;
-use Modules\User\Entities\User;
 
 class MachineResource extends JsonResource
 {
