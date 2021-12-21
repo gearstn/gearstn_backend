@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Modules\Category\Database\Seeders\CategorySeeder;
 use Modules\City\Database\Seeders\CitySeeder;
@@ -11,7 +12,6 @@ use Modules\Manufacture\Database\Seeders\ManufactureSeeder;
 use Modules\SubCategory\Database\Seeders\SubCategorySeeder;
 use Modules\Upload\Database\Seeders\UploadSeeder;
 use Modules\User\Database\Seeders\UserSeeder;
-use Modules\User\Entities\User;
 use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder

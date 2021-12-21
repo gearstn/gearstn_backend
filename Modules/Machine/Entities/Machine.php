@@ -2,6 +2,7 @@
 
 namespace Modules\Machine\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use LamaLama\Wishlist\Wishlistable;
@@ -9,7 +10,6 @@ use Modules\Category\Entities\Category;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SubCategory\Entities\SubCategory;
-use Modules\User\Entities\User;
 
 class Machine extends Model
 {

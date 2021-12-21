@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
-
+use App\Models\User;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,7 +16,6 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Modules\User\Entities\User;
 
 class AuthController extends Controller
 {
