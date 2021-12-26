@@ -11,5 +11,7 @@
     "Setting": true,
     "SubCategory": true,
     "User": true,
-    "Upload": true
+    "Upload": true,
+    "Blog": true,
+    "Subscription": true
 }
