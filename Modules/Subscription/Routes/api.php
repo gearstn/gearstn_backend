@@ -20,6 +20,8 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         //Auth routes
         Route::middleware('auth:sanctum')->group( function () {
             Route::resource('subscriptions','SubscriptionController' ,['as' => 'frontend'])->only('index','show');
-            Route::post('subscriptions/add', [SubscriptionController::class , 'subscribe' ] ,['as' => 'frontend']);
+            Route::post('subscriptions/subscribe', [SubscriptionController::class , 'subscribe' ] ,['as' => 'frontend']);
+            Route::post('subscriptions/unsubscribe', [SubscriptionController::class , 'unsubscribe' ] ,['as' => 'frontend']);
+            Route::get('user_subscriptions', [SubscriptionController::class , 'user_subscriptions' ] ,['as' => 'frontend']);
         });
 });

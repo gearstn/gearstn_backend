@@ -13,10 +13,11 @@ use LamaLama\Wishlist\HasWishlists;
 use Modules\Machine\Entities\Machine;
 use Modules\Subscription\Entities\Subscription;
 use Spatie\Permission\Traits\HasRoles;
+use Rinvex\Subscriptions\Traits\HasSubscriptions;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens , SoftDeletes, HasWishlists , HasRoles;
+    use HasFactory, Notifiable, HasApiTokens , SoftDeletes, HasWishlists , HasRoles, HasSubscriptions;
 
     protected $dates = ['deleted_at'];
     /**
