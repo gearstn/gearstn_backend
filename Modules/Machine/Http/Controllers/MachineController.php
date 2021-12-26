@@ -4,6 +4,7 @@ namespace Modules\Machine\Http\Controllers;
 
 use App\Classes\CollectionPaginate;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
@@ -33,6 +34,15 @@ class MachineController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
+        $user = User::find($inputs['seller_id']);
+        foreach ($user->subscriptions()->get() as $plan) {
+            if ( str_contains($plan->slug , 'distributor') ) {
+                $plan->recordFeatureUsage($plan->slug);
+            }
+        }
+        
+        return true;
 
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadController();
