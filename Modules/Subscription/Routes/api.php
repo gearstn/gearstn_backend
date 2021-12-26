@@ -18,8 +18,8 @@ use Modules\Subscription\Http\Controllers\SubscriptionController;
 
 Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         //Auth routes
+        Route::resource('subscriptions','SubscriptionController' ,['as' => 'frontend'])->only('index','show');
         Route::middleware('auth:sanctum')->group( function () {
-            Route::resource('subscriptions','SubscriptionController' ,['as' => 'frontend'])->only('index','show');
             Route::post('subscriptions/subscribe', [SubscriptionController::class , 'subscribe' ] ,['as' => 'frontend']);
             Route::post('subscriptions/unsubscribe', [SubscriptionController::class , 'unsubscribe' ] ,['as' => 'frontend']);
             Route::get('user_subscriptions', [SubscriptionController::class , 'user_subscriptions' ] ,['as' => 'frontend']);
