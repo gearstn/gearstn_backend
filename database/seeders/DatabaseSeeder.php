@@ -37,6 +37,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MachineModelSeeder::class);
         $this->call(SubscriptionSeeder::class);
         // MachineModel::factory()->count(50)->create();
-        //Machine::factory()->count(1000)->create();
+        Machine::factory()->count(100)->create();
     }
 }
