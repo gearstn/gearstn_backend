@@ -34,33 +34,31 @@ class MachineController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
-
         $user = User::find($inputs['seller_id']);
-        foreach ($user->subscriptions()->get() as $plan) {
-            if ( str_contains($plan->slug , 'distributor') ) {
-                $plan->recordFeatureUsage($plan->slug);
-            }
-        }
         
-        return true;
-
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadController();
         $request = new Request([
             'photos' => $inputs['photos'],
             'seller_id' => $inputs['seller_id'],
         ]);
+
         if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $response = $uploads_controller->store($request);
         if($response->status() != 200) { return $response; }
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
+        //Record Subscription Usage
+        useSubscriptionFeature($user,'photos-per-listing', count($request->file('photos')));
+
         $validator = Validator::make($inputs, Machine::$cast);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-
+        //Record Subscription Usage
+        useSubscriptionFeature($user,'number-of-listing');
+        
         $machine = Machine::create($inputs);
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;

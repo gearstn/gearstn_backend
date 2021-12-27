@@ -76,3 +76,23 @@ if (!function_exists('areActiveRoutes')) {
         }
     }
 }
+
+if (!function_exists('useSubscriptionFeature')) {
+    function useSubscriptionFeature($user, $target_feature, $uses = 1)
+    {
+        foreach ($user->subscriptions()->get() as $subscription) {
+            $plan = app('rinvex.subscriptions.plan')->find($subscription->plan_id);
+            $target_slug ='';
+            foreach ($plan->features as $feature) {
+                if ( str_contains($feature->slug, $target_feature) ){
+                    $target_slug = $feature->slug;
+                }
+            }
+            if ( $subscription->slug == $plan->slug ) {
+                $canUseFeature = $subscription->canUseFeature($target_slug);
+                if ( $canUseFeature === null || $canUseFeature === true ) $subscription->recordFeatureUsage($target_slug, $uses);
+                else return response()->json( ['message_en' => 'Subscription Value Exceeded' , 'message_ar' => 'Subscription Value Exceeded' ] ,401 );
+            }
+        }
+    }
+}

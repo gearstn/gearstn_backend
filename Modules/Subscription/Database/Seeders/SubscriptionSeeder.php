@@ -34,13 +34,13 @@ class SubscriptionSeeder extends Seeder
 
         // Create multiple plan features at once
         $plan->features()->saveMany([
-            new PlanFeature(['name' => ['en' => 'Competitor Rate with Discounts', 'ar' => 'سعر المنافس مع الخصومات'], 'value' => 27, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Number of Listing', 'ar' => 'عدد القوائم'], 'value' => 1, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Photos Per Listing', 'ar' => 'صور لكل قائمة'], 'value' => 5, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 0, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 0, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 0, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 0, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Competitor Rate with Discounts Silver', 'ar' => 'سعر المنافس مع الخصومات فضى'], 'value' => 27, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Number of Listing Silver', 'ar' => 'عدد القوائم فضى'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Photos Per Listing Silver', 'ar' => 'صور لكل قائمة فضى'], 'value' => 5, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Video Per listing Silver', 'ar' => 'فيديو لكل قائمة فضى'], 'value' => 0, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager Silver', 'ar' => 'مدير حساب مخصص فضى'], 'value' => 0, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top Silver', 'ar' => 'يتم تعزيز الآلات في الأعلى فضى'], 'value' => 0, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Email Marketing Silver', 'ar' => 'التسويق عبر البريد الإلكتروني فضى'], 'value' => 0, 'sort_order' => 1]),
         ]);
 
         //Distributor Package Gold Seed
@@ -62,13 +62,13 @@ class SubscriptionSeeder extends Seeder
         
         // Create multiple plan features at once
         $plan->features()->saveMany([
-            new PlanFeature(['name' => ['en' => 'Competitor Rate with Discounts', 'ar' => 'سعر المنافس مع الخصومات'], 'value' => 135, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Number of Listing', 'ar' => 'عدد القوائم'], 'value' => 5, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Photos Per Listing', 'ar' => 'صور لكل قائمة'], 'value' => 10, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 1, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 1, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 1, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Competitor Rate with Discounts Gold', 'ar' => 'سعر المنافس مع الخصومات ذهبى'], 'value' => 135, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Number of Listing Gold', 'ar' => 'عدد القوائم ذهبى'], 'value' => 5, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Photos Per Listing Gold', 'ar' => 'صور لكل قائمة ذهبى'], 'value' => 10, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Video Per listing Gold', 'ar' => 'فيديو لكل قائمة ذهبى'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager Gold', 'ar' => 'مدير حساب مخصص ذهبى'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top Gold', 'ar' => 'يتم تعزيز الآلات في الأعلى ذهبى'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Email Marketing Gold', 'ar' => 'التسويق عبر البريد الإلكتروني ذهبى'], 'value' => 1, 'sort_order' => 1]),
         ]);
 
 
@@ -91,13 +91,13 @@ class SubscriptionSeeder extends Seeder
         
         // Create multiple plan features at once
         $plan->features()->saveMany([
-            new PlanFeature(['name' => ['en' => 'Competitor Rate with Discounts', 'ar' => 'سعر المنافس مع الخصومات'], 'value' => 'Not Available', 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Number of Listing', 'ar' => 'عدد القوائم'], 'value' => 100, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Photos Per Listing', 'ar' => 'صور لكل قائمة'], 'value' => 50, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 3, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 1, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 3, 'sort_order' => 1]),
-            new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Competitor Rate with Discounts Platinum', 'ar' => 'سعر المنافس مع الخصومات بلاتينى'], 'value' => 'Not Available', 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Number of Listing Platinum', 'ar' => 'عدد القوائم بلاتينى'], 'value' => 100, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Photos Per Listing Platinum', 'ar' => 'صور لكل قائمة بلاتينى'], 'value' => 50, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Video Per listing Platinum', 'ar' => 'فيديو لكل قائمة بلاتينى'], 'value' => 3, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager Platinum', 'ar' => 'مدير حساب مخصص بلاتينى'], 'value' => 1, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top Platinum', 'ar' => 'يتم تعزيز الآلات في الأعلى بلاتينى'], 'value' => 3, 'sort_order' => 1]),
+            new PlanFeature(['name' => ['en' => 'Email Marketing Platinum', 'ar' => 'التسويق عبر البريد الإلكتروني بلاتينى'], 'value' => 1, 'sort_order' => 1]),
         ]);
 
     }
