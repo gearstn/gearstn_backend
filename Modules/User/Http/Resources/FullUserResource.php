@@ -27,6 +27,7 @@ class FullUserResource extends JsonResource
             "commercial_license_image" => Upload::find($this->commercial_license_image,['id', 'url']),
             "country" => $this->country,
             "role" => $this->getRoleNames(),
+            "phone" => $this->phone,
         ];
         return $data;
     }
