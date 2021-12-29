@@ -18,7 +18,7 @@ class ManufactureResource extends JsonResource
             "id" => $this->id,
             "title_en" => $this->title_en,
             "title_ar" => $this->title_ar,
-            "sub_category_id" => $this->sub_category_id,
+            "category_id" => $this->category_id,
         ];
         return $data;
     }
