@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
             'company_name' => 'Company',
             'email' => 'user@user.com',
             'password' => bcrypt('12345678'),
+            'phone' => 01200000000,
         ];
         $admin = [
             'first_name' => 'admin',
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@admin.com',
             'is_admin' => 1,
             'password' => bcrypt('12345678'),
+            'phone' => 01200000000,
         ];
         $admin = User::create($admin);
         $user = User::create($user1);
