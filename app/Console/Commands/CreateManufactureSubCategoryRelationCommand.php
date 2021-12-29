@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Modules\Category\Entities\Category;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SubCategory\Entities\SubCategory;
 
@@ -43,6 +44,8 @@ class CreateManufactureSubCategoryRelationCommand extends Command
         $sub_categories = SubCategory::all()->pluck('id')->toArray();
         foreach ($manufactures as  $manufacture) {
             $manufacture->sub_categories()->attach($sub_categories);
+            $manufacture->category_id = Category::all()->random()->id;
+            $manufacture->save();
         }
     }
 
