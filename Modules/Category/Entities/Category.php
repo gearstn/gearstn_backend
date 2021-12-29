@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Machine\Entities\Machine;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\SubCategory\Entities\SubCategory;
+use Modules\Manufacture\Entities\Manufacture;
 
 class Category extends Model
 {
@@ -23,6 +24,10 @@ class Category extends Model
     public function sub_categories()
     {
         return $this->hasMany(SubCategory::class);
+    }
+    public function manufactures()
+    {
+        return $this->hasMany(Manufacture::class);
     }
     public function machine_models()
     {
