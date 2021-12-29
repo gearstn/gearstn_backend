@@ -14,7 +14,7 @@ class UpdateCategoryIdInManufacturesTable extends Migration
     public function up()
     {
         Schema::table('manufactures', function (Blueprint $table) {
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->default(1);
             $table->foreign("category_id")->references("id")->on("categories")->onDelete("cascade");
         });
     }
