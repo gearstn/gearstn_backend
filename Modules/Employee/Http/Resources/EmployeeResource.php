@@ -21,6 +21,7 @@ class EmployeeResource extends JsonResource
             "name_en" => $this->name_en,
             "name_ar" => $this->name_ar,
             "image_url" => $this->image_url,
+            "linkedin_url" => $this->linkedin_url,
         ];
         return $data;
     }
