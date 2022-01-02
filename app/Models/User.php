@@ -60,7 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public static $cast = [
         'first_name' => 'required',
         'last_name' => 'required',
-        'company_name' => 'required',
+        // 'company_name' => 'required',
         'email' => 'required|unique:users',
         'tax_license' => 'required|unique:users',
         'commercial_license' => 'required|unique:users',
