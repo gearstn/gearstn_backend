@@ -31,7 +31,8 @@ class AuthController extends Controller
             // 'company_name' => 'string|max:255',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required'
+            'role_id' => 'required',
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|unique:users,phone'
         ]);
 
         if ($validator->fails()) {
