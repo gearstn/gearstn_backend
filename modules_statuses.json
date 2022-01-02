@@ -13,5 +13,6 @@
     "User": true,
     "Upload": true,
     "Blog": true,
-    "Subscription": true
+    "Subscription": true,
+    "Conversation": true
 }
