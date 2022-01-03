@@ -25,9 +25,19 @@ class FullUserResource extends JsonResource
             "tax_license_image" => Upload::find($this->tax_license_image,['id', 'url']),
             "commercial_license" => $this->commercial_license,
             "commercial_license_image" => Upload::find($this->commercial_license_image,['id', 'url']),
+            "national_id" => $this->national_id,
+            "national_id_image" => Upload::find($this->national_id_image,['id', 'url']),
             "country" => $this->country,
             "role" => $this->getRoleNames(),
         ];
+
+        if ($this->hasRole('distributor') ) {
+            unset($data['national_id'] ,$data['national_id_image']);
+        }
+        elseif ($this->hasRole('contractor')) {
+            unset($data['tax_license'] ,$data['tax_license_image'],$data['commercial_license'],$data['commercial_license_image']);
+        }
+
         return $data;
     }
 }

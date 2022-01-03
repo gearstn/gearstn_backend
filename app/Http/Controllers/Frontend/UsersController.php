@@ -47,7 +47,20 @@ class UsersController extends Controller
     {
         $inputs = $request->all();
         $user = Auth::user();
-        if(isset($inputs['tax_license_image'])) {
+            
+        //For distributor it is required to upload tax_license_image & commercial_license_image
+        if ($user->hasRole('distributor') && $user->tax_license_image === null && $user->commercial_license_image === null) {
+            $validator = Validator::make($inputs, [
+                'tax_license' => 'required',
+                'tax_license_image' => 'required',
+                'commercial_license' => 'required',
+                'commercial_license_image' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+
             //Uploads route to upload images and get array of ids
             $uploads_controller = new UploadsController();
             $request = new Request([
@@ -57,9 +70,7 @@ class UsersController extends Controller
             $response = $uploads_controller->store($request);
             if($response->status() != 200) { return $response; }
             $inputs['tax_license_image'] = json_decode($response->getContent())[0];
-        }
 
-        if(isset($inputs['commercial_license_image'])) {
             //Uploads route to upload images and get array of ids
             $uploads_controller = new UploadsController();
             $request = new Request([
@@ -70,7 +81,29 @@ class UsersController extends Controller
             if($response->status() != 200) { return $response; }
             $inputs['commercial_license_image'] = json_decode($response->getContent())[0];
         }
-        // dd($inputs);
+
+        //For contractor it is required to upload national_id_image 
+        if ($user->hasRole('contractor') && $user->national_id_image === null) {
+            $validator = Validator::make($inputs, [
+                'national_id' => 'required',
+                'national_id_image' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json($validator->messages(), 400);
+            }
+        
+            //Uploads route to upload images and get array of ids
+            $uploads_controller = new UploadsController();
+            $request = new Request([
+                'photos' => [$inputs['national_id_image']],
+                'seller_id' => $user->id,
+            ]);
+            $response = $uploads_controller->store($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['national_id_image'] = json_decode($response->getContent())[0];
+        }
+
         $user->update($inputs);
         $user->save();
         return response()->json(['message' => 'Profile Updated Successfully'], 200);
