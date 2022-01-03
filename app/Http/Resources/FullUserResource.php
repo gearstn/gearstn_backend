@@ -28,6 +28,7 @@ class FullUserResource extends JsonResource
             "national_id" => $this->national_id,
             "national_id_image" => Upload::find($this->national_id_image,['id', 'url']),
             "country" => $this->country,
+            "phone" => $this->phone,
             "role" => $this->getRoleNames(),
         ];
 
