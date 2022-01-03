@@ -1,23 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Frontend\CategoriesController;
-use App\Http\Controllers\Frontend\SubCategoriesController;
-use App\Http\Controllers\Frontend\MachineModelsController;
-use App\Http\Controllers\Frontend\MachinesController;
-use App\Http\Controllers\Frontend\ManufacturesController;
-use App\Http\Controllers\Frontend\NewsController;
-use App\Http\Controllers\Frontend\AuctionsController;
 use App\Http\Controllers\Auth\VerificationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\CitiesController;
-use App\Http\Controllers\Frontend\EmployeesController;
-use App\Http\Controllers\Frontend\MailsController;
-use App\Http\Controllers\Frontend\SavedListController;
-use App\Http\Controllers\Frontend\SettingsController;
-use App\Http\Controllers\Frontend\UsersController;
-use App\Http\Controllers\ImageUploadController;
-use App\Http\Controllers\UploadsController;
 
 /*
 |--------------------------------------------------------------------------

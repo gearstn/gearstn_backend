@@ -2,7 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
-use Modules\User\Http\Controllers\UploadsController;
+use Modules\Upload\Http\Controllers\UploadController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -63,7 +63,7 @@ class UserController extends Controller
             }
 
             //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadsController();
+            $uploads_controller = new UploadController();
             $request = new Request([
                 'photos' => [$inputs['tax_license_image']],
                 'seller_id' => $user->id,
@@ -73,7 +73,7 @@ class UserController extends Controller
             $inputs['tax_license_image'] = json_decode($response->getContent())[0];
 
             //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadsController();
+            $uploads_controller = new UploadController();
             $request = new Request([
                 'photos' => [$inputs['commercial_license_image']],
                 'seller_id' => $user->id,
@@ -95,7 +95,7 @@ class UserController extends Controller
             }
         
             //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadsController();
+            $uploads_controller = new UploadController();
             $request = new Request([
                 'photos' => [$inputs['national_id_image']],
                 'seller_id' => $user->id,
