@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ManufactureSeeder::class);
         $this->call(CitySeeder::class);
         $this->call(MachineModelSeeder::class);
-        $this->call(SubscriptionSeeder::class);
+        // $this->call(SubscriptionSeeder::class);
         // MachineModel::factory()->count(50)->create();
         Machine::factory()->count(100)->create();
     }

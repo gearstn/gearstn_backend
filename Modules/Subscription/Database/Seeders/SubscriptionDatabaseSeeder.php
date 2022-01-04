@@ -14,8 +14,10 @@ class SubscriptionDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        // Model::unguard();
 
         // $this->call("OthersTableSeeder");
+        $this->call(SubscriptionSeeder::class);
+
     }
 }
