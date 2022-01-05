@@ -83,7 +83,7 @@ if (!function_exists('areActiveRoutes')) {
 if (!function_exists('currency_converter')) {
     function currency_converter($from, $amount)
     {
-        $to = request()->header('currency');
+        $to = request()->header('currency') != null ? request()->header('currency') : 'USD' ;
         return Currency::convert()->from($from)->to($to)->amount($amount)->get();
     }
 }
