@@ -10,6 +10,8 @@ use Modules\MachineModel\Entities\MachineModel;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SubCategory\Entities\SubCategory;
 use Modules\Upload\Entities\Upload;
+use AmrShawky\LaravelCurrency\Facade\Currency;
+use Illuminate\Support\Facades\Config;
 
 class MachineResource extends JsonResource
 {
@@ -35,7 +37,7 @@ class MachineResource extends JsonResource
             'slug' => $this->slug,
             'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
             'skq' => $this->skq,
-            'price' => $this->price,
+            'price' =>  currency_converter('USD',$this->price),
             'approved' => $this->approved,
             'seller_id' => User::find($this->seller_id,['id','first_name', 'last_name', 'company_name', 'country', 'email']),
             'city_id' => City::find($this->city_id,$selected_columns),
