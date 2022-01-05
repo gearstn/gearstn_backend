@@ -20,7 +20,7 @@ class SubscriptionResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
-            'price' => $this->price,
+            'price' => currency_converter('USD',$this->price),
             'currency' => $this->currency,
             'invoice_period' => $this->invoice_period,
             'invoice_interval' => $this->invoice_interval,
