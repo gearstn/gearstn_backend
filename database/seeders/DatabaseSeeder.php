@@ -28,15 +28,15 @@ class DatabaseSeeder extends Seeder
         // Role::create(['name' => 'distributor','guard_name' => 'api']);
         // Role::create(['name' => 'contractor','guard_name' => 'api']);
 
-        if (User::all()->count() == 0) $this->call(UserSeeder::class);
-        $this->call(UploadSeeder::class);
-        $this->call(CategorySeeder::class);
-        $this->call(SubCategorySeeder::class);
-        $this->call(ManufactureSeeder::class);
-        $this->call(CitySeeder::class);
-        $this->call(MachineModelSeeder::class);
+        // if (User::all()->count() == 0) $this->call(UserSeeder::class);
+        // $this->call(UploadSeeder::class);
+        // $this->call(CategorySeeder::class);
+        // $this->call(SubCategorySeeder::class);
+        // $this->call(ManufactureSeeder::class);
+        // $this->call(CitySeeder::class);
+        // $this->call(MachineModelSeeder::class);
         // $this->call(SubscriptionSeeder::class);
         // MachineModel::factory()->count(50)->create();
-        Machine::factory()->count(100)->create();
+        Machine::newFactory()->count(100)->create();
     }
 }
