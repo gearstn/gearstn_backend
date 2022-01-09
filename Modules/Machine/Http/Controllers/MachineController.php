@@ -12,7 +12,7 @@ use Modules\Machine\Http\Resources\MachineResource;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Upload\Http\Controllers\UploadController;
-
+use CyrildeWit\EloquentViewable\Contracts\Visitor;
 class MachineController extends Controller
 {
     /**
@@ -88,6 +88,9 @@ class MachineController extends Controller
     public function show($slug)
     {
         $machine = Machine::where('slug', '=', $slug)->firstOrFail();
+
+        views($machine)->useVisitor(new Visitor())->record();
+
         return response()->json(new MachineResource($machine), 200);
     }
 

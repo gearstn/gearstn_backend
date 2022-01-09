@@ -178,6 +178,7 @@ return [
         Laravel\Scout\ScoutServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Nwidart\Modules\LaravelModulesServiceProvider::class,
+        CyrildeWit\EloquentViewable\EloquentViewableServiceProvider::class,
     ],
 
     /*
