@@ -11,8 +11,7 @@ use Modules\MachineModel\Entities\MachineModel;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SubCategory\Entities\SubCategory;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
-use CyrildeWit\EloquentViewable\Contracts\Viewable as Viewable;
-
+use CyrildeWit\EloquentViewable\Contracts\Viewable;
 class Machine extends Model implements Viewable
 {
     use Searchable;
