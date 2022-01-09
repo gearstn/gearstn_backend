@@ -12,6 +12,7 @@ use Modules\SubCategory\Entities\SubCategory;
 use Modules\Upload\Entities\Upload;
 use AmrShawky\LaravelCurrency\Facade\Currency;
 use Illuminate\Support\Facades\Config;
+use Modules\Machine\Entities\Machine;
 
 class MachineResource extends JsonResource
 {
@@ -45,6 +46,7 @@ class MachineResource extends JsonResource
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
             'manufacture_id' => Manufacture::find($this->manufacture_id,$selected_columns),
             'model_id' => MachineModel::find($this->model_id,$selected_columns),
+            'views' => views(Machine::find($this->id))->count(),
         ];
         return $data;
     }

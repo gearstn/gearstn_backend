@@ -12,7 +12,6 @@ use Modules\Machine\Http\Resources\MachineResource;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Upload\Http\Controllers\UploadController;
-
 class MachineController extends Controller
 {
     /**
@@ -42,8 +41,6 @@ class MachineController extends Controller
             }
         }
         
-        return true;
-
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadController();
         $request = new Request([
@@ -88,6 +85,7 @@ class MachineController extends Controller
     public function show($slug)
     {
         $machine = Machine::where('slug', '=', $slug)->firstOrFail();
+        views($machine)->record();
         return response()->json(new MachineResource($machine), 200);
     }
 
