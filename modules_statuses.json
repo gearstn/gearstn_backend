@@ -14,5 +14,6 @@
     "Upload": true,
     "Blog": true,
     "Subscription": true,
-    "Conversation": true
+    "Conversation": true,
+    "PaymentGateWay": true
 }
