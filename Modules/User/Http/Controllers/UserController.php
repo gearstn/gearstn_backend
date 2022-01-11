@@ -11,6 +11,7 @@ use Modules\User\Http\Resources\FullUserResource;
 use Modules\User\Http\Resources\NormalUserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Modules\User\Entities\AcountManagerRequest;
 
 class UserController extends Controller
 {
@@ -163,6 +164,21 @@ class UserController extends Controller
     public function request_account_manager()
     {
         $user = Auth::user();
-        return response()->json(['message' => 'Profile Deleted Successfully'], 200);
+        $data = [
+            'company_name' => $user->company_name,
+            'email' => $user->email,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'user_id' => $user->id,
+        ];
+        $validator = Validator::make($data, AcountManagerRequest::$cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        AcountManagerRequest::create($data);
+        return response()->json(['message_en' => 'your request has been created successfully',
+                                 'message_ar' => 'تم إنشاء طلبك بنجاح'
+                                ], 200);
     }
 }

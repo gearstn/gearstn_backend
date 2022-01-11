@@ -20,8 +20,10 @@ class CreateAccountManagerRequestsTable extends Migration
             $table->string('email');
             $table->string('company_name')->nullable();
             $table->string('reason')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('assigned_to_id')->nullable();
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
+            $table->foreign("assigned_to_id")->references("id")->on("users")->onDelete("cascade");
             $table->timestamps();
         });
     }
