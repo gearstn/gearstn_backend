@@ -3,6 +3,7 @@
 namespace Modules\News\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Upload\Entities\Upload;
 
 class NewsResource extends JsonResource
 {
@@ -18,7 +19,7 @@ class NewsResource extends JsonResource
             "id" => $this->id,
             "title_en" => $this->title_en,
             "title_ar" => $this->title_ar,
-            "image_url" => $this->image_url,
+            "image_id" => Upload::find($this->image_id,['id', 'url']),
             "bodytext_en" => $this->bodytext_en,
             "bodytext_ar" => $this->bodytext_ar,
             "slug" => $this->slug,
