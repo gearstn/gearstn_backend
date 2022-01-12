@@ -19,7 +19,8 @@ class NewsResource extends JsonResource
             "title_en" => $this->title_en,
             "title_ar" => $this->title_ar,
             "image_url" => $this->image_url,
-            "bodytext" => $this->bodytext,
+            "bodytext_en" => $this->bodytext_en,
+            "bodytext_ar" => $this->bodytext_ar,
             "slug" => $this->slug,
         ];
         return $data;

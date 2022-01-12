@@ -43,12 +43,11 @@ class NewsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $news = News::findOrFail($id);
+        $news = News::where('slug',$slug);
         return response()->json(new NewsResource($news), 200);
     }
 
