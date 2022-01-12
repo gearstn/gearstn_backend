@@ -5,6 +5,7 @@ namespace Modules\Manufacture\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\Manufacture\Http\Resources\ManufactureResource;
 
@@ -21,22 +22,22 @@ class ManufactureController extends Controller
         return ManufactureResource::collection($manufacture)->additional(['status' => 200, 'message' => 'Manufactures fetched successfully']);
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param Request $request
-    //  * @return Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $inputs = $request->all();
-    //     $validator = Validator::make($inputs, Manufacture::$cast);
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->messages(), 400);
-    //     }
-    //     $manufacture = Manufacture::create($inputs);
-    //     return response()->json(new ManufactureResource($manufacture),200);
-    // }
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function store(Request $request)
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, Manufacture::$cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $manufacture = Manufacture::create($inputs);
+        return response()->json(new ManufactureResource($manufacture),200);
+    }
 
 
     /**
