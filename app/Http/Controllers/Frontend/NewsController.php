@@ -47,7 +47,7 @@ class NewsController extends Controller
      */
     public function show($slug)
     {
-        $news = News::where('slug',$slug);
+        $news = News::where('slug','=',$slug)->firstOrFail();
         return response()->json(new NewsResource($news), 200);
     }
 
