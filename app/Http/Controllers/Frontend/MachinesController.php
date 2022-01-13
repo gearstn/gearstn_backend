@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Classes\CollectionPaginate;
 use App\Http\Controllers\UploadsController;
+use App\Http\Requests\StoreMachine;
 use App\Models\MachineModel;
 use Illuminate\Support\Facades\Route;
 
@@ -30,11 +31,35 @@ class MachinesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      */
+
+ 
+
     public function store(Request $request)
     {
         $inputs = $request->all();
+
+        $validator = Validator::make($inputs,  ['year' => 'required',
+                                                'country' => 'required',
+                                                'sn' => 'required',
+                                                'description' => 'required',
+                                                'condition' => 'required',
+                                                'sell_type' => 'required',
+                                                'seller_id' => 'required',
+                                                'category_id' => 'required',
+                                                'sub_category_id' => 'required',
+                                                'manufacture_id' => 'required',
+                                                'model_id' => 'required_without:new_model',
+                                                'city_id' => 'required',
+                                                'new_model' => 'required_without:model_id',
+                                                "photos" => ["required","array","min:1","max:5"],
+                                                "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:500"],
+                                            ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+
 
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadsController();
@@ -48,12 +73,25 @@ class MachinesController extends Controller
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
-        $validator = Validator::make($inputs, Machine::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
+        //If the client wants to create a non existing model
+        if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
+            $models_controller = new MachineModelsController();
+            $request = new Request([
+                'title_en' => $inputs['new_model'],
+                'title_ar' => $inputs['new_model'],
+                'category_id' => $inputs['category_id'],
+                'sub_category_id' => $inputs['sub_category_id'],
+                'manufacture_id' => $inputs['manufacture_id'],
+            ]);
+            $response = $models_controller->store($request);
+            if($response->status() != 200)
+                return $response;
+            $inputs['model_id'] = json_decode($response->getContent())->id;
         }
 
+        
         $machine = Machine::create($inputs);
+        // dd("7amdela");
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;
         $machine->slug = $machine->year.'-'.$machine->manufacture->title_en.'-'.$model_title.'-'.$machine->sku;

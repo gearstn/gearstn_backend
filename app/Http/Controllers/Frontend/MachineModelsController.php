@@ -36,6 +36,7 @@ class MachineModelsController extends Controller
     public function store(Request $request)
     {
         $inputs = $request->all();
+
         $inputs['sub_category_id'] = Manufacture::find($inputs['manufacture_id'])->sub_category_id;
         $inputs['category_id'] = SubCategory::find($inputs['sub_category_id'])->category_id;
         $validator = Validator::make($inputs, MachineModel::$cast);
