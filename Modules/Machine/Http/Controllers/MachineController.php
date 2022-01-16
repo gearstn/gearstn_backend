@@ -84,12 +84,6 @@ class MachineController extends Controller
             unset($inputs['report_file']);
         }
 
-
-        $validator = Validator::make($inputs, Machine::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-
         $machine = Machine::create($inputs);
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;
@@ -207,6 +201,18 @@ class MachineController extends Controller
         $inputs = $request->all();
         $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
+
+    public function get_machine_price(Request $request){
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            "machine_id" => 'required',
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $machine_price = Machine::find($inputs['machine_id'])->price;
+        return response()->json(['price' => $machine_price],200);
     }
 
 }
