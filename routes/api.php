@@ -91,6 +91,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
 
     Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
+    Route::get('/latest-news', [NewsController::class, 'latest_news'] ,['as' => 'frontend']);
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('cities', CitiesController::class ,['as' => 'frontend'])->only('index','show');
     Route::resource('settings', SettingsController::class ,['as' => 'frontend'])->only('index');
