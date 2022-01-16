@@ -33,4 +33,11 @@ class NewsController extends Controller
         $news = News::findOrFail($id);
         return response()->json(new NewsResource($news), 200);
     }
+
+    public function latest_news(Request $request)
+    {
+        $news = News::orderBy('created_at', 'desc')->take((int)$request->number)->get();
+        return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
+    }
+
 }

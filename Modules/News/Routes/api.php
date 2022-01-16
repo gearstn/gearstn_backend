@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::resource('news', 'NewsController' ,['as' => 'frontend'])->only('index','show');
+    Route::get('/latest-news', [NewsController::class, 'latest_news'] ,['as' => 'frontend']);
 });
