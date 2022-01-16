@@ -43,6 +43,8 @@ class Machine extends Model implements Viewable
         'sub_category_id',
         'manufacture_id',
         'model_id',
+        'manufacturing_place',
+        'report_id'
     ];
     public static $cast = [
         'year' => 'required',

@@ -8,10 +8,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
+use Modules\Machine\Http\Requests\StoreMachineRequest;
 use Modules\Machine\Http\Resources\MachineResource;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Upload\Http\Controllers\UploadController;
+use Modules\MachineModel\Http\Controllers\MachineModelController;
 class MachineController extends Controller
 {
     /**
@@ -28,11 +30,10 @@ class MachineController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      */
-    public function store(Request $request)
+    public function store(StoreMachineRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
 
         $user = User::find($inputs['seller_id']);
         foreach ($user->subscriptions()->get() as $plan) {
@@ -53,9 +54,34 @@ class MachineController extends Controller
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
-        $validator = Validator::make($inputs, Machine::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
+        //If the client wants to create a non existing model
+        if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
+            $models_controller = new MachineModelController();
+            $request = new Request([
+                'title_en' => $inputs['new_model'],
+                'title_ar' => $inputs['new_model'],
+                'category_id' => $inputs['category_id'],
+                'sub_category_id' => $inputs['sub_category_id'],
+                'manufacture_id' => $inputs['manufacture_id'],
+            ]);
+            $response = $models_controller->store($request);
+            if($response->status() != 200)
+                return $response;
+            $inputs['model_id'] = json_decode($response->getContent())->id;
+        }
+
+
+        if ( isset($inputs['report_file']) ) {
+            //Uploads route to upload images and get array of ids
+            $uploads_controller = new UploadController();
+            $request = new Request([
+                'file' => $inputs['report_file'],
+                'seller_id' => $inputs['seller_id'],
+            ]);
+            $response = $uploads_controller->upload_report_file($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['report_id'] = $response->getContent();
+            unset($inputs['report_file']);
         }
 
         $machine = Machine::create($inputs);
@@ -175,6 +201,18 @@ class MachineController extends Controller
         $inputs = $request->all();
         $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
+
+    public function get_machine_price(Request $request){
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            "machine_id" => 'required',
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $machine_price = Machine::find($inputs['machine_id'])->price;
+        return response()->json(['price' => $machine_price],200);
     }
 
 }
