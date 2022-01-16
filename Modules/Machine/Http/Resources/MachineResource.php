@@ -38,7 +38,7 @@ class MachineResource extends JsonResource
             'slug' => $this->slug,
             'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
             'skq' => $this->skq,
-            'price' =>  currency_converter('USD',$this->price),
+            'price' =>  $this->show_price == 1 ? currency_converter('USD',$this->price) : 'Price Hidden',
             'approved' => $this->approved,
             'seller_id' => User::find($this->seller_id,['id','first_name', 'last_name', 'company_name', 'country', 'email']),
             'city_id' => City::find($this->city_id,$selected_columns),

@@ -8,10 +8,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
+use Modules\Machine\Http\Requests\StoreMachineRequest;
 use Modules\Machine\Http\Resources\MachineResource;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Upload\Http\Controllers\UploadController;
+use Modules\MachineModel\Http\Controllers\MachineModelController;
 class MachineController extends Controller
 {
     /**
@@ -28,11 +30,10 @@ class MachineController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
      */
-    public function store(Request $request)
+    public function store(StoreMachineRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
 
         $user = User::find($inputs['seller_id']);
         foreach ($user->subscriptions()->get() as $plan) {
@@ -52,6 +53,37 @@ class MachineController extends Controller
         if($response->status() != 200) { return $response; }
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
+
+        //If the client wants to create a non existing model
+        if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
+            $models_controller = new MachineModelController();
+            $request = new Request([
+                'title_en' => $inputs['new_model'],
+                'title_ar' => $inputs['new_model'],
+                'category_id' => $inputs['category_id'],
+                'sub_category_id' => $inputs['sub_category_id'],
+                'manufacture_id' => $inputs['manufacture_id'],
+            ]);
+            $response = $models_controller->store($request);
+            if($response->status() != 200)
+                return $response;
+            $inputs['model_id'] = json_decode($response->getContent())->id;
+        }
+
+
+        if ( isset($inputs['report_file']) ) {
+            //Uploads route to upload images and get array of ids
+            $uploads_controller = new UploadController();
+            $request = new Request([
+                'file' => $inputs['report_file'],
+                'seller_id' => $inputs['seller_id'],
+            ]);
+            $response = $uploads_controller->upload_report_file($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['report_id'] = $response->getContent();
+            unset($inputs['report_file']);
+        }
+
 
         $validator = Validator::make($inputs, Machine::$cast);
         if ($validator->fails()) {
