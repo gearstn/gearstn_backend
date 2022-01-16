@@ -37,8 +37,8 @@ class UploadController extends Controller
         foreach ($inputs['photos'] as $image) {
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
-            $path = Storage::disk('s3')->put('images', $image);
-            $url = Storage::disk('s3')->url($path);
+            $path = Storage::disk('local')->put('images', $image);
+            $url = Storage::disk('local')->url($path);
             $photo = [
                 'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
@@ -52,6 +52,7 @@ class UploadController extends Controller
         }
         return response()->json($images,200);
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -65,5 +66,43 @@ class UploadController extends Controller
             $image->delete();
         // }
         return redirect()->back();
+    }
+
+
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function upload_report_file(Request $request)
+    {
+        $inputs = $request->all();
+        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
+
+        $validator = Validator::make($inputs, [
+            "file" => ["required","mimes:pdf,docx,doc","max:3000"],
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $images = [];
+        foreach ($inputs['photos'] as $image) {
+            $fileInfo = $image->getClientOriginalName();
+            $newFileName = time() . '.' . $image->extension();
+            $path = Storage::disk('local')->put('machine_reports', $image);
+            $url = Storage::disk('local')->url($path);
+            $photo = [
+                'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
+                'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
+                'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
+                'file_name' => $newFileName,
+                'type' => 'file',
+                'url' => $url,
+                'file_path' => $path,
+            ];
+            $file = Upload::create($photo)->id;
+        }
+        return response()->json($file,200);
     }
 }
