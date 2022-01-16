@@ -23,23 +23,6 @@ class NewsController extends Controller
 
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $inputs = $request->all();
-    //     $validator = Validator::make($inputs, News::$cast);
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->messages(), 400);
-    //     }
-    //     $news = News::create($inputs);
-    //     return response()->json(new NewsResource($news), 200);
-    // }
-
     /**
      * Display the specified resource.
      *
@@ -51,31 +34,13 @@ class NewsController extends Controller
         return response()->json(new NewsResource($news), 200);
     }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     $inputs = $request->all();
-    //     $news = News::find($id);
-    //     $news->update($inputs);
-    //     return response()->json(new NewsResource($news), 200);
-    // }
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy($id)
-    // {
-    //     $news = News::findOrFail($id);
-    //     $news->delete();
-    //     return response()->json(new NewsResource($news), 200);
-    // }
+
+    public function latest_news(Request $request)
+    {
+        $news = News::orderBy('created_at', 'desc')->take((int)$request->number)->get();
+        return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
+    }
+
+
 }
