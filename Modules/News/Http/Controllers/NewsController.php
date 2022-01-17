@@ -17,7 +17,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::paginate(number_in_page());
+        $news = News::orderBy('created_at', 'desc')->paginate(number_in_page());
         return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
 
     }
