@@ -40,8 +40,16 @@ class SubscriptionController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
         $user = User::find(auth()->user()->id);
+
+        if ($user->activeSubscriptions() === []) {
+            return response()->json([
+                'message_en' => 'You Have an active subscription you can not subscribe again',
+                'message_ar' => 'لديك اشتراك نشط لا يمكنك الاشتراك مرة أخرى',
+            ],200);        
+        }
+
+        $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
         $user = $user->newSubscription($subscription->name,$subscription);
         return response()->json([
             'message_en' => 'You Have subscribed successfully',
