@@ -24,7 +24,9 @@ class SubscriptionResource extends JsonResource
             'currency' => $this->currency,
             'invoice_period' => $this->invoice_period,
             'invoice_interval' => $this->invoice_interval,
-            'features' => $this->features->sortBy('sort_order')->toArray(),
+            // 'features' => $this->features->sortBy('sort_order')->toArray(),
+            'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order')),
         ];
-        return $data;    }
+        return $data;    
+    }
 }
