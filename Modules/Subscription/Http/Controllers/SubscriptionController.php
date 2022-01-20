@@ -46,7 +46,7 @@ class SubscriptionController extends Controller
             return response()->json([
                 'message_en' => 'You Have an active subscription you can not subscribe again',
                 'message_ar' => 'لديك اشتراك نشط لا يمكنك الاشتراك مرة أخرى',
-            ],200);        
+            ],422);        
         }
 
         $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
