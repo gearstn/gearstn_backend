@@ -22,7 +22,7 @@ class MachineModelsController extends Controller
      */
     public function index()
     {
-        $models = MachineModel::paginate(number_in_page());
+        $models = MachineModel::all();
         return MachineModelResource::collection($models)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
     }
 
