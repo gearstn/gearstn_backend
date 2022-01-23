@@ -41,7 +41,6 @@ class SubscriptionController extends Controller
         }
 
         $user = User::find(auth()->user()->id);
-
         if ($user->activeSubscriptions() !== []) {
             return response()->json([
                 'message_en' => 'You Have an active subscription you can not subscribe again',

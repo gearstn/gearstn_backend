@@ -38,10 +38,22 @@ class MachineController extends Controller
         $user = User::find($inputs['seller_id']);
         foreach ($user->subscriptions()->get() as $plan) {
             if ( str_contains($plan->slug , 'distributor') ) {
-                $plan->recordFeatureUsage($plan->slug);
+                $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
+                $subscription->features();
+                $feature_slug = null;
+                foreach ($subscription->features as $feature) {
+                    if(str_contains($feature->slug , 'number-of-listing')) $feature_slug = $feature->slug;
+                }
+                if ($plan->canUseFeature($feature_slug)) $plan->recordFeatureUsage($feature_slug);
+                else {
+                    return response()->json([
+                        'message_en' => 'You Have the mahcine listing limit, you have to upgrade your account',
+                        'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
+                    ],422);
+                }    
             }
         }
-        
+
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadController();
         $request = new Request([
