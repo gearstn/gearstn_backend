@@ -31,6 +31,7 @@ class News extends Model
         'bodytext_en' => 'required',
         'bodytext_ar' => 'required',
         'slug' => 'string',
+        'author' => 'string',
         'mins_read' => 'integer',
         'seo_title' => 'string',
         'seo_description' => 'string',
