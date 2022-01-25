@@ -24,9 +24,12 @@ class NewsResource extends JsonResource
             "bodytext_ar" => $this->bodytext_ar,
             "slug" => $this->slug,
             "mins_read" => $this->mins_read,
-            "author" => $this->author,
-            "seo_title" => $this->seo_title,
-            "seo_description" => $this->seo_description,
+            "author_en" => $this->author_en,
+            "author_ar" => $this->author_ar,
+            "seo_title_en" => $this->seo_title_en,
+            "seo_title_ar" => $this->seo_title_ar,
+            "seo_description_en" => $this->seo_description_en,
+            "seo_description_ar" => $this->seo_description_ar,
         ];
         return $data;
     }
