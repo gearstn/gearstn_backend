@@ -15,9 +15,12 @@ class AddAuthAndSeoNewsTable extends Migration
     {
         Schema::table('news', function (Blueprint $table) {
             $table->integer('mins_read')->nullable();
-            $table->string('author', 255)->nullable();
-            $table->string('seo_title', 255)->nullable();
-            $table->string('seo_description', 255)->nullable();
+            $table->string('author_en', 255)->nullable();
+            $table->string('author_ar', 255)->nullable();
+            $table->string('seo_title_en', 255)->nullable();
+            $table->string('seo_title_ar', 255)->nullable();
+            $table->string('seo_description_en', 255)->nullable();
+            $table->string('seo_description_ar', 255)->nullable();
         });
     }
 
