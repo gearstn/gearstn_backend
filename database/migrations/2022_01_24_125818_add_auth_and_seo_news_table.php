@@ -32,7 +32,7 @@ class AddAuthAndSeoNewsTable extends Migration
     public function down()
     {
         Schema::table('news', function (Blueprint $table) {
-            $table->dropColumn(['mins_read','author','seo_title', 'seo_description']);
+            $table->dropColumn(['mins_read','author_en','author_ar','seo_title_en','seo_title_ar' , 'seo_description_en','seo_description_ar']);
         });
     }
 }
