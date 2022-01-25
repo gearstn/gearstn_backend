@@ -34,17 +34,23 @@ class MachineController extends Controller
     public function store(StoreMachineRequest $request)
     {
         $inputs = $request->validated();
-
         $user = User::find($inputs['seller_id']);
         foreach ($user->subscriptions()->get() as $plan) {
             if ( str_contains($plan->slug , 'distributor') ) {
                 $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
                 $subscription->features();
-                $feature_slug = null;
+                $feature_slug_machines = null;
+                $feature_slug_photos = null;
+                $photos_count = isset($inputs['photos']) ? count($inputs['photos']) : 0;
                 foreach ($subscription->features as $feature) {
-                    if(str_contains($feature->slug , 'number-of-listing')) $feature_slug = $feature->slug;
+                    if(str_contains($feature->slug , 'number-of-listing')) $feature_slug_machines = $feature->slug;
+                    if(str_contains($feature->slug , 'photos-per-listing')) $feature_slug_photos = $feature->slug;
                 }
-                if ($plan->canUseFeature($feature_slug)) $plan->recordFeatureUsage($feature_slug);
+                // dd($feature_slug_machines,$plan->canUseFeature($feature_slug_machines) ,$feature_slug_photos,$plan->getFeatureRemainings($feature_slug_photos) > $photos_count);
+                if ($plan->canUseFeature($feature_slug_machines) && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count) {
+                    $plan->recordFeatureUsage($feature_slug_machines , 1);
+                    $plan->recordFeatureUsage($feature_slug_photos , $photos_count);
+                }
                 else {
                     return response()->json([
                         'message_en' => 'You Have the mahcine listing limit, you have to upgrade your account',
@@ -53,7 +59,7 @@ class MachineController extends Controller
                 }    
             }
         }
-
+        dd('passed');
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadController();
         $request = new Request([
