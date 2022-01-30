@@ -35,6 +35,7 @@ class StoreMachineRequest extends FormRequest
             'report_file' => 'required_if:manufacturing_place,forign',
             "photos" => ["required","array","min:1","max:5"],
             "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:500"],
+            "videos" => ["required","array","min:0","max:3"],
         ];
     }
 

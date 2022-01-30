@@ -41,36 +41,50 @@ class MachineController extends Controller
                 $subscription->features();
                 $feature_slug_machines = null;
                 $feature_slug_photos = null;
+                $feature_slug_videos = null;
                 $photos_count = isset($inputs['photos']) ? count($inputs['photos']) : 0;
+                $videos_count = isset($inputs['videos']) ? count($inputs['videos']) : 0;
                 foreach ($subscription->features as $feature) {
                     if(str_contains($feature->slug , 'number-of-listing')) $feature_slug_machines = $feature->slug;
-                    if(str_contains($feature->slug , 'photos-per-listing')) $feature_slug_photos = $feature->slug;
+                    if(str_contains($feature->slug , 'total-photos')) $feature_slug_photos = $feature->slug;
+                    if(str_contains($feature->slug , 'total-videos')) $feature_slug_videos = $feature->slug;
                 }
-                // dd($feature_slug_machines,$plan->canUseFeature($feature_slug_machines) ,$feature_slug_photos,$plan->getFeatureRemainings($feature_slug_photos) > $photos_count);
-                if ($plan->canUseFeature($feature_slug_machines) && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count) {
+                if ($plan->getFeatureRemainings($feature_slug_machines) > 0  && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count && $plan->getFeatureRemainings($feature_slug_videos) > $videos_count) {
                     $plan->recordFeatureUsage($feature_slug_machines , 1);
                     $plan->recordFeatureUsage($feature_slug_photos , $photos_count);
+                    $plan->recordFeatureUsage($feature_slug_videos , $videos_count);
                 }
                 else {
                     return response()->json([
-                        'message_en' => 'You Have the mahcine listing limit, you have to upgrade your account',
+                        'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
                         'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
                     ],422);
                 }    
             }
         }
-        dd('passed');
+
         //Uploads route to upload images and get array of ids
         $uploads_controller = new UploadController();
         $request = new Request([
             'photos' => $inputs['photos'],
             'seller_id' => $inputs['seller_id'],
         ]);
-        if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $response = $uploads_controller->store($request);
         if($response->status() != 200) { return $response; }
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
+
+
+        //Uploads route to upload Videos and get array of ids
+        $uploads_controller = new UploadController();
+        $request = new Request([
+            'photos' => $inputs['videos'],
+            'seller_id' => $inputs['seller_id'],
+        ]);
+        $response = $uploads_controller->store($request);
+        if($response->status() != 200) { return $response; }
+        $inputs['videos'] = $response->getContent();
+        unset($inputs['videos']);
 
         //If the client wants to create a non existing model
         if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
@@ -102,6 +116,7 @@ class MachineController extends Controller
             unset($inputs['report_file']);
         }
 
+        if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $machine = Machine::create($inputs);
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;
