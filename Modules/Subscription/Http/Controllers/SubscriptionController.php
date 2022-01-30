@@ -76,7 +76,9 @@ class SubscriptionController extends Controller
     public function user_subscriptions()
     {
         $user = User::find(auth()->user()->id);
-        return SubscriptionResource::collection($user->activeSubscriptions())->additional(['status' => 200, 'message' => 'User Subscriptions fetched successfully']);     ;
+        // dd($user->activeSubscriptions()->first());
+        return response()->json(new SubscriptionResource($user->activeSubscriptions()->first()), 200);
+        // return SubscriptionResource::collection($user->activeSubscriptions())->additional(['status' => 200, 'message' => 'User Subscriptions fetched successfully']);     ;
     }
 
 }

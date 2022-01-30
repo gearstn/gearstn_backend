@@ -20,11 +20,10 @@ class SubscriptionResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
-            'price' => currency_converter('USD',$this->price),
+            'price' => currency_converter('USD',$this->price == null ? 0 : $this->price ),
             'currency' => $this->currency,
             'invoice_period' => $this->invoice_period,
             'invoice_interval' => $this->invoice_interval,
-            // 'features' => $this->features->sortBy('sort_order')->toArray(),
             'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order')),
         ];
         return $data;    
