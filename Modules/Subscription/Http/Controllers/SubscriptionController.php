@@ -76,9 +76,9 @@ class SubscriptionController extends Controller
     public function user_subscriptions()
     {
         $user = User::find(auth()->user()->id);
-        // dd($user->activeSubscriptions()->first());
-        return response()->json(new SubscriptionResource($user->activeSubscriptions()->first()), 200);
-        // return SubscriptionResource::collection($user->activeSubscriptions())->additional(['status' => 200, 'message' => 'User Subscriptions fetched successfully']);     ;
+        $plan_id = $user->activeSubscriptions()->first()->plan_id;
+        $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
+        return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']); 
     }
 
 }
