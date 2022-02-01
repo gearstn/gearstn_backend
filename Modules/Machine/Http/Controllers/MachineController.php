@@ -74,17 +74,18 @@ class MachineController extends Controller
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
+        if ( isset($inputs['videos']) ) {
+            //Uploads route to upload Videos and get array of ids
+            $uploads_controller = new UploadController();
+            $request = new Request([
+                'photos' => $inputs['videos'],
+                'seller_id' => $inputs['seller_id'],
+            ]);
+            $response = $uploads_controller->store($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['videos'] = $response->getContent();
+        }
 
-        //Uploads route to upload Videos and get array of ids
-        $uploads_controller = new UploadController();
-        $request = new Request([
-            'photos' => $inputs['videos'],
-            'seller_id' => $inputs['seller_id'],
-        ]);
-        $response = $uploads_controller->store($request);
-        if($response->status() != 200) { return $response; }
-        $inputs['videos'] = $response->getContent();
-        unset($inputs['videos']);
 
         //If the client wants to create a non existing model
         if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
@@ -115,6 +116,33 @@ class MachineController extends Controller
             $inputs['report_id'] = $response->getContent();
             unset($inputs['report_file']);
         }
+
+        if ( isset($inputs['serial_photo']) ) {
+            //Uploads route to upload Videos and get array of ids
+            $uploads_controller = new UploadController();
+            $request = new Request([
+                'photos' => $inputs['serial_photo'],
+                'seller_id' => $inputs['seller_id'],
+            ]);
+            $response = $uploads_controller->store($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['serial_photo_id'] = $response->getContent();
+            unset($inputs['serial_photo']);
+        }
+
+        if ( isset($inputs['hour_meter_photo']) ) {
+            //Uploads route to upload Videos and get array of ids
+            $uploads_controller = new UploadController();
+            $request = new Request([
+                'photos' => $inputs['hour_meter_photo'],
+                'seller_id' => $inputs['seller_id'],
+            ]);
+            $response = $uploads_controller->store($request);
+            if($response->status() != 200) { return $response; }
+            $inputs['hour_meter_photo_id'] = $response->getContent();
+            unset($inputs['hour_meter_photo']);
+        }
+        
 
         if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $machine = Machine::create($inputs);

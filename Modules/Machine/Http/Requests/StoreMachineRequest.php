@@ -34,8 +34,10 @@ class StoreMachineRequest extends FormRequest
             'sku' => 'sometimes',
             'report_file' => 'required_if:manufacturing_place,forign',
             "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:500"],
-            "videos" => ["required","array","min:0","max:3"],
+            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:1000"],
+            "videos" => ["array","min:0","max:3"],
+            "serial_photo" => ["mimes:jpeg,jpg,png,gif","max:1000"],
+            "hour_meter_photo" => ["mimes:jpeg,jpg,png,gif","max:1000"],
         ];
     }
 

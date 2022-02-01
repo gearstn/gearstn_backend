@@ -44,13 +44,14 @@ class Machine extends Model implements Viewable
         'manufacture_id',
         'model_id',
         'manufacturing_place',
-        'report_id'
+        'report_id',
+        'serial_photo_id',
+        'hourmeter_photo_id'
     ];
     public static $cast = [
         'year' => 'required',
         'country' => 'required',
         'sn' => 'required',
-        // 'rent_hours' => 'required',
         'description' => 'required',
         'condition' => 'required',
         'sell_type' => 'required',
