@@ -31,7 +31,7 @@ class ConversationController extends Controller
     public function get_user_conversations()
     {
         $id = Auth::user()->id;
-        $conversations = Conversation::where('contractor_id', $id)->orWhere('distributor_id', $id)->paginate(number_in_page());
+        $conversations = Conversation::where('sender_id', $id)->orWhere('receiver_id', $id)->paginate(number_in_page());
         return ConversationResource::collection($conversations)->additional(['status' => 200, 'message' => 'Conversations fetched successfully']);
     }
     
