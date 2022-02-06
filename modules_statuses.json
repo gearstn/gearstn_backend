@@ -1,0 +1,18 @@
+{
+    "Machine": true,
+    "Auction": true,
+    "Category": true,
+    "City": true,
+    "Employee": true,
+    "MachineModel": true,
+    "Mail": true,
+    "Manufacture": true,
+    "News": true,
+    "Setting": true,
+    "SubCategory": true,
+    "User": true,
+    "Upload": true,
+    "Blog": true,
+    "Subscription": true,
+    "Conversation": true
+}

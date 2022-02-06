@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "amrshawky/laravel-currency": "^4.0",
         "cyrildewit/eloquent-viewable": "^6.0",
         "darkaonline/l5-swagger": "^8.0",
         "doctrine/dbal": "^3.2",
@@ -18,10 +19,13 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "nwidart/laravel-modules": "^8.2",
+        "rinvex/laravel-subscriptions": "^5.0",
         "spatie/laravel-permission": "^5.4",
         "spatie/laravel-query-builder": "^4.0",
         "spatie/laravel-sitemap": "^5.9",
-        "teamtnt/laravel-scout-tntsearch-driver": "^11.5"
+        "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
+        "doctrine/dbal": "^3.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -38,7 +42,9 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "Modules\\": "Modules/"
+
         }
     },
     "autoload-dev": {

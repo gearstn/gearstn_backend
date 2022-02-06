@@ -1,4 +1,6 @@
 <?php
+
+use AmrShawky\LaravelCurrency\Facade\Currency;
 use Illuminate\Support\Facades\Route;
 
 
@@ -74,5 +76,14 @@ if (!function_exists('areActiveRoutes')) {
                 if ($params[0] == $currentRouteParams[0] && $params[1] == '*') return $output;
             }
         }
+    }
+}
+
+
+if (!function_exists('currency_converter')) {
+    function currency_converter($from, $amount)
+    {
+        $to = request()->header('currency') != null ? request()->header('currency') : 'USD' ;
+        return ceil(Currency::convert()->from($from)->to($to)->amount($amount)->get());
     }
 }
