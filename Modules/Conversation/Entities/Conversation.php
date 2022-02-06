@@ -12,18 +12,18 @@ class Conversation extends Model
     protected $table = 'conversations';
     protected $fillable = [
         'chat_token',
-        'contractor_done',
-        'distributor_done',
-        'contractor_id',
-        'distributor_id'
+        'sender_done',
+        'receiver_done',
+        'sender_id',
+        'receiver_id',
+        'machine_id'
     ];
 
     public static $cast = [
         'chat_token' => 'required|unique:conversations',
-        'contractor_done' => 'required',
-        'distributor_done' => 'required',
-        'contractor_id' => 'required',
-        'distributor_id' => 'required',
+        'sender_id' => 'required',
+        'receiver_id' => 'required',
+        'machine_id' => 'required',
     ];    
     protected static function newFactory()
     {

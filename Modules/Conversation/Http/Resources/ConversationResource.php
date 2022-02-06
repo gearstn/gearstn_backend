@@ -17,10 +17,11 @@ class ConversationResource extends JsonResource
         $data = [
             "id" => $this->id,
             "chat_token" => $this->chat_token,
-            "contractor_done" => $this->contractor_done,
-            "distributor_done" => $this->distributor_done,
-            "contractor_id" => $this->contractor_id,
-            "distributor_id" => $this->distributor_id,
+            "sender_done" => $this->sender_done,
+            "receiver_done" => $this->receiver_done,
+            "sender_id" => $this->sender_id,
+            "receiver_id" => $this->receiver_id,
+            "machine_id" => $this->machine_id,
         ];
         return $data;
     }
