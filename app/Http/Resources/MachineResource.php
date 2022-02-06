@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Machine;
 use App\Models\MachineModel;
 use App\Models\Manufacture;
 use App\Models\SubCategory;
@@ -43,6 +44,7 @@ class MachineResource extends JsonResource
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
             'manufacture_id' => Manufacture::find($this->manufacture_id,$selected_columns),
             'model_id' => MachineModel::find($this->model_id,$selected_columns),
+            'views' => views(Machine::find($this->id))->count(),
         ];
         return $data;
     }

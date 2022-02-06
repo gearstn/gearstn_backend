@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\UploadsController;
 use App\Http\Resources\FullUserResource;
 use App\Http\Resources\NormalUserResource;
+use App\Models\Machine;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -157,4 +158,21 @@ class UsersController extends Controller
         }
         return response()->json($arr);
     }
+
+
+    public function get_phone(Request $request)
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($inputs,  ['seller_id' => 'required','machine_id' => 'required']);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $user = User::findOrFail($inputs['seller_id']);
+        $machine = Machine::where('id', '=', $inputs['machine_id'])->firstOrFail();
+        $phone = $user->phone;
+        views($machine)->record();
+        return response()->json($phone, 200);
+    }
+
 }

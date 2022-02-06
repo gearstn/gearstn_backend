@@ -118,6 +118,7 @@ class MachinesController extends Controller
     public function show($slug)
     {
         $machine = Machine::where('slug', '=', $slug)->firstOrFail();
+        views($machine)->record();
         return response()->json(new MachineResource($machine), 200);
     }
 

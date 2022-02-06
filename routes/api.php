@@ -52,6 +52,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
         Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
         Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
+        Route::get('/users/phone',[UsersController::class, 'get_phone']);
         Route::post('/users',[UsersController::class, 'update'])->name('users.update');
         Route::resource('users',UsersController::class)->only('destroy');
 
