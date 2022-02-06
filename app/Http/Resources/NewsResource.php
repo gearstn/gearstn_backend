@@ -21,6 +21,7 @@ class NewsResource extends JsonResource
             "title_ar" => $this->title_ar,
             "post_date" => $this->post_date,
             "updated_date" => $this->updated_at,
+            "created_date" => $this->created_at,
             "image_id" => Upload::find($this->image_id,['id', 'url']),
             "bodytext_en" => $this->bodytext_en,
             "bodytext_ar" => $this->bodytext_ar,
