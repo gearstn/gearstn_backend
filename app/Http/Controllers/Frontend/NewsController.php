@@ -38,7 +38,8 @@ class NewsController extends Controller
 
     public function latest_news(Request $request)
     {
-        $news = News::orderBy('created_at', 'desc')->take((int)$request->number)->get();
+        $inputs = $request->all();
+        $news = News::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
         return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
     }
 
