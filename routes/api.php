@@ -91,6 +91,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::get('/filter_models', [ MachineModelsController::class , 'filter_models' ])->name('machine-models.filter_models');
 
     Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
+    Route::get('/latest-machines', [MachinesController::class, 'latest_machines`'] ,['as' => 'frontend']);
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
     Route::get('/latest-news', [NewsController::class, 'latest_news'] ,['as' => 'frontend']);
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');

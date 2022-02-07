@@ -210,4 +210,11 @@ class MachinesController extends Controller
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
+    public function latest_machines(Request $request)
+    {
+        $inputs = $request->all();
+        $machines = Machine::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
+        return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
+
 }
