@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Modules\Conversation\Entities\Conversation;
+use Modules\Conversation\Http\Requests\StoreConversationRequest;
 use Modules\Conversation\Http\Resources\ConversationResource;
 
 class ConversationController extends Controller
@@ -17,13 +18,9 @@ class ConversationController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
+    public function store(StoreConversationRequest $request)
     {
-        $inputs = $request->all();
-        $validator = Validator::make($inputs, Conversation::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+        $inputs = $request->validated();
         $conversation = Conversation::create($inputs);
         return response()->json(new ConversationResource($conversation), 200);
     }
