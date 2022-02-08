@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\MachineModel\Entities\MachineModel;
+use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\MachineModel\Http\Resources\MachineModelResource;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SubCategory\Entities\SubCategory;
@@ -31,15 +32,9 @@ class MachineModelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMachineModelRequest $request)
     {
-        $inputs = $request->all();
-        $inputs['sub_category_id'] = Manufacture::find($inputs['manufacture_id'])->sub_category_id;
-        $inputs['category_id'] = SubCategory::find($inputs['sub_category_id'])->category_id;
-        $validator = Validator::make($inputs, MachineModel::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+        $inputs = $request->validated();
         $machine_model = MachineModel::create($inputs);
         return response()->json(new MachineModelResource($machine_model), 200);
     }
