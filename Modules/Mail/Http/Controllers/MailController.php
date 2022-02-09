@@ -11,12 +11,14 @@ use Modules\Machine\Entities\Machine;
 use Modules\Mail\Emails\ContactBuyerMail;
 use Modules\Mail\Emails\ContactSellerMail;
 use Modules\Mail\Emails\StoreMachineMail;
+use Modules\Mail\Http\Requests\ContactSellerRequest;
+use Modules\Mail\Http\Requests\StoreMachineMailRequest;
 
 class MailController extends Controller
 {
-    public function contact_seller(Request $request)
+    public function contact_seller(ContactSellerRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
         $machine = Machine::find($inputs['machine_id']);
         $seller = User::find($machine->seller_id);
 
@@ -40,9 +42,9 @@ class MailController extends Controller
     }
 
 
-    public function store_machine(Request $request)
+    public function store_machine(StoreMachineMailRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
         $machine = Machine::find($inputs['machine_id']);
         $seller = User::find($machine->seller_id);
 
