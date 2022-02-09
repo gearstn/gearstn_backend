@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Resources\MachineResource;
+use Modules\User\Http\Requests\SaveList\AddToListRequest;
+use Modules\User\Http\Requests\SaveList\RemoveFromListRequest;
 
 class SavedListController extends Controller
 {
@@ -17,9 +19,9 @@ class SavedListController extends Controller
         return response()->json(MachineResource::collection($user->wishlist($user->id)),200);
     }
 
-    public function addToList(Request $request)
+    public function addToList(AddToListRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
         $user = User::find(auth()->user()->id);
         $machine = Machine::find($inputs['machine_id']);
         $user->wish($machine,$user->id);
@@ -27,9 +29,9 @@ class SavedListController extends Controller
     }
 
 
-    public function removeItem(Request $request)
+    public function removeItem(RemoveFromListRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
         $user = User::find(auth()->user()->id);
         $machine = Machine::find($inputs['machine_id']);
         $user->unwish($machine,$user->id);
