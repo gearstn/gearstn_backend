@@ -118,6 +118,7 @@ class MachinesController extends Controller
     public function show($slug)
     {
         $machine = Machine::where('slug', '=', $slug)->firstOrFail();
+        views($machine)->record();
         return response()->json(new MachineResource($machine), 200);
     }
 
@@ -207,6 +208,13 @@ class MachinesController extends Controller
         $inputs = $request->all();
         $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
+
+    public function latest_machines(Request $request)
+    {
+        $inputs = $request->all();
+        $machines = Machine::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
+        return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
 }

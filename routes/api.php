@@ -52,6 +52,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         Route::post('/users/change-password',[UsersController::class, 'change_password']);
         Route::get('/users/profile',[UsersController::class, 'getNormalUser']);
         Route::get('/users/full-profile',[UsersController::class, 'getFullUser']);
+        Route::get('/users/phone',[UsersController::class, 'get_phone']);
         Route::post('/users',[UsersController::class, 'update'])->name('users.update');
         Route::resource('users',UsersController::class)->only('destroy');
 
@@ -90,6 +91,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::get('/filter_models', [ MachineModelsController::class , 'filter_models' ])->name('machine-models.filter_models');
 
     Route::resource('machines', MachinesController::class ,['as' => 'frontend'])->except('create', 'edit');
+    Route::get('/latest-machines', [MachinesController::class, 'latest_machines'] ,['as' => 'frontend']);
     Route::resource('news', NewsController::class ,['as' => 'frontend'])->only('index','show');
     Route::get('/latest-news', [NewsController::class, 'latest_news'] ,['as' => 'frontend']);
     Route::resource('auctions', AuctionsController::class ,['as' => 'frontend'])->only('index','show');
