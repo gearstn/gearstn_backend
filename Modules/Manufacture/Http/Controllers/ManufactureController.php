@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\Manufacture\Entities\Manufacture;
+use Modules\Manufacture\Http\Requests\StoreManufactureRequest;
 use Modules\Manufacture\Http\Resources\ManufactureResource;
 
 class ManufactureController extends Controller
@@ -28,13 +29,9 @@ class ManufactureController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreManufactureRequest $request)
     {
-        $inputs = $request->all();
-        $validator = Validator::make($inputs, Manufacture::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+        $inputs = $request->validated();
         $manufacture = Manufacture::create($inputs);
         return response()->json(new ManufactureResource($manufacture),200);
     }
