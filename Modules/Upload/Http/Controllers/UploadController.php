@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Modules\Upload\Entities\Upload;
+use Modules\Upload\Http\Requests\StoreUploadRequest;
+use Modules\Upload\Http\Requests\DestroyUploadRequest;
+use Modules\Upload\Http\Requests\StoreFileRequest;
 
 class UploadController extends Controller
 {
@@ -19,20 +22,10 @@ class UploadController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request)
+    public function store(StoreUploadRequest $request)
     {
-        $inputs = $request->all();
-        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
-
-        $validator = Validator::make($inputs, [
-            "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:500"],
-        ] );
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+        $inputs = $request->validated();
         $images = [];
         foreach ($inputs['photos'] as $image) {
             $fileInfo = $image->getClientOriginalName();
@@ -57,9 +50,9 @@ class UploadController extends Controller
      * Remove the specified resource from storage.
      *
      */
-    public function destroy(Request $request)
+    public function destroy(DestroyUploadRequest $request)
     {
-        $inputs = $request->all();
+        $inputs = $request->validated();
         // foreach($inputs['ids'] as $id){
             $image = Upload::find($inputs['ids']);
             Storage::disk('s3')->delete($image->file_path);
@@ -75,23 +68,14 @@ class UploadController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function upload_report_file(Request $request)
+    public function upload_report_file(StoreFileRequest $request)
     {
-        $inputs = $request->all();
-        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
-
-        $validator = Validator::make($inputs, [
-            "file" => ["required","mimes:pdf,docx,doc","max:3000"],
-        ] );
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-        $images = [];
-        foreach ($inputs['photos'] as $image) {
+        $inputs = $request->validated();
+        foreach ($inputs['file'] as $image) {
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
-            $path = Storage::disk('local')->put('machine_reports', $image);
-            $url = Storage::disk('local')->url($path);
+            $path = Storage::disk('s3')->put('machine_reports', $image);
+            $url = Storage::disk('s3')->url($path);
             $photo = [
                 'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
