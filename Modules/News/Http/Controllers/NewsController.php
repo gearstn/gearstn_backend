@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\News\Entities\News;
+use Modules\News\Http\Requests\LatestNewsRequest;
 use Modules\News\Http\Resources\NewsResource;
 
 class NewsController extends Controller
@@ -34,9 +35,10 @@ class NewsController extends Controller
         return response()->json(new NewsResource($news), 200);
     }
 
-    public function latest_news(Request $request)
+    public function latest_news(LatestNewsRequest $request)
     {
-        $news = News::orderBy('created_at', 'desc')->take((int)$request->number)->get();
+        $inputs = $request->validated();
+        $news = News::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
         return NewsResource::collection($news)->additional(['status' => 200, 'message' => 'News fetched successfully']);
     }
 
