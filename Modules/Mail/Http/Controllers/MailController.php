@@ -38,6 +38,7 @@ class MailController extends Controller
 
         Mail::to($seller->email)->send(new ContactSellerMail($seller_details));
         Mail::to(auth()->user()->email)->send(new ContactBuyerMail($buyer_details));
+        views($machine)->record();
         return response('Email sent Successfully',200);
     }
 

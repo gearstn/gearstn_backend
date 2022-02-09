@@ -11,6 +11,7 @@ use Modules\User\Http\Resources\FullUserResource;
 use Modules\User\Http\Resources\NormalUserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Modules\Machine\Entities\Machine;
 use Modules\User\Entities\AcountManagerRequest;
 use Modules\User\Http\Requests\User\ChangePasswordRequest;
 
@@ -171,5 +172,20 @@ class UserController extends Controller
         return response()->json(['message_en' => 'your request has been created successfully',
                                  'message_ar' => 'تم إنشاء طلبك بنجاح'
                                 ], 200);
+    }
+
+    public function get_phone(Request $request)
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($inputs,  ['seller_id' => 'required','machine_id' => 'required']);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $user = User::findOrFail($inputs['seller_id']);
+        $machine = Machine::where('id', '=', $inputs['machine_id'])->firstOrFail();
+        $phone = $user->phone;
+        views($machine)->record();
+        return response()->json($phone, 200);
     }
 }

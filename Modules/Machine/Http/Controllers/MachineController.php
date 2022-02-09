@@ -276,4 +276,11 @@ class MachineController extends Controller
         return response()->json(['price' => $machine_price],200);
     }
 
+    public function latest_machines(Request $request)
+    {
+        $inputs = $request->all();
+        $machines = Machine::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
+        return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
+
 }

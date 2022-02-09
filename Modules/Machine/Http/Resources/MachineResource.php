@@ -40,7 +40,7 @@ class MachineResource extends JsonResource
             'skq' => $this->skq,
             'price' =>  $this->show_price == 1 ? currency_converter('USD',$this->price) : 'Price Hidden',
             'approved' => $this->approved,
-            'seller_id' => User::find($this->seller_id,['id','first_name', 'last_name', 'company_name', 'country', 'email']),
+            'seller_id' => User::find($this->seller_id,['id','first_name', 'last_name', 'company_name', 'country', 'email' , 'phone']),
             'city_id' => City::find($this->city_id,$selected_columns),
             'category_id' => Category::find($this->category_id,$selected_columns),
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
