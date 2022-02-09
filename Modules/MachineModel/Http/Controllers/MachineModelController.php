@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\MachineModel\Entities\MachineModel;
+use Modules\MachineModel\Http\Requests\FilterMachineModelRequest;
 use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\MachineModel\Http\Resources\MachineModelResource;
 use Modules\Manufacture\Entities\Manufacture;
@@ -53,19 +54,10 @@ class MachineModelController extends Controller
     }
 
     //Get models based on sub_category_id && manufacture_id
-    public function filter_models(Request $request)
+    public function filter_models(FilterMachineModelRequest $request)
     {
-        $inputs = $request->all();
-        $validator = Validator::make($inputs, [
-            'sub_category_id' => 'required',
-            'manufacture_id' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
-
+        $inputs = $request->validated();
         $models = MachineModel::where('sub_category_id',$inputs['sub_category_id'])->where('manufacture_id',$inputs['manufacture_id'])->get();
-        // dd($models);
         return MachineModelResource::collection($models)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
     }
 }
