@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Modules\Conversation\Entities\Conversation;
 use Modules\Conversation\Http\Requests\StoreConversationRequest;
+use Modules\Conversation\Http\Requests\CheckForConversationRequest;
 use Modules\Conversation\Http\Resources\ConversationResource;
 
 class ConversationController extends Controller
@@ -31,7 +32,14 @@ class ConversationController extends Controller
         $conversations = Conversation::where('sender_id', $id)->orWhere('receiver_id', $id)->paginate(number_in_page());
         return ConversationResource::collection($conversations)->additional(['status' => 200, 'message' => 'Conversations fetched successfully']);
     }
-    
+
+    public function check_for_conversation(CheckForConversationRequest $request)
+    {
+        $inputs = $request->validated();
+        $id = Auth::user()->id;
+        $conversation = Conversation::where('sender_id', $id)->Where('machine_id', $inputs['machine_id'])->first();
+        return response()->json(new ConversationResource($conversation), 200);
+    }
     /**
      * Remove the specified resource from storage.
      * @param int $id
