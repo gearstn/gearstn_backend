@@ -18,10 +18,10 @@ class ConversationResource extends JsonResource
         $data = [
             "id" => $this->id,
             "chat_token" => $this->chat_token,
-            "sender_done" => $this->sender_done,
-            "receiver_done" => $this->receiver_done,
-            "sender_id" => User::find($this->sender_id,['id','first_name', 'last_name']),
-            "receiver_id" => User::find($this->receiver_id,['id','first_name', 'last_name']),
+            "acquire_done" => $this->acquire_done,
+            "owner_done" => $this->owner_done,
+            "acquire_id" => User::find($this->acquire_id,['id','first_name', 'last_name']),
+            "owner_id" => User::find($this->owner_id,['id','first_name', 'last_name']),
             "machine_id" => $this->machine_id,
         ];
         return $data;

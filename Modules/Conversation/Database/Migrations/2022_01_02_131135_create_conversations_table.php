@@ -16,12 +16,12 @@ class CreateConversationsTable extends Migration
         Schema::create('conversations', function (Blueprint $table) {
             $table->id();
             $table->string('chat_token');
-            $table->boolean('sender_done')->default(0);
-            $table->boolean('receiver_done')->default(0);
-            $table->unsignedBigInteger('sender_id');
-            $table->foreign("sender_id")->references("id")->on("users")->onDelete("cascade");
-            $table->unsignedBigInteger('receiver_id');
-            $table->foreign("receiver_id")->references("id")->on("users")->onDelete("cascade");
+            $table->boolean('acquire_done')->default(0);
+            $table->boolean('owner_done')->default(0);
+            $table->unsignedBigInteger('acquire_id');
+            $table->foreign("acquire_id")->references("id")->on("users")->onDelete("cascade");
+            $table->unsignedBigInteger('owner_id');
+            $table->foreign("owner_id")->references("id")->on("users")->onDelete("cascade");
             $table->unsignedBigInteger('machine_id')->nullable();
             $table->foreign("machine_id")->references("id")->on("machines")->onDelete("cascade");
             $table->timestamps();

@@ -15,8 +15,8 @@ class StoreConversationRequest extends FormRequest
     {
         return [
             'chat_token' => 'required|unique:conversations',
-            'sender_id' => 'required',
-            'receiver_id' => 'required',
+            'acquire_id' => 'required',
+            'owner_id' => 'required',
             'machine_id' => 'required',
         ];
     }
