@@ -23,7 +23,7 @@ class ConversationResource extends JsonResource
             "owner_done" => $this->owner_done,
             "acquire" => User::find($this->acquire_id,['id','first_name', 'last_name']),
             "owner" => User::find($this->owner_id,['id','first_name', 'last_name']),
-            "machine_id" => Machine::find($this->machine_id .['id','slug']),
+            "machine" => Machine::find($this->machine_id .['id','slug']),
         ];
         return $data;
     }
