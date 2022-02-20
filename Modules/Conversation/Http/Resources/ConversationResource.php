@@ -4,6 +4,7 @@ namespace Modules\Conversation\Http\Resources;
 
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Machine\Entities\Machine;
 
 class ConversationResource extends JsonResource
 {
@@ -20,9 +21,9 @@ class ConversationResource extends JsonResource
             "chat_token" => $this->chat_token,
             "acquire_done" => $this->acquire_done,
             "owner_done" => $this->owner_done,
-            "acquire_id" => User::find($this->acquire_id,['id','first_name', 'last_name']),
-            "owner_id" => User::find($this->owner_id,['id','first_name', 'last_name']),
-            "machine_id" => $this->machine_id,
+            "acquire" => User::find($this->acquire_id,['id','first_name', 'last_name']),
+            "owner" => User::find($this->owner_id,['id','first_name', 'last_name']),
+            "machine_id" => Machine::find($this->machine_id .['id','slug']),
         ];
         return $data;
     }
