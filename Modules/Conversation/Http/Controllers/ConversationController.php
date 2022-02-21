@@ -2,6 +2,7 @@
 
 namespace Modules\Conversation\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,14 +28,21 @@ class ConversationController extends Controller
         return response()->json(new ConversationResource($conversation), 200);
     }
 
-    public function get_user_conversations()
+    public function get_user_conversations(): JsonResponse
     {
-        $id = Auth::user()->id;
-        $conversations = Conversation::where('acquire_id', $id)->orWhere('owner_id', $id)->paginate(number_in_page());
-        return ConversationResource::collection($conversations)->additional(['status' => 200, 'message' => 'Conversations fetched successfully']);
+        $auth_id = Auth::user()->id;
+        $conversations = Conversation::where('acquire_id', $auth_id)->orWhere('owner_id', $auth_id)->get();
+        $result = [];
+        foreach ($conversations as $conversation){
+            if ($conversation->acquire_id == $auth_id)
+                $result[json_encode(User::find($conversation->owner_id,['id','first_name', 'last_name']))][] = new ConversationResource($conversation);
+            else
+                $result[json_encode(User::find($conversation->acquire_id,['id','first_name', 'last_name']))][] = new ConversationResource($conversation);
+        }
+        return response()->json($result, 200);
     }
 
-    public function check_for_conversation(CheckForConversationRequest $request)
+    public function check_for_conversation(CheckForConversationRequest $request): JsonResponse
     {
         $inputs = $request->validated();
         $id = Auth::user()->id;
@@ -46,7 +54,7 @@ class ConversationController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $conversation = Conversation::findOrFail($id);
         $conversation->delete();
