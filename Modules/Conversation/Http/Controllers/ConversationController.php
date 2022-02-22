@@ -3,9 +3,12 @@
 namespace Modules\Conversation\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,18 +16,30 @@ use Modules\Conversation\Entities\Conversation;
 use Modules\Conversation\Http\Requests\StoreConversationRequest;
 use Modules\Conversation\Http\Requests\CheckForConversationRequest;
 use Modules\Conversation\Http\Resources\ConversationResource;
+use Modules\Mail\Http\Controllers\MailController;
+use Modules\Mail\Http\Requests\OpenConversationMailRequest;
 
 class ConversationController extends Controller
 {
     /**
      * Store a newly created resource in storage.
-     * @param Request $request
-     * @return JsonResponse
+     * @param StoreConversationRequest $request
+     * @return Application|ResponseFactory|JsonResponse|Response
      */
     public function store(StoreConversationRequest $request)
     {
         $inputs = $request->validated();
         $conversation = Conversation::create($inputs);
+
+//        Send Mail To the machine owner
+        $mail_parameters = [
+            'machine_id' => $inputs['machine_id'],
+            'acquire_id' => $inputs['acquire_id'],
+            'owner_id' => $inputs['owner_id'],
+        ];
+        $response = redirect()->route('open-conversation-with-seller' , $mail_parameters );
+        if($response->status() != 200) { return $response; }
+
         return response()->json(new ConversationResource($conversation), 200);
     }
 

@@ -59,7 +59,7 @@ class MachineController extends Controller
                         'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
                         'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
                     ],422);
-                }    
+                }
             }
         }
 
@@ -142,7 +142,7 @@ class MachineController extends Controller
             $inputs['hour_meter_photo_id'] = $response->getContent();
             unset($inputs['hour_meter_photo']);
         }
-        
+
 
         if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $machine = Machine::create($inputs);
@@ -151,13 +151,12 @@ class MachineController extends Controller
         $machine->slug = $machine->year.'-'.$machine->manufacture->title_en.'-'.$model_title.'-'.$machine->sku;
         $machine->save();
 
-        //Send Mail To the machine owner
-        $mails_controller = new MailController();
-        $request = new Request([
+//        Send Mail To the machine owner
+        $mail_parameters = [
             'machine_id' => $machine->id,
             'seller_id' => $inputs['seller_id'],
-        ]);
-        $response = $mails_controller->store_machine($request);
+        ];
+        $response = redirect()->route('store-machine' , $mail_parameters );
         if($response->status() != 200) { return $response; }
 
         return response()->json(new MachineResource($machine), 200);
