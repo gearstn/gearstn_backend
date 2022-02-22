@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Machine\Entities\Machine;
 use Modules\Mail\Emails\ContactBuyerMail;
 use Modules\Mail\Emails\ContactSellerMail;
+use Modules\Mail\Emails\OpenConversationMail;
 use Modules\Mail\Emails\StoreMachineMail;
 use Modules\Mail\Http\Requests\ContactSellerRequest;
+use Modules\Mail\Http\Requests\OpenConversationMailRequest;
 use Modules\Mail\Http\Requests\StoreMachineMailRequest;
 
 class MailController extends Controller
@@ -56,5 +58,23 @@ class MailController extends Controller
 
         Mail::to($seller->email)->send(new StoreMachineMail($details));
         return response('Email sent Successfully',200);
+    }
+
+
+    public function open_conversation_with_seller(OpenConversationMailRequest $request)
+    {
+        $inputs = $request->validated();
+        $machine = Machine::find($inputs['machine_id']);
+        $owner = User::find($inputs['owner_id']);
+        $acquire = User::find($inputs['acquire_id']);
+
+        $details = [
+            'subject' => $acquire->first_name . ' ' . $acquire->last_name . ' ' . ' opened a conversation ' ,
+            'acquire'=> $acquire,
+            'owner'=> $owner,
+            'machine'=> $machine,
+        ];
+
+        Mail::to($owner->email)->send(new OpenConversationMail($details));
     }
 }
