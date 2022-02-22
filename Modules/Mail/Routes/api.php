@@ -21,6 +21,8 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     //Auth routes
     Route::middleware('auth:sanctum')->group( function () {
         //Mails Routes
-        Route::get('/contact-seller', [MailController::class, 'contact_seller']);
+        Route::get('/contact-seller', [MailController::class, 'contact_seller'])->name('contact-seller');
+        Route::get('/store-machine', [MailController::class, 'store_machine'])->name('store-machine');
+        Route::get('/open-conversation-with-seller', [MailController::class, 'open_conversation_with_seller'])->name('open-conversation-with-seller');
     });
 });
