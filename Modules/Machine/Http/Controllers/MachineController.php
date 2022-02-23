@@ -275,10 +275,10 @@ class MachineController extends Controller
         return response()->json(['price' => $machine_price],200);
     }
 
-    public function latest_machines(Request $request)
+    public function latest_machines(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $inputs = $request->all();
-        $machines = Machine::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
+        $machines = Machine::orderBy('created_at', 'desc')->where('approved',1)->take((int)$inputs['number'])->get();
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 

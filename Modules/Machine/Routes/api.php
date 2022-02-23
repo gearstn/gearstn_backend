@@ -30,6 +30,6 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/machines-filter-data', [MachineController::class, 'getMinMaxOfField']);
     Route::get('/related-machines', [MachineController::class, 'getRelatedMachines']);
     Route::get('/machine-price', [MachineController::class, 'get_machine_price']);
-    Route::get('/latest-machines', [MachinesController::class, 'latest_machines'] ,['as' => 'frontend']);
+    Route::get('/latest-machines', [MachineController::class, 'latest_machines'] ,['as' => 'frontend']);
 
 });
