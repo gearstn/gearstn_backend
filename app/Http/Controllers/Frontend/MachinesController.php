@@ -33,7 +33,7 @@ class MachinesController extends Controller
      *
      */
 
- 
+
 
     public function store(Request $request)
     {
@@ -89,7 +89,7 @@ class MachinesController extends Controller
             $inputs['model_id'] = json_decode($response->getContent())->id;
         }
 
-        
+
         $machine = Machine::create($inputs);
         // dd("7amdela");
         $machine->sku = random_int(10000000, 99999999);
@@ -213,7 +213,7 @@ class MachinesController extends Controller
     public function latest_machines(Request $request)
     {
         $inputs = $request->all();
-        $machines = Machine::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
+        $machines = Machine::orderBy('created_at', 'desc')->where('approved',1)->take((int)$inputs['number'])->get();
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
