@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 
 class UploadsController extends Controller
 {
@@ -47,19 +48,25 @@ class UploadsController extends Controller
 
         $validator = Validator::make($inputs, [
             "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:500"],
+            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:5000000000"],
         ] );
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
         $images = [];
         foreach ($inputs['photos'] as $image) {
+
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
-            $path = Storage::disk('s3')->put('images', $image);
-            $url = Storage::disk('s3')->url($path);
+
+            $img = Image::make($image)->limitColors(256)->gamma(1.0);
+            $resource = $img->stream($image->extension())->detach();
+
+            $path = Storage::disk('local')->put('images',   $resource);
+            $url = Storage::disk('local')->url($path);
+
             $photo = [
-                'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
+                'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
                 'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
                 'file_name' => $newFileName,
