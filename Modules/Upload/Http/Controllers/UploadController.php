@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 use Modules\Upload\Entities\Upload;
 use Modules\Upload\Http\Requests\StoreUploadRequest;
 use Modules\Upload\Http\Requests\DestroyUploadRequest;
@@ -28,10 +29,14 @@ class UploadController extends Controller
         $inputs = $request->validated();
         $images = [];
         foreach ($inputs['photos'] as $image) {
+
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
-            $path = Storage::disk('local')->put('images', $image);
+            $img = Image::make($image)->insert( storage_path('app/public/logo.png') , 'bottom-right' ,10 ,10 )->limitColors(256)->gamma(1.0)->encode($image->extension());
+
+            $path = Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$img);
             $url = Storage::disk('local')->url($path);
+
             $photo = [
                 'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
