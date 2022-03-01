@@ -19,7 +19,7 @@ class Machine extends Model implements Viewable
     use InteractsWithViews;
 
     protected $table = 'machines';
-    
+
     protected $fillable = [
         'year',
         'sn',
@@ -110,7 +110,7 @@ class Machine extends Model implements Viewable
         ];
     }
 
-    
+
     protected static function newFactory()
     {
         return \Modules\Machine\Database\factories\MachineFactory::new();

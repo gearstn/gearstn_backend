@@ -25,7 +25,7 @@ class Employee extends Model
         'name_en' => 'required',
         'name_ar' => 'required',
     ];
-        
+
     protected static function newFactory()
     {
         //return \Modules\Employee\Database\factories\EmployeeFactory::new();

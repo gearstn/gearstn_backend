@@ -32,7 +32,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::get('/change-lang/{lang}', function ($lang) {
         App::setLocale($lang);
         return Config::get('app.locale');
-    });  
+    });
 
     //Auth routes
     Route::middleware('auth:sanctum')->group( function () {

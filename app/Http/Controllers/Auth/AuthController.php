@@ -63,7 +63,7 @@ class AuthController extends Controller
 
             return $this->error('Credentials Error',401,['message_en' => 'Incorrect email or password',
                                               'message_ar' => 'خطء فى البريد الالكترونى او كلمة السر' ]);
-        }        
+        }
         if (Auth::user()->email_verified_at == null) {
             return $this->error('Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
                                               'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
@@ -108,7 +108,7 @@ class AuthController extends Controller
 
 		if($status === Password::RESET_LINK_SENT) {
 			return response()->json(['message_en' => __($status),'message_ar' => 'لقد تواصلنا معك عبر بريدك الالكترونى' ], 200);
-		} 
+		}
         else {
 			throw ValidationException::withMessages([
 				'message_en' => __($status),

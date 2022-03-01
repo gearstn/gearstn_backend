@@ -17,7 +17,7 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        $sub_categories = SubCategory::paginate(number_in_page());
+        $sub_categories = SubCategory::all();
         return SubCategoryResource::collection($sub_categories)->additional(['status' => 200, 'message' => 'SubCategories fetched successfully']);
     }
 
