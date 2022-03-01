@@ -58,13 +58,10 @@ class UploadsController extends Controller
 
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
+            $img = Image::make($image)->insert( public_path('logo.png') , 'bottom-right' ,10 ,10 )->limitColors(256)->gamma(1.0)->encode($image->extension());
 
-            $img = Image::make($image)->limitColors(256)->gamma(1.0);
-            $resource = $img->stream($image->extension())->detach();
-
-            $path = Storage::disk('local')->put('images',   $resource);
+            $path = Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$img);
             $url = Storage::disk('local')->url($path);
-
             $photo = [
                 'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
