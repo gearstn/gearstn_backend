@@ -69,7 +69,8 @@ class AuthController extends Controller
                                               'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
         }
         return response()->json([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken
+            'token' => auth()->user()->createToken('API Token')->plainTextToken,
+            'id' => auth()->user()->id,
         ]);
     }
 
