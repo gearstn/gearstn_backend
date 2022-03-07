@@ -22,6 +22,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::middleware('auth:sanctum')->group( function () {
         //Store Update Destroy routes for Machines and Models
         Route::resource('machines', 'MachineController' ,['as' => 'frontend'])->only('store','update','destroy');
+        Route::get('/user-machines', [MachineController::class, 'user_machines']);
     });
 
     Route::resource('machines', 'MachineController' ,['as' => 'frontend'])->except('create', 'edit');

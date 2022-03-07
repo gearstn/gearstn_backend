@@ -6,6 +6,7 @@ use App\Classes\CollectionPaginate;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Requests\StoreMachineRequest;
@@ -282,4 +283,9 @@ class MachineController extends Controller
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
+    public function user_machines()
+    {
+        $machines = Machine::where('seller_id', Auth::user()->id)->get();
+        return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
 }
