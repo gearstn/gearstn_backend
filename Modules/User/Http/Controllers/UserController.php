@@ -174,7 +174,7 @@ class UserController extends Controller
                                 ], 200);
     }
 
-    public function get_phone(Request $request)
+    public function get_phone(Request $request): \Illuminate\Http\JsonResponse
     {
         $inputs = $request->all();
         $validator = Validator::make($inputs,  ['seller_id' => 'required','machine_id' => 'required']);
@@ -183,9 +183,12 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($inputs['seller_id']);
+
         $machine = Machine::where('id', '=', $inputs['machine_id'])->firstOrFail();
+        $machine->phone_clicks = $machine->phone_clicks + 1;
+        $machine->save();
+
         $phone = $user->phone;
-        views($machine)->record();
         return response()->json($phone, 200);
     }
 }

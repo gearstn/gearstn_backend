@@ -5,6 +5,7 @@ namespace Modules\Machine\Http\Controllers;
 use App\Classes\CollectionPaginate;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -166,10 +167,10 @@ class MachineController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return Response
+     * @param $slug
+     * @return JsonResponse
      */
-    public function show($slug)
+    public function show($slug): JsonResponse
     {
         $machine = Machine::where('slug', '=', $slug)->firstOrFail();
         views($machine)->record();
@@ -180,10 +181,10 @@ class MachineController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
         $inputs = $request->all();
         $machine = Machine::find($id);
@@ -195,9 +196,9 @@ class MachineController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $machine = Machine::findOrFail($id);
         $machine->delete();
@@ -205,7 +206,7 @@ class MachineController extends Controller
     }
 
 
-    public function search_filter(Request $request)
+    public function search_filter(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $inputs = $request->all();
         //Full Search in all fields
@@ -247,7 +248,8 @@ class MachineController extends Controller
 
 
 
-    public function getMinMaxOfField(){
+    public function getMinMaxOfField(): JsonResponse
+    {
         $results =[];
         $results[ 'max_price'] = Machine::max('price');
         $results[ 'min_price'] = Machine::min('price');
@@ -258,13 +260,15 @@ class MachineController extends Controller
         return response()->json($results,200);
     }
 
-    public function getRelatedMachines(Request $request){
+    public function getRelatedMachines(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    {
         $inputs = $request->all();
         $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
-    public function get_machine_price(Request $request){
+    public function get_machine_price(Request $request): JsonResponse
+    {
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
             "machine_id" => 'required',
@@ -283,9 +287,23 @@ class MachineController extends Controller
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
-    public function user_machines()
+    public function user_machines(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $machines = Machine::where('seller_id', Auth::user()->id)->get();
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
+    }
+
+
+    public function add_machine_view(Request $request): JsonResponse
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            "machine_id" => 'required',
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $machine = Machine::find($inputs['machine_id']);
+        views($machine)->record();
     }
 }

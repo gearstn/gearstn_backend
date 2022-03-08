@@ -47,6 +47,7 @@ class MachineResource extends JsonResource
             'manufacture_id' => Manufacture::find($this->manufacture_id,$selected_columns),
             'model_id' => MachineModel::find($this->model_id,$selected_columns),
             'views' => views(Machine::find($this->id))->count(),
+            'phone_clicks' => $this->phone_clicks,
         ];
         return $data;
     }
