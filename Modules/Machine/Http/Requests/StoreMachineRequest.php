@@ -29,7 +29,7 @@ class StoreMachineRequest extends FormRequest
             'model_id' => 'required_without:new_model',
             'city_id' => 'required',
             'new_model' => 'required_without:model_id',
-            'manufacturing_place' => 'required|string',
+//            'manufacturing_place' => 'required|string',
             'slug' => 'sometimes',
             'sku' => 'sometimes',
             'report_file' => 'required_if:manufacturing_place,forign',
@@ -50,7 +50,7 @@ class StoreMachineRequest extends FormRequest
     {
         return true;
     }
-       
+
    protected function failedValidation(Validator $validator)
    {
        throw new HttpResponseException(response()->json($validator->errors(), 422));
