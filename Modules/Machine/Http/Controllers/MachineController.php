@@ -294,7 +294,7 @@ class MachineController extends Controller
     }
 
 
-    public function add_machine_view(Request $request): JsonResponse
+    public function add_machine_view(Request $request)
     {
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
