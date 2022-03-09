@@ -3,6 +3,7 @@
 namespace Modules\News\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\News\Entities\News;
@@ -26,16 +27,16 @@ class NewsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show($slug): JsonResponse
     {
-        $news = News::findOrFail($id);
+        $news = News::where('slug', '=', $slug)->firstOrFail();
         return response()->json(new NewsResource($news), 200);
     }
 
-    public function latest_news(LatestNewsRequest $request)
+    public function latest_news(LatestNewsRequest $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
         $inputs = $request->validated();
         $news = News::orderBy('created_at', 'desc')->take((int)$inputs['number'])->get();
