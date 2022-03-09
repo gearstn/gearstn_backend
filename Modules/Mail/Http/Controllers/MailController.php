@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
 use Modules\Mail\Emails\ContactBuyerMail;
 use Modules\Mail\Emails\ContactSellerMail;
@@ -45,9 +46,18 @@ class MailController extends Controller
     }
 
 
-    public function store_machine(StoreMachineMailRequest $request)
+    public function store_machine(Request $request)
     {
-        $inputs = $request->validated();
+
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'machine_id' => 'required'
+        ] );
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
         $machine = Machine::find($inputs['machine_id']);
         $seller = User::find($machine->seller_id);
 

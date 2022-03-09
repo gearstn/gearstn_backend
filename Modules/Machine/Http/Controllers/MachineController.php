@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
@@ -16,6 +17,7 @@ use Modules\Machine\Http\Resources\MachineResource;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\Mail\Http\Controllers\MailController;
+use Modules\Mail\Http\Requests\StoreMachineMailRequest;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\MachineModel\Http\Controllers\MachineModelController;
 use Modules\Upload\Http\Requests\StoreFileRequest;
@@ -26,7 +28,7 @@ class MachineController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Collection|Machine[]
+     * @return AnonymousResourceCollection
      */
     public function index()
     {
@@ -156,11 +158,13 @@ class MachineController extends Controller
         $machine->save();
 
 //        Send Mail To the machine owner
-        $mail_parameters = [
+        $data = [
             'machine_id' => $machine->id,
             'seller_id' => $inputs['seller_id'],
         ];
-        $response = redirect()->route('store-machine' , $mail_parameters );
+        $post = new Post_Caller(MailController::class,'store_machine',StoreMachineMailRequest::class,$data);
+        $response = $post->call();
+//        $response = redirect()->route('store-machine' , $mail_parameters );
         if($response->status() != 200) { return $response; }
 
         return response()->json(new MachineResource($machine), 200);
@@ -208,7 +212,7 @@ class MachineController extends Controller
     }
 
 
-    public function search_filter(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function search_filter(Request $request): AnonymousResourceCollection
     {
         $inputs = $request->all();
         //Full Search in all fields
@@ -262,7 +266,7 @@ class MachineController extends Controller
         return response()->json($results,200);
     }
 
-    public function getRelatedMachines(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function getRelatedMachines(Request $request): AnonymousResourceCollection
     {
         $inputs = $request->all();
         $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
@@ -282,14 +286,14 @@ class MachineController extends Controller
         return response()->json(['price' => $machine_price],200);
     }
 
-    public function latest_machines(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function latest_machines(Request $request): AnonymousResourceCollection
     {
         $inputs = $request->all();
         $machines = Machine::orderBy('created_at', 'desc')->where('approved',1)->take((int)$inputs['number'])->get();
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
-    public function user_machines(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    public function user_machines(): AnonymousResourceCollection
     {
         $machines = Machine::where('seller_id', Auth::user()->id)->get();
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
