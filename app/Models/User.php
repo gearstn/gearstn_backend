@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Notifications\PasswordReset;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use LamaLama\Wishlist\HasWishlists;
+use Modules\Machine\Entities\Machine;
+use Modules\Subscription\Entities\Subscription;
 use Spatie\Permission\Traits\HasRoles;
+use Rinvex\Subscriptions\Traits\HasSubscriptions;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasApiTokens , SoftDeletes, HasWishlists , HasRoles;
+    use HasFactory, Notifiable, HasApiTokens , SoftDeletes, HasWishlists , HasRoles, HasSubscriptions;
 
     protected $dates = ['deleted_at'];
     /**
@@ -76,6 +79,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Machine::class);
     }
 
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
     /**
      * Send the password reset notification.
      *
@@ -85,5 +92,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new PasswordReset($token));
+    }
+
+    protected static function newFactory()
+    {
+        //return \Modules\User\Database\factories\UserFactory::new();
     }
 }
