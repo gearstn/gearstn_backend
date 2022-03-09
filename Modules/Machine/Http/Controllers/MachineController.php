@@ -14,6 +14,7 @@ use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Requests\StoreMachineRequest;
 use Modules\Machine\Http\Resources\MachineResource;
 use Modules\MachineModel\Entities\MachineModel;
+use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\MachineModel\Http\Controllers\MachineModelController;
@@ -41,7 +42,8 @@ class MachineController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find($inputs['seller_id']);
-        foreach ($user->subscriptions()->get() as $plan) {
+        //Turn Subscription OF
+        /*foreach ($user->subscriptions()->get() as $plan) {
             if ( str_contains($plan->slug , 'distributor') ) {
                 $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
                 $subscription->features();
@@ -67,11 +69,12 @@ class MachineController extends Controller
                     ],422);
                 }
             }
-        }
+        }*/
 
         //Uploads route to upload images and get array of ids
+
         $data = [
-            'photos' => [$inputs['photos']],
+            'photos' => $inputs['photos'],
             'seller_id' => $user->id,
         ];
         $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
@@ -94,17 +97,16 @@ class MachineController extends Controller
 
         //If the client wants to create a non existing model
         if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
-            $models_controller = new MachineModelController();
-            $request = new Request([
+            $data = [
                 'title_en' => $inputs['new_model'],
                 'title_ar' => $inputs['new_model'],
                 'category_id' => $inputs['category_id'],
                 'sub_category_id' => $inputs['sub_category_id'],
                 'manufacture_id' => $inputs['manufacture_id'],
-            ]);
-            $response = $models_controller->store($request);
-            if($response->status() != 200)
-                return $response;
+            ];
+            $post = new Post_Caller(MachineModelController::class,'store',StoreMachineModelRequest::class,$data);
+            $response = $post->call();
+            if($response->status() != 200) { return $response; }
             $inputs['model_id'] = json_decode($response->getContent())->id;
         }
 
