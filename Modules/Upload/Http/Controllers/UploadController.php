@@ -3,6 +3,7 @@
 namespace Modules\Upload\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -24,21 +25,36 @@ class UploadController extends Controller
      * Store a newly created resource in storage.
      *
      */
-    public function store(StoreUploadRequest $request)
+    public function store(Request $request)
     {
-        $inputs = $request->validated();
+        $inputs = $request->all();
+        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
+
+        $validator = Validator::make($inputs, [
+            "photos" => ["required","array","min:1","max:5"],
+            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:1000000"],
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
         $images = [];
         foreach ($inputs['photos'] as $image) {
 
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
-            $img = Image::make($image)->insert( storage_path('app/public/logo.png') , 'bottom-right')->limitColors(256)->gamma(1.0)->encode($image->extension());
+            if ($image->getSize() /1024 > 250.0){
+                $img = Image::make($image)->insert( storage_path('app/public/logo.png') , 'bottom-right')->limitColors(256)->gamma(1.0)->encode($image->extension());
+            }
+            else{
+                $img = Image::make($image)->insert( storage_path('app/public/logo.png') , 'bottom-right')->encode($image->extension());
+            }
 
-            $path = Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$img);
+            Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$img);
+            $path = $inputs['seller_id'] .'/'. $newFileName;
             $url = Storage::disk('local')->url($path);
-
             $photo = [
-                'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
+                'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
                 'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
                 'file_name' => $newFileName,
@@ -46,6 +62,9 @@ class UploadController extends Controller
                 'url' => $url,
                 'file_path' => $path,
             ];
+            dd($path ,$url);
+
+
             $images[] = Upload::create($photo)->id;
         }
         return response()->json($images,200);
@@ -55,7 +74,7 @@ class UploadController extends Controller
      * Remove the specified resource from storage.
      *
      */
-    public function destroy(DestroyUploadRequest $request)
+    public function destroy(DestroyUploadRequest $request): \Illuminate\Http\RedirectResponse
     {
         $inputs = $request->validated();
         // foreach($inputs['ids'] as $id){
@@ -67,13 +86,13 @@ class UploadController extends Controller
     }
 
 
-
-        /**
+    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param StoreFileRequest $request
+     * @return JsonResponse
      */
-    public function upload_report_file(StoreFileRequest $request)
+    public function upload_report_file(StoreFileRequest $request): JsonResponse
     {
         $inputs = $request->validated();
         foreach ($inputs['file'] as $image) {
@@ -82,7 +101,7 @@ class UploadController extends Controller
             $path = Storage::disk('s3')->put('machine_reports', $image);
             $url = Storage::disk('s3')->url($path);
             $photo = [
-                'user_id' => isset($inputs['seller_id']) ? $inputs['seller_id'] : Auth::user()->id ,
+                'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
                 'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
                 'file_name' => $newFileName,
