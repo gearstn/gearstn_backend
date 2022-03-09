@@ -77,8 +77,11 @@ class UserController extends Controller
             ];
             $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
             $response = $post->call();
+
             if($response->status() != 200) { return $response; }
             $inputs['tax_license_image'] = json_decode($response->getContent())[0];
+
+
 
             //Adding Commercial License Image
             $data = [

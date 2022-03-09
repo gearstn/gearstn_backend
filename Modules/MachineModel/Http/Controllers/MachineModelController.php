@@ -3,6 +3,7 @@
 namespace Modules\MachineModel\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -30,12 +31,22 @@ class MachineModelController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(StoreMachineModelRequest $request)
+    public function store(Request $request): JsonResponse
     {
-        $inputs = $request->validated();
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'title_en' => 'required|unique:models',
+            'title_ar' => 'required',
+            'category_id' => 'required',
+            'sub_category_id' => 'required',
+            'manufacture_id' => 'required',
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
         $machine_model = MachineModel::create($inputs);
         return response()->json(new MachineModelResource($machine_model), 200);
     }
