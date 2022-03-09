@@ -3,6 +3,7 @@
 namespace Modules\Machine\Http\Controllers;
 
 use App\Classes\CollectionPaginate;
+use App\Classes\POST_Caller;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,9 @@ use Modules\MachineModel\Entities\MachineModel;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\MachineModel\Http\Controllers\MachineModelController;
+use Modules\Upload\Http\Requests\StoreFileRequest;
+use Modules\Upload\Http\Requests\StoreUploadRequest;
+
 class MachineController extends Controller
 {
     /**
@@ -66,28 +70,27 @@ class MachineController extends Controller
         }
 
         //Uploads route to upload images and get array of ids
-        $uploads_controller = new UploadController();
-        $request = new Request([
-            'photos' => $inputs['photos'],
-            'seller_id' => $inputs['seller_id'],
-        ]);
-        $response = $uploads_controller->store($request);
+        $data = [
+            'photos' => [$inputs['photos']],
+            'seller_id' => $user->id,
+        ];
+        $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+        $response = $post->call();
         if($response->status() != 200) { return $response; }
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
+
         if ( isset($inputs['videos']) ) {
-            //Uploads route to upload Videos and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
-                'photos' => $inputs['videos'],
-                'seller_id' => $inputs['seller_id'],
-            ]);
-            $response = $uploads_controller->store($request);
+            $data = [
+                'photos' => [$inputs['videos']],
+                'seller_id' => $user->id,
+            ];
+            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['videos'] = $response->getContent();
         }
-
 
         //If the client wants to create a non existing model
         if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
@@ -107,39 +110,36 @@ class MachineController extends Controller
 
 
         if ( isset($inputs['report_file']) ) {
-            //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
-                'file' => $inputs['report_file'],
-                'seller_id' => $inputs['seller_id'],
-            ]);
-            $response = $uploads_controller->upload_report_file($request);
+            $data = [
+                'file' => [$inputs['report_file']],
+                'seller_id' => $user->id,
+            ];
+            $post = new Post_Caller(UploadController::class,'upload_report_file',StoreFileRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['report_id'] = $response->getContent();
             unset($inputs['report_file']);
         }
 
         if ( isset($inputs['serial_photo']) ) {
-            //Uploads route to upload Videos and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
-                'photos' => $inputs['serial_photo'],
-                'seller_id' => $inputs['seller_id'],
-            ]);
-            $response = $uploads_controller->store($request);
+            $data = [
+                'photos' => [$inputs['serial_photo']],
+                'seller_id' => $user->id,
+            ];
+            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['serial_photo_id'] = $response->getContent();
             unset($inputs['serial_photo']);
         }
 
         if ( isset($inputs['hour_meter_photo']) ) {
-            //Uploads route to upload Videos and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
-                'photos' => $inputs['hour_meter_photo'],
-                'seller_id' => $inputs['seller_id'],
-            ]);
-            $response = $uploads_controller->store($request);
+            $data = [
+                'photos' => [$inputs['hour_meter_photo']],
+                'seller_id' => $user->id,
+            ];
+            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['hour_meter_photo_id'] = $response->getContent();
             unset($inputs['hour_meter_photo']);

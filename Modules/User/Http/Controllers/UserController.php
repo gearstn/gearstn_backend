@@ -2,11 +2,16 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\Classes\POST_Caller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Modules\Upload\Http\Controllers\UploadController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Upload\Http\Requests\StoreUploadRequest;
 use Modules\User\Http\Resources\FullUserResource;
 use Modules\User\Http\Resources\NormalUserResource;
 use Illuminate\Support\Facades\Hash;
@@ -44,8 +49,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return Response
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
      */
     public function update(Request $request)
     {
@@ -65,25 +70,26 @@ class UserController extends Controller
                 return response()->json($validator->messages(), 400);
             }
 
-            //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
+            //Adding Tax License Image
+            $data = [
                 'photos' => [$inputs['tax_license_image']],
                 'seller_id' => $user->id,
-            ]);
-            $response = $uploads_controller->store($request);
+            ];
+            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['tax_license_image'] = json_decode($response->getContent())[0];
 
-            //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
+            //Adding Commercial License Image
+            $data = [
                 'photos' => [$inputs['commercial_license_image']],
                 'seller_id' => $user->id,
-            ]);
-            $response = $uploads_controller->store($request);
+            ];
+            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['commercial_license_image'] = json_decode($response->getContent())[0];
+
         }
 
         //For contractor it is required to upload national_id_image
@@ -97,15 +103,16 @@ class UserController extends Controller
                 return response()->json($validator->messages(), 400);
             }
 
-            //Uploads route to upload images and get array of ids
-            $uploads_controller = new UploadController();
-            $request = new Request([
+            //Adding National License Image
+            $data = [
                 'photos' => [$inputs['national_id_image']],
                 'seller_id' => $user->id,
-            ]);
-            $response = $uploads_controller->store($request);
+            ];
+            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $response = $post->call();
             if($response->status() != 200) { return $response; }
             $inputs['national_id_image'] = json_decode($response->getContent())[0];
+
         }
 
         $user->update($inputs);
@@ -174,7 +181,7 @@ class UserController extends Controller
                                 ], 200);
     }
 
-    public function get_phone(Request $request): \Illuminate\Http\JsonResponse
+    public function get_phone(Request $request): JsonResponse
     {
         $inputs = $request->all();
         $validator = Validator::make($inputs,  ['seller_id' => 'required','machine_id' => 'required']);
