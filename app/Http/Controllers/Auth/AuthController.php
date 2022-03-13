@@ -75,7 +75,7 @@ class AuthController extends Controller
             'token' => $token,
             'id' => auth()->user()->id,
         ])
-        ->withCookie(cookie('_gtn_at', $token, 60 * 60 * 24 * 7, '/'));
+        ->withCookie(cookie('_gtn_at', $token, 60 * 60 * 24 * 7, '/',null,false));
     }
 
     public function logout(): array
