@@ -21,6 +21,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     //Login & register Frontend
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::get('/auth/login',[AuthController::class, 'login'])->name('frontend_login');
+    Route::get('/auth/get-token',[AuthController::class, 'get_token'])->name('get_token');
 
     //Verification Routes
     Route::post('/email/verify', [AuthController::class, 'verify']);
