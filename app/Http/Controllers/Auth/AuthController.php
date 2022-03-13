@@ -71,21 +71,21 @@ class AuthController extends Controller
         }
         $token = auth()->user()->createToken('API Token')->plainTextToken;
 
-        Cookie::queue('token',$token, 10);
         return response()->json([
             'token' => $token,
             'id' => auth()->user()->id,
-        ])->withCookie(cookie('token', $token, 1));
+        ])
+        ->withCookie(cookie('_gtn_at', $token, 60 * 60 * 24 * 7, '/'));
     }
 
     public function logout(): array
     {
 
-        auth()->user()->tokens()->delete();
-        $cookie = Cookie::forget('token');
-        return [
-            'message' => 'Tokens Revoked'
-        ];
+        // auth()->user()->tokens()->delete();
+        // $cookie = Cookie::forget('_gtn_at');
+        // return [
+        //     'message' => 'Tokens Revoked'
+        // ];
     }
 
     public function verify(Request $request)
@@ -152,6 +152,6 @@ class AuthController extends Controller
 
     public function get_token(): JsonResponse
     {
-        return response()->json(['token' => Cookie::get('token')],200);
+        return response()->json(['_gtn_at' => Cookie::get('token')],200);
     }
 }
