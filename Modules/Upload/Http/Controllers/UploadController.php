@@ -52,9 +52,9 @@ class UploadController extends Controller
                 $img = Image::make($image)->insert( storage_path('app/public/logo.png') , 'bottom-right')->encode($image->extension());
             }
 
-            Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$img);
+            Storage::disk('s3')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$img);
             $path = $inputs['seller_id'] .'/'. $newFileName;
-            $url = Storage::disk('local')->url($path);
+            $url = Storage::disk('s3')->url($path);
             $photo = [
                 'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
