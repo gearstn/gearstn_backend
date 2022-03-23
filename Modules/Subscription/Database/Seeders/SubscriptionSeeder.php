@@ -69,16 +69,12 @@ class SubscriptionSeeder extends Seeder
             new PlanFeature(['name' => ['en' => 'Total Photos', 'ar' => 'مجموع الصور'], 'value' => 50, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 'false', 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Videos', 'ar' => 'مجموع مقاطع الفيديو'], 'value' => 'false', 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Listing in Arabic and English', 'ar' => 'الإدراج باللغتين العربية والإنجليزية'], 'value' => 'true', 'sort_order' => 6 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'User Dashboard', 'ar' => 'لوحة تحكم المستخدم'], 'value' => 'true', 'sort_order' => 7 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Live Chat', 'ar' => 'دردشة مباشرة'], 'value' => 'true', 'sort_order' => 8 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Bulk Import', 'ar' => 'استيراد بالجملة'], 'value' => 'false', 'sort_order' => 9 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'false', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Upgrade feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'false', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Having discount on opening branded page', 'ar' => 'الحصول على خصم على فتح الصفحة ذات العلامات التجارية'], 'value' => 'false', 'sort_order' => 12 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Subscription for branded page', 'ar' => 'الاشتراك في الصفحة ذات العلامات التجارية'], 'value' => 'false', 'sort_order' => 13 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 0, 'sort_order' => 14 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'false', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 'false', 'sort_order' => 15 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'false', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Verified Seller', 'ar' => 'بائع معتمد'],'description' => ['en' => 'To be a verified seller you need to provide your commercial papers' , 'ar' => 'لكي تكون بائعًا معتمدًا ، يجب عليك تقديم أوراقك التجارية'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
 
         //Distributor Package Gold Seed
@@ -100,23 +96,19 @@ class SubscriptionSeeder extends Seeder
 
         // Create multiple plan features at once
         $plan->features()->saveMany([
-            new PlanFeature(['name' => ['en' => 'Min Cost', 'ar' => 'اقل تكلفة'], 'value' => 8000, 'sort_order' => 1 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+                new PlanFeature(['name' => ['en' => 'Min Cost', 'ar' => 'اقل تكلفة'], 'value' => 8000, 'sort_order' => 1 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Max Cost', 'ar' => 'اعلى تكلغة'], 'value' => 10000, 'sort_order' => 2 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Number of Listing', 'ar' => 'عدد القوائم'], 'value' => 25, 'sort_order' => 3 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Photos Per Listing', 'ar' => 'صور لكل قائمة'], 'value' => 10, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Photos', 'ar' => 'مجموع الصور'], 'value' => 250, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 1, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Videos', 'ar' => 'مجموع مقاطع الفيديو'], 'value' => 25, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Listing in Arabic and English', 'ar' => 'الإدراج باللغتين العربية والإنجليزية'], 'value' => 'true', 'sort_order' => 6 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'User Dashboard', 'ar' => 'لوحة تحكم المستخدم'], 'value' => 'true', 'sort_order' => 7 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Live Chat', 'ar' => 'دردشة مباشرة'], 'value' => 'true', 'sort_order' => 8 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Bulk Import', 'ar' => 'استيراد بالجملة'], 'value' => 'false', 'sort_order' => 9 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Upgrade feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Having discount on opening branded page', 'ar' => 'الحصول على خصم على فتح الصفحة ذات العلامات التجارية'], 'value' => '10%', 'sort_order' => 12 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Subscription for branded page', 'ar' => 'الاشتراك في الصفحة ذات العلامات التجارية'], 'value' => 'true', 'sort_order' => 13 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 1, 'sort_order' => 14 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 'true', 'sort_order' => 15 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Verified Seller', 'ar' => 'بائع معتمد'],'description' => ['en' => 'To be a verified seller you need to provide your commercial papers' , 'ar' => 'لكي تكون بائعًا معتمدًا ، يجب عليك تقديم أوراقك التجارية'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
 
 
@@ -146,16 +138,12 @@ class SubscriptionSeeder extends Seeder
             new PlanFeature(['name' => ['en' => 'Total Photos', 'ar' => 'مجموع الصور'], 'value' => 550, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 2, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Videos', 'ar' => 'مجموع مقاطع الفيديو'], 'value' => 100, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Listing in Arabic and English', 'ar' => 'الإدراج باللغتين العربية والإنجليزية'], 'value' => 'true', 'sort_order' => 6 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'User Dashboard', 'ar' => 'لوحة تحكم المستخدم'], 'value' => 'true', 'sort_order' => 7 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Live Chat', 'ar' => 'دردشة مباشرة'], 'value' => 'true', 'sort_order' => 8 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Bulk Import', 'ar' => 'استيراد بالجملة'], 'value' => 'true', 'sort_order' => 9 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Upgrade feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Having discount on opening branded page', 'ar' => 'الحصول على خصم على فتح الصفحة ذات العلامات التجارية'], 'value' => '20%', 'sort_order' => 12 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Subscription for branded page', 'ar' => 'الاشتراك في الصفحة ذات العلامات التجارية'], 'value' => 'true', 'sort_order' => 13 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 3, 'sort_order' => 14 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 'true', 'sort_order' => 15 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Verified Seller', 'ar' => 'بائع معتمد'],'description' => ['en' => 'To be a verified seller you need to provide your commercial papers' , 'ar' => 'لكي تكون بائعًا معتمدًا ، يجب عليك تقديم أوراقك التجارية'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
 
 
@@ -186,16 +174,12 @@ class SubscriptionSeeder extends Seeder
             new PlanFeature(['name' => ['en' => 'Total Photos', 'ar' => 'مجموع الصور'], 'value' => 50, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 'false', 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Videos', 'ar' => 'مجموع مقاطع الفيديو'], 'value' => 'false', 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Listing in Arabic and English', 'ar' => 'الإدراج باللغتين العربية والإنجليزية'], 'value' => 'true', 'sort_order' => 6 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'User Dashboard', 'ar' => 'لوحة تحكم المستخدم'], 'value' => 'true', 'sort_order' => 7 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Live Chat', 'ar' => 'دردشة مباشرة'], 'value' => 'true', 'sort_order' => 8 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Bulk Import', 'ar' => 'استيراد بالجملة'], 'value' => 'false', 'sort_order' => 9 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => '1 Hour Per Month', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Upgrade feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'false', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Having discount on opening branded page', 'ar' => 'الحصول على خصم على فتح الصفحة ذات العلامات التجارية'], 'value' => 'false', 'sort_order' => 12 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Subscription for branded page', 'ar' => 'الاشتراك في الصفحة ذات العلامات التجارية'], 'value' => 'false', 'sort_order' => 13 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 0, 'sort_order' => 14 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => '1 Hour Per Month', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 'false', 'sort_order' => 15 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'false', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Verified Seller', 'ar' => 'بائع معتمد'],'description' => ['en' => 'To be a verified seller you need to provide your commercial papers' , 'ar' => 'لكي تكون بائعًا معتمدًا ، يجب عليك تقديم أوراقك التجارية'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
 
         //Distributor Package Gold Seed
@@ -224,16 +208,12 @@ class SubscriptionSeeder extends Seeder
             new PlanFeature(['name' => ['en' => 'Total Photos', 'ar' => 'مجموع الصور'], 'value' => 250, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 1, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Videos', 'ar' => 'مجموع مقاطع الفيديو'], 'value' => 5, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Listing in Arabic and English', 'ar' => 'الإدراج باللغتين العربية والإنجليزية'], 'value' => 'true', 'sort_order' => 6 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'User Dashboard', 'ar' => 'لوحة تحكم المستخدم'], 'value' => 'true', 'sort_order' => 7 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Live Chat', 'ar' => 'دردشة مباشرة'], 'value' => 'true', 'sort_order' => 8 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Bulk Import', 'ar' => 'استيراد بالجملة'], 'value' => 'false', 'sort_order' => 9 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Upgrade feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Having discount on opening branded page', 'ar' => 'الحصول على خصم على فتح الصفحة ذات العلامات التجارية'], 'value' => '10%', 'sort_order' => 12 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Subscription for branded page', 'ar' => 'الاشتراك في الصفحة ذات العلامات التجارية'], 'value' => 'true', 'sort_order' => 13 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 1, 'sort_order' => 14 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 'true', 'sort_order' => 15 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Verified Seller', 'ar' => 'بائع معتمد'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
 
 
@@ -263,16 +243,12 @@ class SubscriptionSeeder extends Seeder
             new PlanFeature(['name' => ['en' => 'Total Photos', 'ar' => 'مجموع الصور'], 'value' => 550, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Video Per listing', 'ar' => 'فيديو لكل قائمة'], 'value' => 2, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Total Videos', 'ar' => 'مجموع مقاطع الفيديو'], 'value' => 100, 'sort_order' => 5 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Listing in Arabic and English', 'ar' => 'الإدراج باللغتين العربية والإنجليزية'], 'value' => 'true', 'sort_order' => 6 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'User Dashboard', 'ar' => 'لوحة تحكم المستخدم'], 'value' => 'true', 'sort_order' => 7 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Live Chat', 'ar' => 'دردشة مباشرة'], 'value' => 'true', 'sort_order' => 8 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Bulk Import', 'ar' => 'استيراد بالجملة'], 'value' => 'true', 'sort_order' => 9 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Dedicated Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Upgrade feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Having discount on opening branded page', 'ar' => 'الحصول على خصم على فتح الصفحة ذات العلامات التجارية'], 'value' => '20%', 'sort_order' => 12 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Subscription for branded page', 'ar' => 'الاشتراك في الصفحة ذات العلامات التجارية'], 'value' => 'true', 'sort_order' => 13 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Machines to be boosted in the top', 'ar' => 'يتم تعزيز الآلات في الأعلى'], 'value' => 3, 'sort_order' => 14 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Account Manager', 'ar' => 'مدير حساب مخصص'], 'value' => 'true', 'sort_order' => 10 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
             new PlanFeature(['name' => ['en' => 'Email Marketing', 'ar' => 'التسويق عبر البريد الإلكتروني'], 'value' => 'true', 'sort_order' => 15 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Feature listing', 'ar' => 'ترقية قائمة الميزات'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Verified Seller', 'ar' => 'بائع معتمد'],'description' => ['en' => 'To be a verified seller you need to provide your commercial papers' , 'ar' => 'لكي تكون بائعًا معتمدًا ، يجب عليك تقديم أوراقك التجارية'], 'value' => 'true', 'sort_order' => 11 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
     }
 }
