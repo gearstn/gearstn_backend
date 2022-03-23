@@ -17,8 +17,8 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        $subscriptions = app('rinvex.subscriptions.plan')->all();
-        return SubscriptionResource::collection($subscriptions)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);     ;
+        $subscriptions = app('rinvex.subscriptions.plan')->where('slug','!=','listing-machine')->get();
+        return SubscriptionResource::collection($subscriptions)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
     }
     /**
      * Show the specified resource.
@@ -45,7 +45,7 @@ class SubscriptionController extends Controller
             return response()->json([
                 'message_en' => 'You Have an active subscription you can not subscribe again',
                 'message_ar' => 'لديك اشتراك نشط لا يمكنك الاشتراك مرة أخرى',
-            ],422);        
+            ],422);
         }
 
         $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
@@ -70,7 +70,7 @@ class SubscriptionController extends Controller
         return response()->json([
             'message_en' => 'You Have unsubscribed successfully',
             'message_ar' => 'لقد قمت بالاشتراك بنجاح',
-        ],200);    
+        ],200);
     }
 
     public function user_subscriptions()
@@ -78,7 +78,13 @@ class SubscriptionController extends Controller
         $user = User::find(auth()->user()->id);
         $plan_id = $user->activeSubscriptions()->first()->plan_id;
         $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
-        return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']); 
+        return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
+    }
+
+    public function get_single_listing()
+    {
+        $subscriptions = app('rinvex.subscriptions.plan')->where('slug','listing-machine')->get();
+        return SubscriptionResource::collection($subscriptions)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
     }
 
 }
