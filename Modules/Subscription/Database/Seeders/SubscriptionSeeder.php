@@ -37,7 +37,9 @@ class SubscriptionSeeder extends Seeder
         // Create multiple plan features at once
         $plan->features()->saveMany([
             new PlanFeature(['name' => ['en' => 'Min Cost', 'ar' => 'اقل تكلفة'], 'value' => 80, 'sort_order' => 1 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Max Cost', 'ar' => 'اعلى تكلغة'], 'value' => 80, 'sort_order' => 2 , 'resettable_period' => 1 , 'resettable_interval' => 'month'])
+            new PlanFeature(['name' => ['en' => 'Max Cost', 'ar' => 'اعلى تكلغة'], 'value' => 80, 'sort_order' => 2 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Number of Listing', 'ar' => 'عدد القوائم'], 'value' => 1, 'sort_order' => 3 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
+            new PlanFeature(['name' => ['en' => 'Photos Per Listing', 'ar' => 'صور لكل قائمة'], 'value' => 5, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
         ]);
 
 
