@@ -81,11 +81,11 @@ class AuthController extends Controller
     public function logout(): array
     {
 
-        // auth()->user()->tokens()->delete();
-        // $cookie = Cookie::forget('_gtn_at');
-        // return [
-        //     'message' => 'Tokens Revoked'
-        // ];
+        auth()->user()->tokens()->delete();
+        $cookie = Cookie::forget('_gtn_at');
+        return [
+            'message' => 'Tokens Revoked'
+        ];
     }
 
     public function verify(Request $request)
