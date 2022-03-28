@@ -24,7 +24,6 @@ class Transaction extends Model
         'customerName',
         'customerMobile',
         'customerMail',
-        'signature',
         'taxes',
         'statusCode',
         'statusDescription',

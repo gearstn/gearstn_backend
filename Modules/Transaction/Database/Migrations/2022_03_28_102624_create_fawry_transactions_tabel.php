@@ -26,7 +26,6 @@ class CreateFawryTransactionsTabel extends Migration
             $table->string('customerName');
             $table->string('customerMobile');
             $table->string('customerMail');
-            $table->string('signature');
             $table->string('taxes');
             $table->string('statusCode');
             $table->string('statusDescription');

@@ -28,7 +28,6 @@ class StoreTransactionRequest extends FormRequest
             "customerMail" => 'string' ,
             "customerProfileId" => 'string' ,
             "authNumber" => 'string' ,
-            "signature" => 'string' ,
             "taxes" => 'string' ,
             "statusCode" => 'string' ,
             "statusDescription" => 'string' ,
