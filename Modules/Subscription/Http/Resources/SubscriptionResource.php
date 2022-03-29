@@ -25,7 +25,8 @@ class SubscriptionResource extends JsonResource
             'invoice_period' => $this->invoice_period,
             'invoice_interval' => $this->invoice_interval,
             'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order')),
+            'features_remanings' => new SubscriptionFeatureRemanings($this)
         ];
-        return $data;    
+        return $data;
     }
 }
