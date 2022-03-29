@@ -87,6 +87,7 @@ if (!function_exists('currency_converter')) {
         return ceil(Currency::convert()->from($from)->to($to)->amount($amount)->get());
     }
 }
+
 if (!function_exists('array_flatten')) {
     function array_flatten($array)
     {
@@ -102,5 +103,13 @@ if (!function_exists('array_flatten')) {
             }
         }
         return $result;
+    }
+}
+
+if (!function_exists('get_single_listing_plan_id')) {
+    function get_single_listing_plan_id()
+    {
+        $subscription_id = app('rinvex.subscriptions.plan')->where('slug', 'listing-machine')->first()->id;
+        return $subscription_id;
     }
 }

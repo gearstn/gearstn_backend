@@ -28,12 +28,12 @@ class TransactionController extends Controller
         $inputs['fawry_order_status_id'] = OrderStatus::where('name',$inputs['orderStatus'])->first()->id;
         $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
         unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['subscription_id']);
-        Transaction::create($inputs);
-
 
         $post = new POST_Caller(SubscriptionController::class,'subscribe',Request::class,$subscription_data);
         $response = $post->call();
         if($response->status() != 200) { return $response; }
+
+        Transaction::create($inputs);
 
         return response()->json([
             'message_en' => 'Transaction Created Succesfully',

@@ -39,21 +39,37 @@ class SubscriptionController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-
         $user = User::find(auth()->user()->id);
-        if ($user->activeSubscriptions()->toArray() !== []) {
-            return response()->json([
-                'message_en' => 'You Have an active subscription you can not subscribe again',
-                'message_ar' => 'لديك اشتراك نشط لا يمكنك الاشتراك مرة أخرى',
-            ],422);
-        }
 
-        $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
-        $user = $user->newSubscription($subscription->name,$subscription);
-        return response()->json([
-            'message_en' => 'You Have subscribed successfully',
-            'message_ar' => 'لقد قمت بالاشتراك بنجاح',
-        ],200);
+        $user_subscriptions = $user->activeSubscriptions()->toArray();
+        $single_listing_plan_id = get_single_listing_plan_id();
+
+        //If Subscribing for a single machine it's open to any number of subscriptions
+        if ($inputs['subscription_id'] == $single_listing_plan_id) {
+            $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
+            $user = $user->newSubscription($subscription->name,$subscription);
+            return response()->json([
+                'message_en' => 'You Have subscribed successfully',
+                'message_ar' => 'لقد قمت بالاشتراك بنجاح',
+            ],200);
+        }
+        else {
+            //Check if the user has a full plan subscription
+            foreach ($user_subscriptions as $subscription) {
+                if ($subscription['plan_id'] !== $single_listing_plan_id) {
+                    return response()->json([
+                        'message_en' => 'You Have an active subscription you can not subscribe again',
+                        'message_ar' => 'لديك اشتراك نشط لا يمكنك الاشتراك مرة أخرى',
+                    ],422);
+                }
+            }
+            $subscription = app('rinvex.subscriptions.plan')->find($inputs['subscription_id']);
+            $user = $user->newSubscription($subscription->name,$subscription);
+            return response()->json([
+                'message_en' => 'You Have subscribed successfully',
+                'message_ar' => 'لقد قمت بالاشتراك بنجاح',
+            ],200);
+        }
     }
 
     public function unsubscribe(Request $request)
