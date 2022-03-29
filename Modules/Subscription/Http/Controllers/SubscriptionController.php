@@ -92,9 +92,17 @@ class SubscriptionController extends Controller
     public function user_subscriptions()
     {
         $user = User::find(auth()->user()->id);
-        $plan_id = $user->activeSubscriptions()->first()->plan_id;
-        $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
-        return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
+        $plan_id = $user->activeSubscriptions()->first() ? $user->activeSubscriptions()->first()->plan_id : false;
+        if (!$plan_id) {
+            return response()->json([
+                'message_en' => 'You Have no subscription',
+                'message_ar' => 'ليس لديك اشتراك',
+            ],200); 
+        }
+        else{
+            $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
+            return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
+        }
     }
 
     public function get_single_listing()
