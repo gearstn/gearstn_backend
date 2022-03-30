@@ -26,5 +26,6 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
             Route::post('subscriptions/unsubscribe', [SubscriptionController::class , 'unsubscribe' ] ,['as' => 'frontend']);
             Route::get('user-subscriptions', [SubscriptionController::class , 'user_subscriptions' ] ,['as' => 'frontend']);
             Route::post('extra-plan-subscribe', [SubscriptionController::class , 'extra_plan_subscribe' ] ,['as' => 'frontend']);
+            Route::get('user-extra-subscriptions', [SubscriptionController::class , 'user_extra_subscriptions' ] ,['as' => 'frontend']);
         });
 });

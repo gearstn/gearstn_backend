@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\Subscription\Entities\ExtraPlan;
+use Modules\Subscription\Http\Resources\ExtraPlanResource;
 use Modules\Subscription\Http\Resources\SubscriptionResource;
 
 class SubscriptionController extends Controller
@@ -102,6 +103,21 @@ class SubscriptionController extends Controller
         } else {
             $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
             return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
+        }
+    }
+
+
+    public function user_extra_subscriptions()
+    {
+        $user_id = auth()->user()->id;
+        $extra_plans = ExtraPlan::where('user_id',$user_id)->get();
+        if ($extra_plans) {
+            return ExtraPlanResource::collection($extra_plans)->additional(['status' => 200, 'message' => 'Extra Subscriptions fetched successfully']);
+        } else {
+            return response()->json([
+                'message_en' => 'You Have no extra subscriptions',
+                'message_ar' => 'ليس لديك اشتراكات إضافية',
+            ], 422);
         }
     }
 

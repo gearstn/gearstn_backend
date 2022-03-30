@@ -14,7 +14,16 @@ class ExtraPlanResource extends JsonResource
      */
     public function toArray($request)
     {
-        $data = [];
+        $data = [
+            'name' => $this->name,
+            'number_of_listing' => $this->number_of_listing,
+            'photos_of_listing' => $this->photos_of_listing,
+            'number_of_months' => $this->number_of_months,
+            'starts_at' => $this->starts_at,
+            'ends_at' => $this->ends_at,
+            'machines' => $this->machines,
+            'user_id' => $this->user_id,
+        ];
         return $data;
     }
 }
