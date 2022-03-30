@@ -88,6 +88,7 @@ class MachineController extends Controller
 
                             if ($number_of_listing > count($listed_machine)) {
                                 $using_extra_plan_id = $subscription->id;
+                                break;
                             }
                         }
                         if ($using_extra_plan_id == null) {
@@ -111,6 +112,7 @@ class MachineController extends Controller
                 $listed_machine = json_decode($subscription->number_of_listing);
                 if ($number_of_listing > count($listed_machine)) {
                     $using_extra_plan_id = $subscription->id;
+                    break;
                 }
             }
             if ($using_extra_plan_id == null) {
