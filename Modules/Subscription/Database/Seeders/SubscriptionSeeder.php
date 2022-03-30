@@ -16,33 +16,6 @@ class SubscriptionSeeder extends Seeder
     public function run()
     {
 
-
-        //Plan for one machine
-        $plan = app('rinvex.subscriptions.plan')->create([
-            'name' => [
-                'en' => 'Listing Machine',
-                'ar' => 'اضافة ماكينة'
-            ],
-            'description' => ['en' => 'Listing Machine', 'ar' => 'اضافة ماكينة'],
-            'price' => 80.00,
-            'signup_fee' => 0.00,
-            'invoice_period' => 1,
-            'invoice_interval' => 'month',
-            'trial_period' => 0,
-            'trial_interval' => 'day',
-            'sort_order' => 1,
-            'currency' => 'EGP'
-        ]);
-
-        // Create multiple plan features at once
-        $plan->features()->saveMany([
-            new PlanFeature(['name' => ['en' => 'Min Cost', 'ar' => 'اقل تكلفة'], 'value' => 80, 'sort_order' => 1 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Max Cost', 'ar' => 'اعلى تكلغة'], 'value' => 80, 'sort_order' => 2 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Number of Listing', 'ar' => 'عدد القوائم'], 'value' => 1, 'sort_order' => 3 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-            new PlanFeature(['name' => ['en' => 'Photos Per Listing', 'ar' => 'صور لكل قائمة'], 'value' => 5, 'sort_order' => 4 , 'resettable_period' => 1 , 'resettable_interval' => 'month']),
-        ]);
-
-
         //6 Months
 
          //Distributor Package Silver Seed
