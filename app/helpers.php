@@ -109,7 +109,8 @@ if (!function_exists('array_flatten')) {
 if (!function_exists('get_single_listing_plan_id')) {
     function get_single_listing_plan_id()
     {
-        $subscription_id = app('rinvex.subscriptions.plan')->where('slug', 'listing-machine')->first()->id;
-        return $subscription_id;
+        $subscription_id = app('rinvex.subscriptions.plan')->where('slug', 'listing-machine')->first();
+        $subscription_id == null ? $result_id = 0 : $result_id = $subscription_id;
+        return $result_id;
     }
 }
