@@ -14,25 +14,27 @@ class StoreTransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            "type" => 'string' ,
-            "referenceNumber" => 'string' ,
-            "merchantRefNumber" => 'string' ,
-            "orderAmount" => 'string' ,
-            "paymentAmount" => 'string' ,
-            "fawryFees" => 'string' ,
-            "orderStatus" => 'string' ,
-            "paymentMethod" => 'string' ,
-            "paymentTime" => 'string' ,
-            "customerName" => 'string' ,
-            "customerMobile" => 'string' ,
-            "customerMail" => 'string' ,
-            "customerProfileId" => 'string' ,
-            "authNumber" => 'string' ,
-            "taxes" => 'string' ,
-            "statusCode" => 'string' ,
-            "statusDescription" => 'string' ,
-            "basketPayment" => 'string',
-            'subscription_id' => 'integer'
+            "type" => 'required|string' ,
+            "referenceNumber" => 'required|string' ,
+            "merchantRefNumber" => 'required|string' ,
+            "orderAmount" => 'required|string' ,
+            "paymentAmount" => 'required|string' ,
+            "fawryFees" => 'required|string' ,
+            "orderStatus" => 'required|string' ,
+            "paymentMethod" => 'required|string' ,
+            "paymentTime" => 'required|string' ,
+            "customerName" => 'required|string' ,
+            "customerMobile" => 'required|string' ,
+            "customerMail" => 'required|string' ,
+            "customerProfileId" => 'required|string' ,
+            "authNumber" => 'required|string' ,
+            "taxes" => 'required|string' ,
+            "statusCode" => 'required|string' ,
+            "statusDescription" => 'required|string' ,
+            "basketPayment" => 'required|string',
+            'subscription_id' => 'integer',
+            'number_of_listing' => 'integer',
+            'number_of_months' => 'integer'
         ];
     }
 
