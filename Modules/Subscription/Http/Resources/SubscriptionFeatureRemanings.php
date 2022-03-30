@@ -28,9 +28,9 @@ class SubscriptionFeatureRemanings extends JsonResource
             if(str_contains($feature->slug , 'total-videos')) $feature_slug_videos = $feature->slug;
         }
         $data = [
-            "remaning_machines" => $plan->getFeatureUsage($feature_slug_machines),
-            'remaning_photos' => $plan->getFeatureUsage($feature_slug_photos),
-            'remaning_videos' => $plan->getFeatureUsage($feature_slug_videos),
+            "usages_machines" => $plan->getFeatureUsage($feature_slug_machines),
+            'usages_photos' => $plan->getFeatureUsage($feature_slug_photos),
+            'usages_videos' => $plan->getFeatureUsage($feature_slug_videos),
             'starts_at' => $plan->starts_at,
             'ends_at' => $plan->ends_at,
         ];

@@ -97,7 +97,7 @@ class SubscriptionController extends Controller
             return response()->json([
                 'message_en' => 'You Have no subscription',
                 'message_ar' => 'ليس لديك اشتراك',
-            ],200);
+            ],422);
         }
         else{
             $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();

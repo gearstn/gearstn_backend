@@ -3,6 +3,7 @@
 namespace Modules\Subscription\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Route;
 
 class SubscriptionResource extends JsonResource
 {
@@ -24,9 +25,11 @@ class SubscriptionResource extends JsonResource
             'currency' => $this->currency,
             'invoice_period' => $this->invoice_period,
             'invoice_interval' => $this->invoice_interval,
-            'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order')),
-            'features_remanings' => new SubscriptionFeatureRemanings($this)
+             'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order'))
         ];
+        if (Route::current()->uri == 'api/user_subscriptions') {
+            $data['features_usages'] = new SubscriptionFeatureRemanings($this);
+        }
         return $data;
     }
 }
