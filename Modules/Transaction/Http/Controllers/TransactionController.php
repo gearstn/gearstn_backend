@@ -11,6 +11,7 @@ use Modules\Subscription\Http\Controllers\SubscriptionController;
 use Modules\Transaction\Entities\OrderStatus;
 use Modules\Transaction\Entities\Transaction;
 use Modules\Transaction\Http\Requests\StoreTransactionRequest;
+use Modules\Transaction\Http\Resources\TransactionResource;
 
 class TransactionController extends Controller
 {
@@ -39,5 +40,12 @@ class TransactionController extends Controller
             'message_en' => 'Transaction Created Succesfully',
             'message_ar' => 'لقد تم تسجيل العملية بنجاح',
         ],200);
+    }
+
+    public function user_transactions()
+    {
+        $user = User::find(auth()->user()->id);
+        $transactions = Transaction::where('user_id',$user->id)->get();
+        return TransactionResource::collection($transactions)->additional(['status' => 200, 'message' => 'Transactions fetched successfully']);
     }
 }
