@@ -17,6 +17,7 @@ use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Requests\StoreMachineRequest;
 use Modules\Machine\Http\Resources\MachineResource;
+use Modules\Machine\Jobs\SetMachineHideDataJob;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Mail\Http\Requests\StoreMachineMailRequest;
 use Modules\Subscription\Entities\ExtraPlan;
@@ -48,9 +49,11 @@ class MachineController extends Controller
         //Turn Subscription OF
         $user_subscriptions = $user->subscriptions()->get();
         $user_extra_subscriptions = ExtraPlan::where('user_id', $user->id)->get();
-        if ($user_subscriptions) {
+        $using_extra_plan_id = null;
+        $plan_ends_at = null;
+        if ($user_subscriptions->count() > 0) {
             foreach ($user_subscriptions as $plan) {
-                if (str_contains($plan->slug, 'distributor')) {
+                if (str_contains($plan->slug, 'mozaa')) {
                     $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
                     $subscription->features();
                     $feature_slug_machines = null;
@@ -73,18 +76,27 @@ class MachineController extends Controller
 
                     }
                     if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count && $plan->getFeatureRemainings($feature_slug_videos) > $videos_count) {
+                        $plan_ends_at = $plan->ends_at;
                         $plan->recordFeatureUsage($feature_slug_machines, 1);
                         $plan->recordFeatureUsage($feature_slug_photos, $photos_count);
                         $plan->recordFeatureUsage($feature_slug_videos, $videos_count);
-                    } elseif ($user_extra_subscriptions) {
-                        $using_extra_plan_id = null;
+
+                    } elseif ($user_extra_subscriptions->count() > 0) {
                         foreach ($user_extra_subscriptions as $subscription) {
                             $number_of_listing = $subscription->number_of_listing;
-                            $listed_machine = json_decode($subscription->number_of_listing);
+                            $listed_machine = $subscription->machines == null ? [] : json_decode($subscription->machines);
+
                             if ($number_of_listing > count($listed_machine)) {
                                 $using_extra_plan_id = $subscription->id;
                             }
                         }
+                        if ($using_extra_plan_id == null) {
+                            return response()->json([
+                                'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
+                                'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
+                            ], 422);
+                        }
+
                     } else {
                         return response()->json([
                             'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
@@ -93,8 +105,7 @@ class MachineController extends Controller
                     }
                 }
             }
-        } elseif ($user_extra_subscriptions) {
-            $using_extra_plan_id = null;
+        } elseif ($user_extra_subscriptions->count() > 0) {
             foreach ($user_extra_subscriptions as $subscription) {
                 $number_of_listing = $subscription->number_of_listing;
                 $listed_machine = json_decode($subscription->number_of_listing);
@@ -104,12 +115,17 @@ class MachineController extends Controller
             }
             if ($using_extra_plan_id == null) {
                 return response()->json([
-                    'message_en' => "You don't have any subscription",
-                    'message_ar' => 'ليس لديك أي اشتراك',
+                    'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
+                    'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
                 ], 422);
             }
         }
-
+        else{
+            return response()->json([
+                'message_en' => "You don't have any subscription",
+                'message_ar' => 'ليس لديك أي اشتراك',
+            ], 422);
+        }
         //Uploads route to upload images and get array of ids
 
         $data = [
@@ -195,12 +211,17 @@ class MachineController extends Controller
         $machine->save();
 
         //Saving Machine in the extra subscription if used
+        //And Dispatch hide machine job
         if ($using_extra_plan_id !== null) {
-            $subscription = ExtraPlan::find($using_extra_plan_id);
-            $subscription_machines = json_decode($subscription->machine);
-            $subscription_machines[] = $machine->id;
-            $subscription->machine = json_encode($subscription_machines);
-            $subscription->save();
+            $extra_plan = ExtraPlan::find($using_extra_plan_id);
+            $extra_plan_machines = json_decode($extra_plan->machines);
+            $extra_plan_machines[] = $machine->id;
+            $extra_plan->machines = json_encode($extra_plan_machines);
+            $extra_plan->save();
+            SetMachineHideDataJob::dispatch(['machine_id' => $machine->id])->delay($extra_plan->ends_at);
+        }
+        elseif ($plan_ends_at !== null) {
+            SetMachineHideDataJob::dispatch(['machine_id' => $machine->id])->delay($plan_ends_at);
         }
 
         //Send Mail To the machine owner
