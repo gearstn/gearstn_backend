@@ -11,15 +11,16 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Modules\MachineModel\Entities\MachineModel;
+use Modules\MachineModel\Http\Controllers\MachineModelController;
+use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Requests\StoreMachineRequest;
 use Modules\Machine\Http\Resources\MachineResource;
-use Modules\MachineModel\Entities\MachineModel;
-use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Mail\Http\Requests\StoreMachineMailRequest;
+use Modules\Subscription\Entities\ExtraPlan;
 use Modules\Upload\Http\Controllers\UploadController;
-use Modules\MachineModel\Http\Controllers\MachineModelController;
 use Modules\Upload\Http\Requests\StoreFileRequest;
 use Modules\Upload\Http\Requests\StoreUploadRequest;
 
@@ -45,33 +46,69 @@ class MachineController extends Controller
         $inputs = $request->validated();
         $user = User::find($inputs['seller_id']);
         //Turn Subscription OF
-        /*foreach ($user->subscriptions()->get() as $plan) {
-            if ( str_contains($plan->slug , 'distributor') ) {
-                $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
-                $subscription->features();
-                $feature_slug_machines = null;
-                $feature_slug_photos = null;
-                $feature_slug_videos = null;
-                $photos_count = isset($inputs['photos']) ? count($inputs['photos']) : 0;
-                $videos_count = isset($inputs['videos']) ? count($inputs['videos']) : 0;
-                foreach ($subscription->features as $feature) {
-                    if(str_contains($feature->slug , 'number-of-listing')) $feature_slug_machines = $feature->slug;
-                    if(str_contains($feature->slug , 'total-photos')) $feature_slug_photos = $feature->slug;
-                    if(str_contains($feature->slug , 'total-videos')) $feature_slug_videos = $feature->slug;
-                }
-                if ($plan->getFeatureRemainings($feature_slug_machines) > 0  && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count && $plan->getFeatureRemainings($feature_slug_videos) > $videos_count) {
-                    $plan->recordFeatureUsage($feature_slug_machines , 1);
-                    $plan->recordFeatureUsage($feature_slug_photos , $photos_count);
-                    $plan->recordFeatureUsage($feature_slug_videos , $videos_count);
-                }
-                else {
-                    return response()->json([
-                        'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
-                        'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
-                    ],422);
+        $user_subscriptions = $user->subscriptions()->get();
+        $user_extra_subscriptions = ExtraPlan::where('user_id', $user->id)->get();
+        if ($user_subscriptions) {
+            foreach ($user_subscriptions as $plan) {
+                if (str_contains($plan->slug, 'distributor')) {
+                    $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
+                    $subscription->features();
+                    $feature_slug_machines = null;
+                    $feature_slug_photos = null;
+                    $feature_slug_videos = null;
+                    $photos_count = isset($inputs['photos']) ? count($inputs['photos']) : 0;
+                    $videos_count = isset($inputs['videos']) ? count($inputs['videos']) : 0;
+                    foreach ($subscription->features as $feature) {
+                        if (str_contains($feature->slug, 'number-of-listing')) {
+                            $feature_slug_machines = $feature->slug;
+                        }
+
+                        if (str_contains($feature->slug, 'total-photos')) {
+                            $feature_slug_photos = $feature->slug;
+                        }
+
+                        if (str_contains($feature->slug, 'total-videos')) {
+                            $feature_slug_videos = $feature->slug;
+                        }
+
+                    }
+                    if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count && $plan->getFeatureRemainings($feature_slug_videos) > $videos_count) {
+                        $plan->recordFeatureUsage($feature_slug_machines, 1);
+                        $plan->recordFeatureUsage($feature_slug_photos, $photos_count);
+                        $plan->recordFeatureUsage($feature_slug_videos, $videos_count);
+                    } elseif ($user_extra_subscriptions) {
+                        $using_extra_plan_id = null;
+                        foreach ($user_extra_subscriptions as $subscription) {
+                            $number_of_listing = $subscription->number_of_listing;
+                            $listed_machine = json_decode($subscription->number_of_listing);
+                            if ($number_of_listing > count($listed_machine)) {
+                                $using_extra_plan_id = $subscription->id;
+                            }
+                        }
+                    } else {
+                        return response()->json([
+                            'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
+                            'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
+                        ], 422);
+                    }
                 }
             }
-        }*/
+        } elseif ($user_extra_subscriptions) {
+            $using_extra_plan_id = null;
+            foreach ($user_extra_subscriptions as $subscription) {
+                $number_of_listing = $subscription->number_of_listing;
+                $listed_machine = json_decode($subscription->number_of_listing);
+                if ($number_of_listing > count($listed_machine)) {
+                    $using_extra_plan_id = $subscription->id;
+                }
+            }
+            if ($using_extra_plan_id == null) {
+                return response()->json([
+                    'message_en' => "You don't have any subscription",
+                    'message_ar' => 'ليس لديك أي اشتراك',
+                ], 422);
+            }
+        }
 
         //Uploads route to upload images and get array of ids
 
@@ -79,26 +116,25 @@ class MachineController extends Controller
             'photos' => $inputs['photos'],
             'seller_id' => $user->id,
         ];
-        $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+        $post = new Post_Caller(UploadController::class, 'store', StoreUploadRequest::class, $data);
         $response = $post->call();
-        if($response->status() != 200) { return $response; }
+        if ($response->status() != 200) {return $response;}
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
-
-        if ( isset($inputs['videos']) ) {
+        if (isset($inputs['videos'])) {
             $data = [
                 'photos' => [$inputs['videos']],
                 'seller_id' => $user->id,
             ];
-            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $post = new Post_Caller(UploadController::class, 'store', StoreUploadRequest::class, $data);
             $response = $post->call();
-            if($response->status() != 200) { return $response; }
+            if ($response->status() != 200) {return $response;}
             $inputs['videos'] = $response->getContent();
         }
 
         //If the client wants to create a non existing model
-        if($inputs['model_id'] == 0 && isset($inputs['new_model'])){
+        if ($inputs['model_id'] == 0 && isset($inputs['new_model'])) {
             $data = [
                 'title_en' => $inputs['new_model'],
                 'title_ar' => $inputs['new_model'],
@@ -106,66 +142,76 @@ class MachineController extends Controller
                 'sub_category_id' => $inputs['sub_category_id'],
                 'manufacture_id' => $inputs['manufacture_id'],
             ];
-            $post = new Post_Caller(MachineModelController::class,'store',StoreMachineModelRequest::class,$data);
+            $post = new Post_Caller(MachineModelController::class, 'store', StoreMachineModelRequest::class, $data);
             $response = $post->call();
-            if($response->status() != 200) { return $response; }
+            if ($response->status() != 200) {return $response;}
             $inputs['model_id'] = json_decode($response->getContent())->id;
         }
 
-
-        if ( isset($inputs['report_file']) ) {
+        if (isset($inputs['report_file'])) {
             $data = [
                 'file' => [$inputs['report_file']],
                 'seller_id' => $user->id,
             ];
-            $post = new Post_Caller(UploadController::class,'upload_report_file',StoreFileRequest::class,$data);
+            $post = new Post_Caller(UploadController::class, 'upload_report_file', StoreFileRequest::class, $data);
             $response = $post->call();
-            if($response->status() != 200) { return $response; }
+            if ($response->status() != 200) {return $response;}
             $inputs['report_id'] = $response->getContent();
             unset($inputs['report_file']);
         }
 
-        if ( isset($inputs['serial_photo']) ) {
+        if (isset($inputs['serial_photo'])) {
             $data = [
                 'photos' => [$inputs['serial_photo']],
                 'seller_id' => $user->id,
             ];
-            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $post = new Post_Caller(UploadController::class, 'store', StoreUploadRequest::class, $data);
             $response = $post->call();
-            if($response->status() != 200) { return $response; }
+            if ($response->status() != 200) {return $response;}
             $inputs['serial_photo_id'] = $response->getContent();
             unset($inputs['serial_photo']);
         }
 
-        if ( isset($inputs['hour_meter_photo']) ) {
+        if (isset($inputs['hour_meter_photo'])) {
             $data = [
                 'photos' => [$inputs['hour_meter_photo']],
                 'seller_id' => $user->id,
             ];
-            $post = new Post_Caller(UploadController::class,'store',StoreUploadRequest::class,$data);
+            $post = new Post_Caller(UploadController::class, 'store', StoreUploadRequest::class, $data);
             $response = $post->call();
-            if($response->status() != 200) { return $response; }
+            if ($response->status() != 200) {return $response;}
             $inputs['hour_meter_photo_id'] = $response->getContent();
             unset($inputs['hour_meter_photo']);
         }
 
+        if (!isset($inputs['rent_hours'])) {
+            $inputs['rent_hours'] = 0;
+        }
 
-        if(!isset($inputs['rent_hours'])) $inputs['rent_hours'] = 0;
         $machine = Machine::create($inputs);
         $machine->sku = random_int(10000000, 99999999);
         $model_title = MachineModel::findorFail($machine->model_id)->title_en;
-        $machine->slug = $machine->year.'-'.$machine->manufacture->title_en.'-'.$model_title.'-'.$machine->sku;
+        $machine->slug = $machine->year . '-' . $machine->manufacture->title_en . '-' . $model_title . '-' . $machine->sku;
         $machine->save();
 
-//        Send Mail To the machine owner
+        //Saving Machine in the extra subscription if used
+        if ($using_extra_plan_id !== null) {
+            $subscription = ExtraPlan::find($using_extra_plan_id);
+            $subscription_machines = json_decode($subscription->machine);
+            $subscription_machines[] = $machine->id;
+            $subscription->machine = json_encode($subscription_machines);
+            $subscription->save();
+        }
+
+        //Send Mail To the machine owner
         $data = [
             'machine_id' => $machine->id,
             'seller_id' => $inputs['seller_id'],
         ];
-        $post = new Post_Caller(MailController::class,'store_machine',StoreMachineMailRequest::class,$data);
+        $post = new Post_Caller(MailController::class, 'store_machine', StoreMachineMailRequest::class, $data);
         $response = $post->call();
-//        $response = redirect()->route('store-machine' , $mail_parameters );
-        if($response->status() != 200) { return $response; }
+        //$response = redirect()->route('store-machine' , $mail_parameters );
+        if ($response->status() != 200) {return $response;}
 
         return response()->json(new MachineResource($machine), 200);
     }
@@ -211,40 +257,42 @@ class MachineController extends Controller
         return response()->json(new MachineResource($machine), 200);
     }
 
-
     public function search_filter(Request $request): AnonymousResourceCollection
     {
         $inputs = $request->all();
         //Full Search in all fields
-        if( isset($inputs['search_query']) && $inputs['search_query'] != null )
+        if (isset($inputs['search_query']) && $inputs['search_query'] != null) {
             $q = Machine::search($inputs['search_query'])->get();
-        else
+        } else {
             $q = Machine::all();
+        }
 
         //Converting result to Resources Collection
         MachineResource::collection($q);
 
         //Filter for every attribute we want to filter
-        $q =  machines_filter($q, 1 ,'approved'); // To get approved
-        $q =  machines_filter($q, isset( $inputs['category_id'] ) ? $inputs['category_id'] : null,'category_id');
-        $q =  machines_filter($q, isset( $inputs['sub_category_id'] ) ? $inputs['sub_category_id'] : null,'sub_category_id');
-        $q =  machines_filter($q, isset( $inputs['manufacture_id'] ) ? $inputs['manufacture_id'] : null,'manufacture_id');
-        $q =  machines_filter($q, isset( $inputs['model_id'] ) ? $inputs['model_id'] : null,'model_id');
-        $q =  machines_filter($q, isset( $inputs['sell_type'] ) ? $inputs['sell_type'] : null,'sell_type');
-        $q =  machines_filter($q, isset( $inputs['condition'] ) ? $inputs['condition'] : null,'condition');
-        $q =  machines_filter($q, isset( $inputs['country'] ) ? $inputs['country'] : null,'country');
-        $q =  machines_filter($q, isset( $inputs['city_id'] ) ? $inputs['city_id'] : null,'city_id');
-        $q =  machines_range_filter($q, isset($inputs['min_price'] ) ? $inputs['min_price'] : null , isset($inputs['max_price'] ) ? $inputs['max_price'] : null , 'price');
-        $q =  machines_range_filter($q, isset($inputs['min_year'] ) ? $inputs['min_year'] : null , isset($inputs['max_year'] ) ? $inputs['max_year'] : null , 'year');
-        $q =  machines_range_filter($q, isset($inputs['min_hours'] ) ? $inputs['min_hours'] : null , isset($inputs['max_hours'] ) ? $inputs['max_hours'] : null , 'hours');
+        $q = machines_filter($q, 1, 'approved'); // To get approved
+        $q = machines_filter($q, isset($inputs['category_id']) ? $inputs['category_id'] : null, 'category_id');
+        $q = machines_filter($q, isset($inputs['sub_category_id']) ? $inputs['sub_category_id'] : null, 'sub_category_id');
+        $q = machines_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
+        $q = machines_filter($q, isset($inputs['model_id']) ? $inputs['model_id'] : null, 'model_id');
+        $q = machines_filter($q, isset($inputs['sell_type']) ? $inputs['sell_type'] : null, 'sell_type');
+        $q = machines_filter($q, isset($inputs['condition']) ? $inputs['condition'] : null, 'condition');
+        $q = machines_filter($q, isset($inputs['country']) ? $inputs['country'] : null, 'country');
+        $q = machines_filter($q, isset($inputs['city_id']) ? $inputs['city_id'] : null, 'city_id');
+        $q = machines_range_filter($q, isset($inputs['min_price']) ? $inputs['min_price'] : null, isset($inputs['max_price']) ? $inputs['max_price'] : null, 'price');
+        $q = machines_range_filter($q, isset($inputs['min_year']) ? $inputs['min_year'] : null, isset($inputs['max_year']) ? $inputs['max_year'] : null, 'year');
+        $q = machines_range_filter($q, isset($inputs['min_hours']) ? $inputs['min_hours'] : null, isset($inputs['max_hours']) ? $inputs['max_hours'] : null, 'hours');
 
         //Sort the collection of machines if requested
-        $q = $q->when( isset($inputs['sort_by']) && $inputs['sort_by'] != null , function ($q) use ($inputs) {
-            $sort = explode( '_', $inputs['sort_by'] );
-            if($sort[1] == 'asc')
+        $q = $q->when(isset($inputs['sort_by']) && $inputs['sort_by'] != null, function ($q) use ($inputs) {
+            $sort = explode('_', $inputs['sort_by']);
+            if ($sort[1] == 'asc') {
                 return $q->sortBy($sort[0]);
-            else
+            } else {
                 return $q->SortByDesc($sort[0]);
+            }
+
         });
 
         //Adding Pagination to a collection
@@ -252,24 +300,22 @@ class MachineController extends Controller
         return MachineResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
-
-
     public function getMinMaxOfField(): JsonResponse
     {
-        $results =[];
-        $results[ 'max_price'] = Machine::max('price');
-        $results[ 'min_price'] = Machine::min('price');
-        $results[ 'max_year' ] = Machine::max('year' );
-        $results[ 'min_year' ] = Machine::min('year' );
-        $results[ 'max_hours'] = Machine::max('hours');
-        $results[ 'min_hours'] = Machine::min('hours');
-        return response()->json($results,200);
+        $results = [];
+        $results['max_price'] = Machine::max('price');
+        $results['min_price'] = Machine::min('price');
+        $results['max_year'] = Machine::max('year');
+        $results['min_year'] = Machine::min('year');
+        $results['max_hours'] = Machine::max('hours');
+        $results['min_hours'] = Machine::min('hours');
+        return response()->json($results, 200);
     }
 
     public function getRelatedMachines(Request $request): AnonymousResourceCollection
     {
         $inputs = $request->all();
-        $related_machines = Machine::where('approved', '=', 1)->where('id','!=',$inputs['id'])->where('sub_category_id',$inputs['sub_category_id'])->take(10)->get();
+        $related_machines = Machine::where('approved', '=', 1)->where('id', '!=', $inputs['id'])->where('sub_category_id', $inputs['sub_category_id'])->take(10)->get();
         return MachineResource::collection($related_machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
@@ -278,18 +324,18 @@ class MachineController extends Controller
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
             "machine_id" => 'required',
-        ] );
+        ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
         $machine_price = Machine::find($inputs['machine_id'])->price;
-        return response()->json(['price' => $machine_price],200);
+        return response()->json(['price' => $machine_price], 200);
     }
 
     public function latest_machines(Request $request): AnonymousResourceCollection
     {
         $inputs = $request->all();
-        $machines = Machine::orderBy('created_at', 'desc')->where('approved',1)->take((int)$inputs['number'])->get();
+        $machines = Machine::orderBy('created_at', 'desc')->where('approved', 1)->take((int) $inputs['number'])->get();
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
@@ -299,13 +345,12 @@ class MachineController extends Controller
         return MachineResource::collection($machines)->additional(['status' => 200, 'message' => 'Machines fetched successfully']);
     }
 
-
     public function add_machine_view(Request $request)
     {
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
             "machine_id" => 'required',
-        ] );
+        ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
