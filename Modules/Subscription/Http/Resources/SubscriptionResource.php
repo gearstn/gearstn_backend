@@ -27,7 +27,7 @@ class SubscriptionResource extends JsonResource
             'invoice_interval' => $this->invoice_interval,
              'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order'))
         ];
-        if (Route::current()->uri == 'api/user_subscriptions') {
+        if (Route::current()->uri == 'api/user-subscriptions') {
             $data['features_usages'] = new SubscriptionFeatureRemanings($this);
         }
         return $data;
