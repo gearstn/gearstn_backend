@@ -122,10 +122,8 @@ class UploadController extends Controller
     public function upload_video(Request $request)
     {
         $inputs = $request->all();
-        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
-
         $validator = Validator::make($inputs, [
-            "photos" => ["required","array","min:1","max:5"],
+            "videos" => ["required","array","min:1"],
             // "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
             'seller_id' => 'sometimes'
         ] );
@@ -134,24 +132,24 @@ class UploadController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        foreach ($inputs['photos'] as $image) {
-            $fileInfo = $image->getClientOriginalName();
-            $newFileName = time() . '.' . $image->extension();
+        foreach ($inputs['videos'] as $video) {
+            $fileInfo = $video->getClientOriginalName();
+            $newFileName = time() . '.' . $video->extension();
 
-            Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   $image);
+            Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$video);
             $path = $inputs['seller_id'] .'/'. $newFileName;
             $url = Storage::disk('local')->url($path);
-            $photo = [
+            $video_file = [
                 'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
                 'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
                 'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
                 'file_name' => $newFileName,
-                'type' => $image->getMimeType(),
+                'type' => $video->getMimeType(),
                 'url' => $url,
                 'file_path' => $path,
             ];
-            $images[] = Upload::create($photo)->id;
+            $videos[] = Upload::create($video_file)->id;
         }
-        return response()->json($images,200);
+        return response()->json($videos,200);
     }
 }

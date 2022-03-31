@@ -142,7 +142,7 @@ class MachineController extends Controller
 
         if (isset($inputs['videos'])) {
             $data = [
-                'photos' => $inputs['videos'],
+                'videos' => $inputs['videos'],
                 'seller_id' => $user->id,
             ];
             $post = new Post_Caller(UploadController::class, 'upload_video', Request::class , $data);
