@@ -142,10 +142,10 @@ class MachineController extends Controller
 
         if (isset($inputs['videos'])) {
             $data = [
-                'photos' => [$inputs['videos']],
+                'photos' => $inputs['videos'],
                 'seller_id' => $user->id,
             ];
-            $post = new Post_Caller(UploadController::class, 'store', StoreUploadRequest::class, $data);
+            $post = new Post_Caller(UploadController::class, 'upload_video', Request::class , $data);
             $response = $post->call();
             if ($response->status() != 200) {return $response;}
             $inputs['videos'] = $response->getContent();

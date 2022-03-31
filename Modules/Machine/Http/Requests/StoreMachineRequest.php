@@ -38,6 +38,7 @@ class StoreMachineRequest extends FormRequest
             "videos" => ["array","min:0","max:3"],
             "serial_photo" => ["mimes:jpeg,jpg,png,gif","max:1000"],
             "hour_meter_photo" => ["mimes:jpeg,jpg,png,gif","max:1000"],
+            "videos" => ["required","array","min:1","max:5"]
         ];
     }
 

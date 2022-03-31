@@ -32,8 +32,8 @@ class UploadController extends Controller
 
 
         $validator = Validator::make($inputs, [
-            "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
+            // "photos" => ["required","array","min:1","max:5"],
+            // "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
             'seller_id' => 'sometimes'
         ] );
 
@@ -117,7 +117,6 @@ class UploadController extends Controller
         /**
      * Store a newly created resource in storage.
      *
-     * @param StoreFileRequest $request
      * @return JsonResponse
      */
     public function upload_video(Request $request)
@@ -126,7 +125,7 @@ class UploadController extends Controller
         if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
 
         $validator = Validator::make($inputs, [
-            // "photos" => ["required","array","min:1","max:5"],
+            "photos" => ["required","array","min:1","max:5"],
             // "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
             'seller_id' => 'sometimes'
         ] );
@@ -134,7 +133,8 @@ class UploadController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-        foreach ($inputs['file'] as $image) {
+
+        foreach ($inputs['photos'] as $image) {
             $fileInfo = $image->getClientOriginalName();
             $newFileName = time() . '.' . $image->extension();
 
@@ -152,6 +152,6 @@ class UploadController extends Controller
             ];
             $images[] = Upload::create($photo)->id;
         }
-        return response()->json($file,200);
+        return response()->json($images,200);
     }
 }
