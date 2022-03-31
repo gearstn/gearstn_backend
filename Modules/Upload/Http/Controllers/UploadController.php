@@ -112,4 +112,46 @@ class UploadController extends Controller
         }
         return response()->json($file,200);
     }
+
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param StoreFileRequest $request
+     * @return JsonResponse
+     */
+    public function upload_video(Request $request)
+    {
+        $inputs = $request->all();
+        if(isset($inputs['file'])) $inputs['photos'][] = $inputs['file'];
+
+        $validator = Validator::make($inputs, [
+            // "photos" => ["required","array","min:1","max:5"],
+            // "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
+            'seller_id' => 'sometimes'
+        ] );
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        foreach ($inputs['file'] as $image) {
+            $fileInfo = $image->getClientOriginalName();
+            $newFileName = time() . '.' . $image->extension();
+
+            Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   $image);
+            $path = $inputs['seller_id'] .'/'. $newFileName;
+            $url = Storage::disk('local')->url($path);
+            $photo = [
+                'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
+                'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
+                'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
+                'file_name' => $newFileName,
+                'type' => $image->getMimeType(),
+                'url' => $url,
+                'file_path' => $path,
+            ];
+            $images[] = Upload::create($photo)->id;
+        }
+        return response()->json($file,200);
+    }
 }
