@@ -6,6 +6,7 @@ use App\Classes\CollectionPaginate;
 use App\Classes\POST_Caller;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -75,7 +76,7 @@ class MachineController extends Controller
                         }
 
                     }
-                    if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count && $plan->getFeatureRemainings($feature_slug_videos) > $videos_count) {
+                    if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count /*&& $plan->getFeatureRemainings($feature_slug_videos) > $videos_count*/) {
                         $plan_ends_at = $plan->ends_at;
                         $plan->recordFeatureUsage($feature_slug_machines, 1);
                         $plan->recordFeatureUsage($feature_slug_photos, $photos_count);
@@ -214,17 +215,19 @@ class MachineController extends Controller
 
         //Saving Machine in the extra subscription if used
         //And Dispatch hide machine job
+        $details = ['machine_id' => $machine->id];
         if ($using_extra_plan_id !== null) {
             $extra_plan = ExtraPlan::find($using_extra_plan_id);
             $extra_plan_machines = json_decode($extra_plan->machines);
             $extra_plan_machines[] = $machine->id;
             $extra_plan->machines = json_encode($extra_plan_machines);
             $extra_plan->save();
-            SetMachineHideDataJob::dispatch(['machine_id' => $machine->id])->delay($extra_plan->ends_at);
+            SetMachineHideDataJob::dispatch($details)->delay(Carbon::parse($extra_plan->ends_at));
         }
         elseif ($plan_ends_at !== null) {
-            SetMachineHideDataJob::dispatch(['machine_id' => $machine->id])->delay($plan_ends_at);
+            SetMachineHideDataJob::dispatch($details)->delay(Carbon::parse($plan_ends_at));
         }
+        // dispatch($job);
 
         //Send Mail To the machine owner
         $data = [
