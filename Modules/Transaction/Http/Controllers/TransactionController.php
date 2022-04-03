@@ -27,7 +27,7 @@ class TransactionController extends Controller
         ];
 
         $inputs['fawry_order_status_id'] = OrderStatus::where('name',$inputs['orderStatus'])->first()->id;
-        $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
+        $inputs['user_id'] = User::find($inputs['customerProfileId'])->id;
         unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['subscription_id']);
 
         $post = new POST_Caller(SubscriptionController::class,'subscribe',Request::class,$subscription_data);
