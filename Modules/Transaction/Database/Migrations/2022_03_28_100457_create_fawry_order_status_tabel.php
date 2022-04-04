@@ -15,7 +15,8 @@ class CreateFawryOrderStatusTabel extends Migration
     {
         Schema::create('fawry_order_status', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name_en');
+            $table->string('name_ar');
             $table->timestamps();
         });
     }

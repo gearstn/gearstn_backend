@@ -15,14 +15,14 @@ class OrderStatusSeederTableSeeder extends Seeder
      */
     public function run()
     {
-        $status1 = ['name'=>'PAID'];
-        $status2 = ['name'=>'UNPAID'];
-        $status3 = ['name'=>'REFUNDED'];
-        $status4 = ['name'=>'SUCCESS'];
-        $status5 = ['name'=>'FAILD'];
-        $status6 = ['name'=>'TIMEOUT'];
-        $status7 = ['name'=>'CANCELED'];
-        $status8 = ['name'=>'EXPIRED'];
+        $status1 = ['name_en'=>'PAID','name_ar'=>'تم الدفع'];
+        $status2 = ['name_en'=>'UNPAID','name_ar'=>'غير مدفوع'];
+        $status3 = ['name_en'=>'REFUNDED','name_ar'=>'معاد'];
+        $status4 = ['name_en'=>'SUCCESS','name_ar'=>'نجح'];
+        $status5 = ['name_en'=>'FAILD','name_ar'=>'فشل'];
+        $status6 = ['name_en'=>'TIMEOUT','name_ar'=>'نفذ الوقت'];
+        $status7 = ['name_en'=>'CANCELED','name_ar'=>'ألغيت'];
+        $status8 = ['name_en'=>'EXPIRED','name_ar'=>'منتهية الصلاحية'];
         OrderStatus::create($status1);
         OrderStatus::create($status2);
         OrderStatus::create($status3);

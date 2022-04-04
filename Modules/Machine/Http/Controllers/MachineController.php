@@ -227,7 +227,6 @@ class MachineController extends Controller
         elseif ($plan_ends_at !== null) {
             SetMachineHideDataJob::dispatch($details)->delay(Carbon::parse($plan_ends_at));
         }
-        // dispatch($job);
 
         //Send Mail To the machine owner
         $data = [
