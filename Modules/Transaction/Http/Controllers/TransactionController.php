@@ -57,7 +57,7 @@ class TransactionController extends Controller
         $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
         $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
         unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['number_of_listing'],$inputs['number_of_months']);
-
+        $subscription_data['user_id'] = $inputs['user_id'];
         $post = new POST_Caller(SubscriptionController::class,'extra_plan_subscribe',Request::class,$subscription_data);
         $response = $post->call();
         if($response->status() != 200) { return $response; }

@@ -144,16 +144,17 @@ class SubscriptionController extends Controller
 
         $validator = Validator::make($inputs, [
             'number_of_listing' => 'required',
-            'number_of_months' => 'required'
+            'number_of_months' => 'required',
+            'user_id' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
 
         // $user_id = (int)auth()->user()->id;
-        $user_id = Auth::user()->id;
+        // $user_id = Auth::user()->id;
 
-        $inputs['user_id'] = $user_id;
+        // $inputs['user_id'] = $user_id;
         $inputs['starts_at'] =  Carbon::now();
         $inputs['ends_at'] =  Carbon::now()->addMonths($inputs['number_of_months']);
         $inputs['photos_of_listing'] =  5;
