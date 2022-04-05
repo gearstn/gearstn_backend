@@ -76,11 +76,18 @@ class MachineController extends Controller
                         }
 
                     }
-                    if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count /*&& $plan->getFeatureRemainings($feature_slug_videos) > $videos_count*/) {
+                    $video_feature = null;
+                    $plan->getFeatureValue($feature_slug_videos) == 'false' ? $video_feature == 0 : $video_feature = 1;
+
+                    if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count ) {
                         $plan_ends_at = $plan->ends_at;
                         $plan->recordFeatureUsage($feature_slug_machines, 1);
                         $plan->recordFeatureUsage($feature_slug_photos, $photos_count);
-                        $plan->recordFeatureUsage($feature_slug_videos, $videos_count);
+                        if($video_feature){
+                            if($plan->getFeatureRemainings($feature_slug_videos) > $videos_count){
+                                $plan->recordFeatureUsage($feature_slug_videos, $videos_count);
+                            }
+                        }
 
                     } elseif ($user_extra_subscriptions->count() > 0) {
                         foreach ($user_extra_subscriptions as $subscription) {
