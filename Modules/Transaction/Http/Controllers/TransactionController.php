@@ -12,6 +12,8 @@ use Modules\Transaction\Entities\OrderStatus;
 use Modules\Transaction\Entities\Transaction;
 use Modules\Transaction\Http\Requests\StoreTransactionRequest;
 use Modules\Transaction\Http\Resources\TransactionResource;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class TransactionController extends Controller
 {
@@ -26,20 +28,33 @@ class TransactionController extends Controller
             'subscription_id' => $inputs['subscription_id'],
         ];
 
-        $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
-        $inputs['user_id'] = User::find($inputs['customerProfileId'])->id;
-        unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['subscription_id']);
+        $merchantCode = "siYxylRjSPx+Mv6El3ZP+Q==";
+        $secrure_key = '44adc425-0a2b-4936-921a-b705102d56b8';
+        $merchantRefNumber = $inputs['merchantRefNumber'];
+        $signature = hash('sha256' , $merchantCode . $merchantRefNumber . $secrure_key);
+        $response = Http::withBasicAuth('keys', 'secret')
+        ->get('https://atfawry.fawrystaging.com/ECommerceWeb/Fawry/payments/status/v2?merchantCode=siYxylRjSPx+Mv6El3ZP+Q==&merchantRefNumber='. $merchantRefNumber.'&signature='. $signature);
 
-        $post = new POST_Caller(SubscriptionController::class,'subscribe',Request::class,$subscription_data);
-        $response = $post->call();
-        if($response->status() != 200) { return $response; }
+        if( $response->successful() ){
+            $response = json_decode($response->getBody()->getContents(), true);
+            return response($response,420);
+        }elseif( $response->failed() ){
+            $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
+            $inputs['user_id'] = User::find($inputs['customerProfileId'])->id;
+            unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['subscription_id']);
 
-        Transaction::create($inputs);
+            $post = new POST_Caller(SubscriptionController::class,'subscribe',Request::class,$subscription_data);
+            $response = $post->call();
+            if($response->status() != 200) { return $response; }
 
-        return response()->json([
-            'message_en' => 'Transaction Created Succesfully',
-            'message_ar' => 'لقد تم تسجيل العملية بنجاح',
-        ],200);
+            Transaction::create($inputs);
+
+            return response()->json([
+                'message_en' => 'Transaction Created Succesfully',
+                'message_ar' => 'لقد تم تسجيل العملية بنجاح',
+            ],200);
+        }
+
     }
 
         /**
@@ -54,20 +69,32 @@ class TransactionController extends Controller
             'number_of_months' => $inputs['number_of_months']
         ];
 
-        $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
-        $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
-        unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['number_of_listing'],$inputs['number_of_months']);
-        $subscription_data['user_id'] = $inputs['user_id'];
-        $post = new POST_Caller(SubscriptionController::class,'extra_plan_subscribe',Request::class,$subscription_data);
-        $response = $post->call();
-        if($response->status() != 200) { return $response; }
+        $merchantCode = "siYxylRjSPx+Mv6El3ZP+Q==";
+        $secrure_key = '44adc425-0a2b-4936-921a-b705102d56b8';
+        $merchantRefNumber = $inputs['merchantRefNumber'];
+        $signature = hash('sha256' , $merchantCode . $merchantRefNumber . $secrure_key);
+        $response = Http::withBasicAuth('keys', 'secret')
+        ->get('https://atfawry.fawrystaging.com/ECommerceWeb/Fawry/payments/status/v2?merchantCode=siYxylRjSPx+Mv6El3ZP+Q==&merchantRefNumber='. $merchantRefNumber.'&signature='. $signature);
 
-        Transaction::create($inputs);
+        if( $response->successful() ){
+            $response = json_decode($response->getBody()->getContents(), true);
+            return response($response,420);
+        }elseif( $response->failed() ){
+            $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
+            $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
+            unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['number_of_listing'],$inputs['number_of_months']);
+            $subscription_data['user_id'] = $inputs['user_id'];
+            $post = new POST_Caller(SubscriptionController::class,'extra_plan_subscribe',Request::class,$subscription_data);
+            $response = $post->call();
+            if($response->status() != 200) { return $response; }
 
-        return response()->json([
-            'message_en' => 'Transaction Created Succesfully',
-            'message_ar' => 'لقد تم تسجيل العملية بنجاح',
-        ],200);
+            Transaction::create($inputs);
+
+            return response()->json([
+                'message_en' => 'Transaction Created Succesfully',
+                'message_ar' => 'لقد تم تسجيل العملية بنجاح',
+            ],200);
+        }
     }
 
     public function user_transactions()
