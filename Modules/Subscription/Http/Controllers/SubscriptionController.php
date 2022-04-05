@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Modules\Subscription\Entities\ExtraPlan;
 use Modules\Subscription\Http\Resources\ExtraPlanResource;
@@ -149,7 +150,9 @@ class SubscriptionController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $user_id = (int)auth()->user()->id;
+        // $user_id = (int)auth()->user()->id;
+        $user_id = Auth::user()->id;
+
         $inputs['user_id'] = $user_id;
         $inputs['starts_at'] =  Carbon::now();
         $inputs['ends_at'] =  Carbon::now()->addMonths($inputs['number_of_months']);
