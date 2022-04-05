@@ -54,7 +54,7 @@ class TransactionController extends Controller
             'number_of_months' => $inputs['number_of_months']
         ];
 
-        $inputs['fawry_order_status_id'] = OrderStatus::where('name',$inputs['orderStatus'])->first()->id;
+        $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
         $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
         unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['number_of_listing'],$inputs['number_of_months']);
 
