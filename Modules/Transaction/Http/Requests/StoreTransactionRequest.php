@@ -15,8 +15,8 @@ class StoreTransactionRequest extends FormRequest
     {
         return [
             "type" => 'required|string' ,
-            "referenceNumber" => 'required|string' ,
-            "merchantRefNumber" => 'required|string' ,
+            "referenceNumber" => 'required|string|unique:transactions,referenceNumber' ,
+            "merchantRefNumber" => 'required|string|unique:transactions,merchantRefNumber' ,
             "orderAmount" => 'required|string' ,
             "paymentAmount" => 'required|string' ,
             "fawryFees" => 'required|string' ,
@@ -46,5 +46,13 @@ class StoreTransactionRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    public function messages()
+    {
+        return [
+            'referenceNumber.unique' => ['message_en'=>'Duplicate Codes','message_ar'=>'الكود موجود'],
+            'merchantRefNumber.unique' => ['message_en'=>'Duplicate Codes','message_ar'=>'الكود موجود'],
+        ];
     }
 }
