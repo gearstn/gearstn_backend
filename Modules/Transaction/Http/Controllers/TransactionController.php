@@ -26,7 +26,7 @@ class TransactionController extends Controller
             'subscription_id' => $inputs['subscription_id'],
         ];
 
-        $inputs['fawry_order_status_id'] = OrderStatus::where('name',$inputs['orderStatus'])->first()->id;
+        $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
         $inputs['user_id'] = User::find($inputs['customerProfileId'])->id;
         unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['subscription_id']);
 

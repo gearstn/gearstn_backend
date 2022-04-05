@@ -158,9 +158,9 @@ class SubscriptionController extends Controller
         $inputs['starts_at'] =  Carbon::now();
         $inputs['ends_at'] =  Carbon::now()->addMonths($inputs['number_of_months']);
         $inputs['photos_of_listing'] =  5;
-        $user_extra_plans_count = ExtraPlan::where('user_id', $user_id)->count();
+        $user_extra_plans_count = ExtraPlan::where('user_id', $inputs['user_id'])->count();
         $user_extra_plans_count = $user_extra_plans_count + 1;
-        $inputs['name'] =  'extra-plan-' . $user_id . '-' . $user_extra_plans_count;
+        $inputs['name'] =  'extra-plan-' . $inputs['user_id'] . '-' . $user_extra_plans_count;
         ExtraPlan::create($inputs);
         return response()->json([
             'message_en' => 'You Have subscribed for your extra plan successfully',
