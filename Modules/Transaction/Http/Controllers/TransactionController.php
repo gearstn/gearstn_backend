@@ -75,6 +75,15 @@ class TransactionController extends Controller
      */
     public function extra_plan_store(StoreTransactionRequest $request)
     {
+        if (isset($request->validator) && $request->validator->fails()) {
+            return response([
+                'error_code'=> 'VALIDATION_ERROR',
+                'message'   => 'The given data was invalid.',
+                'errors'    => $request->validator->errors()
+            ],400);
+        }
+
+
         $inputs = $request->validated();
         $subscription_data = [
             'number_of_listing' => $inputs['number_of_listing'],
@@ -90,10 +99,13 @@ class TransactionController extends Controller
 
         if( $response->successful() ){
             $response = json_decode($response->getBody()->getContents(), true);
-            return response($response,420);
+            return response([
+                'message' => 'Transaction already exists in fawry',
+                'data' =>$response
+            ],420);
         }elseif( $response->failed() ){
             $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
-            $inputs['user_id'] = User::find($inputs['customerProfileId'])->first()->id;
+            $inputs['user_id'] = User::find($inputs['customerProfileId'])->id;
             unset($inputs['orderStatus'],$inputs['customerProfileId'],$inputs['number_of_listing'],$inputs['number_of_months']);
             $subscription_data['user_id'] = $inputs['user_id'];
             $post = new POST_Caller(SubscriptionController::class,'extra_plan_subscribe',Request::class,$subscription_data);
