@@ -22,7 +22,7 @@ class CreateFawryTransactionsTabel extends Migration
             $table->string('paymentAmount');
             $table->string('fawryFees');
             $table->string('paymentMethod');
-            $table->string('paymentTime');
+            $table->string('paymentTime')->nullable();
             $table->string('customerName');
             $table->string('customerMobile');
             $table->string('customerMail');

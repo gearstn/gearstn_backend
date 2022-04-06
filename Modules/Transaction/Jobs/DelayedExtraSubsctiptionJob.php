@@ -12,7 +12,7 @@ use Modules\Transaction\Entities\Transaction;
 
 class DelayedExtraSubsctiptionJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, Queueable;
 
     public $inputs;
     public $subscription_data;
