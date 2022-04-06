@@ -23,6 +23,15 @@ class TransactionController extends Controller
      */
     public function store(StoreTransactionRequest $request)
     {
+
+        if (isset($request->validator) && $request->validator->fails()) {
+            return response([
+                'error_code'=> 'VALIDATION_ERROR',
+                'message'   => 'The given data was invalid.',
+                'errors'    => $request->validator->errors()
+            ],400);
+        }
+
         $inputs = $request->validated();
         $subscription_data = [
             'subscription_id' => $inputs['subscription_id'],
@@ -37,7 +46,10 @@ class TransactionController extends Controller
 
         if( $response->successful() ){
             $response = json_decode($response->getBody()->getContents(), true);
-            return response($response,420);
+            return response([
+                'message' => 'Transaction already exists in fawry',
+                'data' =>$response
+            ],420);
         }elseif( $response->failed() ){
             $inputs['fawry_order_status_id'] = OrderStatus::where('name_en',$inputs['orderStatus'])->first()->id;
             $inputs['user_id'] = User::find($inputs['customerProfileId'])->id;

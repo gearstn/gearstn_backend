@@ -3,6 +3,7 @@
 namespace Modules\Transaction\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTransactionRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class StoreTransactionRequest extends FormRequest
     {
         return [
             "type" => 'required|string' ,
-            "referenceNumber" => 'required|string|unique:fawry_transactions,referenceNumber' ,
+            "referenceNumber" => 'required|string|unique:fawry_transactions,referenceNumber',
             "merchantRefNumber" => 'required|string|unique:fawry_transactions,merchantRefNumber' ,
             "orderAmount" => 'required|string' ,
             "paymentAmount" => 'required|string' ,
@@ -48,11 +49,9 @@ class StoreTransactionRequest extends FormRequest
         return true;
     }
 
-    public function messages()
+    public $validator = null;
+    protected function failedValidation($validator)
     {
-        return [
-            'referenceNumber.unique' => 'Duplicate Codes',
-            'merchantRefNumber.unique' => 'Duplicate Codes',
-        ];
+        $this->validator = $validator;
     }
 }
