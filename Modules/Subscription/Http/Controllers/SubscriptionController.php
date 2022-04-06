@@ -112,15 +112,8 @@ class SubscriptionController extends Controller
     {
         $user = User::find(auth()->user()->id);
         $plan_id = $user->activeSubscriptions()->first() ? $user->activeSubscriptions()->first()->plan_id : false;
-        if (!$plan_id) {
-            return response()->json([
-                'message_en' => 'You Have no subscription',
-                'message_ar' => 'ليس لديك اشتراك',
-            ], 422);
-        } else {
-            $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
-            return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
-        }
+        $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
+        return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
     }
 
 
@@ -128,14 +121,7 @@ class SubscriptionController extends Controller
     {
         $user_id = auth()->user()->id;
         $extra_plans = ExtraPlan::where('user_id',$user_id)->get();
-        if ($extra_plans) {
-            return ExtraPlanResource::collection($extra_plans)->additional(['status' => 200, 'message' => 'Extra Subscriptions fetched successfully']);
-        } else {
-            return response()->json([
-                'message_en' => 'You Have no extra subscriptions',
-                'message_ar' => 'ليس لديك اشتراكات إضافية',
-            ], 422);
-        }
+        return ExtraPlanResource::collection($extra_plans)->additional(['status' => 200, 'message' => 'Extra Subscriptions fetched successfully']);
     }
 
     public function extra_plan_subscribe(Request $request)
