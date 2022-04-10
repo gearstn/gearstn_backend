@@ -25,9 +25,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function getNormalUser()
+    public function getNormalUser(): JsonResponse
     {
         $id  = Auth::user()->id;
         $user = User::findOrFail($id);
@@ -37,9 +37,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function getFullUser()
+    public function getFullUser(): JsonResponse
     {
         $id  = Auth::user()->id;
         $user = User::findOrFail($id);
@@ -127,9 +127,9 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $user = User::findOrFail($id);
         $user->delete();
@@ -137,8 +137,11 @@ class UserController extends Controller
     }
 
 
-
-    public function change_password(ChangePasswordRequest $request)
+    /**
+     * @param ChangePasswordRequest $request
+     * @return JsonResponse
+     */
+    public function change_password(ChangePasswordRequest $request): JsonResponse
     {
         $input = $request->all();
         $user_id = Auth::user()->id;
@@ -163,7 +166,7 @@ class UserController extends Controller
     }
 
 
-    public function request_account_manager()
+    public function request_account_manager(): JsonResponse
     {
         $user = Auth::user();
         $data = [

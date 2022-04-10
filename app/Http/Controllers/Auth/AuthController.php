@@ -5,9 +5,11 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
@@ -27,7 +29,6 @@ class AuthController extends Controller
         $validator = Validator::make($inputs, [
             'first_name' => 'string|max:255',
             'last_name' => 'string|max:255',
-            // 'company_name' => 'string|max:255',
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role_id' => 'required',
@@ -68,17 +69,20 @@ class AuthController extends Controller
             return $this->error('Verification Error',401,['message_en' => 'Email is not verified , please verify your email',
                                               'message_ar' => 'لم يتم التحقق من البريد الإلكتروني ، يرجى التحقق من البريد الإلكتروني الخاص بك' ]);
         }
+        $token = auth()->user()->createToken('API Token')->plainTextToken;
+
         return response()->json([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken,
+            'token' => $token,
             'id' => auth()->user()->id,
-        ]);
+        ])
+        ->withCookie(cookie('_gtn_at', $token, 60 * 60 * 24 * 7, '/',null,false));
     }
 
-    public function logout()
+    public function logout(): array
     {
 
         auth()->user()->tokens()->delete();
-
+        $cookie = Cookie::forget('_gtn_at');
         return [
             'message' => 'Tokens Revoked'
         ];
@@ -146,9 +150,8 @@ class AuthController extends Controller
 		}
 	}
 
-
-    public function __invoke()
+    public function get_token(): JsonResponse
     {
-        // ...
+        return response()->json(['_gtn_at' => Cookie::get('token')],200);
     }
 }

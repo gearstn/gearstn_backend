@@ -32,8 +32,8 @@ class UploadController extends Controller
 
 
         $validator = Validator::make($inputs, [
-            "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
+            // "photos" => ["required","array","min:1","max:5"],
+            // "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
             'seller_id' => 'sometimes'
         ] );
 
@@ -111,5 +111,45 @@ class UploadController extends Controller
             $file = Upload::create($photo)->id;
         }
         return response()->json($file,200);
+    }
+
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @return JsonResponse
+     */
+    public function upload_video(Request $request)
+    {
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            "videos" => ["required","array","min:1"],
+            // "photos.*" => ["required","mimes:jpg,png,jpeg,gif,svg","max:1000"],
+            'seller_id' => 'sometimes'
+        ] );
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        foreach ($inputs['videos'] as $video) {
+            $fileInfo = $video->getClientOriginalName();
+            $newFileName = time() . '.' . $video->extension();
+
+            Storage::disk('local')->put($inputs['seller_id'] .'/'. $newFileName,   (string)$video);
+            $path = $inputs['seller_id'] .'/'. $newFileName;
+            $url = Storage::disk('local')->url($path);
+            $video_file = [
+                'user_id' => $inputs['seller_id'] ?? Auth::user()->id,
+                'file_original_name' => pathinfo($fileInfo, PATHINFO_FILENAME),
+                'extension' => pathinfo($fileInfo, PATHINFO_EXTENSION),
+                'file_name' => $newFileName,
+                'type' => $video->getMimeType(),
+                'url' => $url,
+                'file_path' => $path,
+            ];
+            $videos[] = Upload::create($video_file)->id;
+        }
+        return response()->json($videos,200);
     }
 }

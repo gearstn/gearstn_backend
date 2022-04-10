@@ -83,10 +83,11 @@ if (!function_exists('areActiveRoutes')) {
 if (!function_exists('currency_converter')) {
     function currency_converter($from, $amount)
     {
-        $to = request()->header('currency') != null ? request()->header('currency') : 'USD' ;
+        $to = request()->header('currency') != null ? request()->header('currency') : 'EGP' ;
         return ceil(Currency::convert()->from($from)->to($to)->amount($amount)->get());
     }
 }
+
 if (!function_exists('array_flatten')) {
     function array_flatten($array)
     {
@@ -102,5 +103,14 @@ if (!function_exists('array_flatten')) {
             }
         }
         return $result;
+    }
+}
+
+if (!function_exists('get_single_listing_plan_id')) {
+    function get_single_listing_plan_id()
+    {
+        $subscription_id = app('rinvex.subscriptions.plan')->where('slug', 'listing-machine')->first();
+        $subscription_id == null ? $result_id = 0 : $result_id = $subscription_id;
+        return $result_id;
     }
 }

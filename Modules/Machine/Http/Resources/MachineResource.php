@@ -49,6 +49,8 @@ class MachineResource extends JsonResource
             'model_id' => MachineModel::find($this->model_id,$selected_columns),
             'views' => views(Machine::find($this->id))->count(),
             'phone_clicks' => $this->phone_clicks,
+            'videos' => Upload::findMany(json_decode($this->videos),['id', 'url']),
+
         ];
         return $data;
     }

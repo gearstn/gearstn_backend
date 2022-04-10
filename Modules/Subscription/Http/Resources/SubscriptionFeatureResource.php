@@ -18,7 +18,7 @@ class SubscriptionFeatureResource extends JsonResource
             "id" => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
-            'value' => str_contains($this->slug, 'cost') ? currency_converter('USD',(float)$this->value == null ? 0 : (float)$this->value ) : $this->value,
+            'value' => str_contains($this->slug, 'cost') ? currency_converter('EGP',(float)$this->value == null ? 0 : (float)$this->value ) : $this->value,
         ];
         return $data;     
     }

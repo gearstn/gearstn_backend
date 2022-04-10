@@ -23,5 +23,6 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
 
         Route::resource('uploads', 'UploadController' )->only('store');
         Route::delete('uploads', [UploadController::class , 'destroy']);
+        Route::post('/upload-video', [ UploadController::class , 'upload_video' ] ,['as' => 'frontend']);
     });
 });
