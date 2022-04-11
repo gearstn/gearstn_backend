@@ -4,10 +4,13 @@ namespace Modules\Conversation\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-class Conversation extends Model
+use Codebyray\ReviewRateable\Contracts\ReviewRateable;
+use Codebyray\ReviewRateable\Traits\ReviewRateable as ReviewRateableTrait;
+class Conversation extends Model implements ReviewRateable
 {
+
     use HasFactory;
+    use ReviewRateableTrait;
 
     protected $table = 'conversations';
     protected $fillable = [
