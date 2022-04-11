@@ -179,7 +179,8 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Nwidart\Modules\LaravelModulesServiceProvider::class,
         CyrildeWit\EloquentViewable\EloquentViewableServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        Codebyray\ReviewRateable\ReviewRateableServiceProvider::class
     ],
 
     /*
