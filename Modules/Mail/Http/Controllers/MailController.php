@@ -16,6 +16,7 @@ use Modules\Mail\Emails\StoreMachineMail;
 use Modules\Mail\Http\Requests\ContactSellerRequest;
 use Modules\Mail\Http\Requests\OpenConversationMailRequest;
 use Modules\Mail\Http\Requests\StoreMachineMailRequest;
+use Modules\Mail\Jobs\ConversationSurveyReminderJob;
 
 class MailController extends Controller
 {
@@ -26,23 +27,23 @@ class MailController extends Controller
         $seller = User::find($machine->seller_id);
 
         $seller_details = [
-            'title' => 'Request price for '.$machine->slug,
+            'title' => 'Request price for ' . $machine->slug,
             'machine' => $machine,
             'body' => $inputs['message'],
-            'seller'=> $seller,
-            'buyer'=> auth()->user()
+            'seller' => $seller,
+            'buyer' => auth()->user()
         ];
 
         $buyer_details = [
-            'title' => 'You have requested price for '.$machine->slug,
-            'seller'=> $seller,
-            'buyer'=> auth()->user()
+            'title' => 'You have requested price for ' . $machine->slug,
+            'seller' => $seller,
+            'buyer' => auth()->user()
         ];
 
         Mail::to($seller->email)->send(new ContactSellerMail($seller_details));
         Mail::to(auth()->user()->email)->send(new ContactBuyerMail($buyer_details));
         views($machine)->record();
-        return response('Email sent Successfully',200);
+        return response('Email sent Successfully', 200);
     }
 
 
@@ -52,7 +53,7 @@ class MailController extends Controller
         $inputs = $request->all();
         $validator = Validator::make($inputs, [
             'machine_id' => 'required'
-        ] );
+        ]);
 
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -62,12 +63,12 @@ class MailController extends Controller
         $seller = User::find($machine->seller_id);
 
         $details = [
-            'title' => 'You have stored machine '.$machine->slug,
-            'seller'=> $seller,
+            'title' => 'You have stored machine ' . $machine->slug,
+            'seller' => $seller,
         ];
 
         Mail::to($seller->email)->send(new StoreMachineMail($details));
-        return response('Email sent Successfully',200);
+        return response('Email sent Successfully', 200);
     }
 
 
@@ -79,11 +80,17 @@ class MailController extends Controller
         $acquire = User::find($inputs['acquire_id']);
 
         $details = [
-            'subject' => $acquire->first_name . ' ' . $acquire->last_name . ' ' . ' opened a conversation ' ,
-            'acquire'=> $acquire,
-            'owner'=> $owner,
-            'machine'=> $machine,
+            'subject' => $acquire->first_name . ' ' . $acquire->last_name . ' ' . ' opened a conversation ',
+            'acquire' => $acquire,
+            'owner' => $owner,
+            'machine' => $machine,
         ];
+
+        ConversationSurveyReminderJob::dispatch([
+            'machine' => $machine,
+            'owner' => $owner,
+            'acquire' => $acquire
+        ])->delay(now()->addWeek(1));
 
         Mail::to($owner->email)->send(new OpenConversationMail($details));
     }
