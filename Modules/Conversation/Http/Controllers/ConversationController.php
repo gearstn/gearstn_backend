@@ -96,9 +96,9 @@ class ConversationController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $user = Auth::user()->id;
+        $user_id = Auth::user()->id;
         $conversation = Conversation::find($inputs['conversation_id']);
-        $rating = $conversation->rating([
+        $conversation->rating([
             'title' => '',
             'body' => '',
             'customer_service_rating' => $inputs['customer_service_rating'],
@@ -108,7 +108,19 @@ class ConversationController extends Controller
             'rating' => $inputs['rating'],
             'recommend' => 'Yes',
             'approved' => true,
-        ], $user);
+        ], $user_id);
 
+        if($user_id == $conversation->acquire_id){
+            $conversation->acquire_done = 1;
+            $conversation->save();
+        }
+        else if($user_id == $conversation->owner_id){
+            $conversation->owner_done = 1;
+            $conversation->save();
+        }
+        return response()->json([
+            'message_en' => 'Survey stored successfully',
+            'message_ar' => 'تم تسجيل الاستبيان بنجاح',
+        ],200);
     }
 }
