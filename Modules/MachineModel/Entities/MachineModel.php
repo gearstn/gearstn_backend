@@ -12,8 +12,8 @@ use Modules\SubCategory\Entities\SubCategory;
 class MachineModel extends Model
 {
     use HasFactory;
-    protected $table = 'models';
-    
+    protected $table = 'machine_models';
+
     protected $fillable = [
         'title_en',
         'title_ar',
