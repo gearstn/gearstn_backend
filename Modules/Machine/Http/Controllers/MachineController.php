@@ -47,7 +47,6 @@ class MachineController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find($inputs['seller_id']);
-        //Turn Subscription OF
         $user_subscriptions = $user->subscriptions()->get();
         $user_extra_subscriptions = ExtraPlan::where('user_id', $user->id)->get();
         $using_extra_plan_id = null;
@@ -303,18 +302,18 @@ class MachineController extends Controller
         MachineResource::collection($q);
 
         //Filter for every attribute we want to filter
-        $q = machines_filter($q, 1, 'approved'); // To get approved
-        $q = machines_filter($q, isset($inputs['category_id']) ? $inputs['category_id'] : null, 'category_id');
-        $q = machines_filter($q, isset($inputs['sub_category_id']) ? $inputs['sub_category_id'] : null, 'sub_category_id');
-        $q = machines_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
-        $q = machines_filter($q, isset($inputs['model_id']) ? $inputs['model_id'] : null, 'model_id');
-        $q = machines_filter($q, isset($inputs['sell_type']) ? $inputs['sell_type'] : null, 'sell_type');
-        $q = machines_filter($q, isset($inputs['condition']) ? $inputs['condition'] : null, 'condition');
-        $q = machines_filter($q, isset($inputs['country']) ? $inputs['country'] : null, 'country');
-        $q = machines_filter($q, isset($inputs['city_id']) ? $inputs['city_id'] : null, 'city_id');
-        $q = machines_range_filter($q, isset($inputs['min_price']) ? $inputs['min_price'] : null, isset($inputs['max_price']) ? $inputs['max_price'] : null, 'price');
-        $q = machines_range_filter($q, isset($inputs['min_year']) ? $inputs['min_year'] : null, isset($inputs['max_year']) ? $inputs['max_year'] : null, 'year');
-        $q = machines_range_filter($q, isset($inputs['min_hours']) ? $inputs['min_hours'] : null, isset($inputs['max_hours']) ? $inputs['max_hours'] : null, 'hours');
+        $q = items_filter($q, 1, 'approved'); // To get approved
+        $q = items_filter($q, isset($inputs['category_id']) ? $inputs['category_id'] : null, 'category_id');
+        $q = items_filter($q, isset($inputs['sub_category_id']) ? $inputs['sub_category_id'] : null, 'sub_category_id');
+        $q = items_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
+        $q = items_filter($q, isset($inputs['model_id']) ? $inputs['model_id'] : null, 'model_id');
+        $q = items_filter($q, isset($inputs['sell_type']) ? $inputs['sell_type'] : null, 'sell_type');
+        $q = items_filter($q, isset($inputs['condition']) ? $inputs['condition'] : null, 'condition');
+        $q = items_filter($q, isset($inputs['country']) ? $inputs['country'] : null, 'country');
+        $q = items_filter($q, isset($inputs['city_id']) ? $inputs['city_id'] : null, 'city_id');
+        $q = items_range_filter($q, isset($inputs['min_price']) ? $inputs['min_price'] : null, isset($inputs['max_price']) ? $inputs['max_price'] : null, 'price');
+        $q = items_range_filter($q, isset($inputs['min_year']) ? $inputs['min_year'] : null, isset($inputs['max_year']) ? $inputs['max_year'] : null, 'year');
+        $q = items_range_filter($q, isset($inputs['min_hours']) ? $inputs['min_hours'] : null, isset($inputs['max_hours']) ? $inputs['max_hours'] : null, 'hours');
 
         //Sort the collection of machines if requested
         $q = $q->when(isset($inputs['sort_by']) && $inputs['sort_by'] != null, function ($q) use ($inputs) {
