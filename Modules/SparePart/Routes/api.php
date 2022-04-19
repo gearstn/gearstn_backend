@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\SparePart\Http\Controllers\SparePartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,24 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/sparepart', function (Request $request) {
-    return $request->user();
+//Routes for frontend
+Route::group(['middleware' => 'cors'], function () {
+
+    //Auth routes
+    Route::middleware('auth:sanctum')->group( function () {
+        //Store Update Destroy routes for Machines and Models
+        Route::resource('spare-parts', 'SparePartController' ,['as' => 'frontend'])->only('store','update','destroy');
+        Route::get('/user-spare-parts', [SparePartControllerController::class, 'user_spare_parts']);
+    });
+
+    Route::resource('spare-parts', 'SparePartController' ,['as' => 'frontend'])->except('create', 'edit');
+    //Search for all Entities
+    Route::get('/spare-parts-search', [SparePartController::class, 'search_filter']);
+    Route::get('/spare-parts-filter-data', [SparePartController::class, 'getMinMaxOfField']);
+    Route::get('/related-spare-parts', [SparePartController::class, 'getRelatedSpareParts']);
+    Route::get('/spare-part-price', [SparePartController::class, 'get_spare_part_price']);
+    Route::get('/latest-spare-parts', [SparePartController::class, 'latest_spare_parts'] ,['as' => 'frontend']);
+    Route::get('/spare-part-view', [SparePartController::class, 'add_spare_part_view']);
+
+
 });
