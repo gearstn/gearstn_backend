@@ -38,7 +38,7 @@ class SparePart extends Model implements Viewable
         'category_id',
         'sub_category_id',
         'manufacture_id',
-        'spare_part_model_id',
+        'model_id',
     ];
     public static $cast = [
         // 'year' => 'required',

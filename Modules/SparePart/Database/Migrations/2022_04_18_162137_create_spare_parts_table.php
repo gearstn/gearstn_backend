@@ -30,13 +30,13 @@ class CreateSparePartsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('sub_category_id');
             $table->unsignedBigInteger('manufacture_id');
-            $table->unsignedBigInteger('spare_part_model_id');
+            $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('seller_id');
             $table->unsignedBigInteger('city_id');
             $table->foreign("category_id")->references("id")->on("categories")->onDelete("cascade");
             $table->foreign("sub_category_id")->references("id")->on("subcategories")->onDelete("cascade");
             $table->foreign("manufacture_id")->references("id")->on("manufactures")->onDelete("cascade");
-            $table->foreign("spare_part_model_id")->references("id")->on("spare_part_models")->onDelete("cascade");
+            $table->foreign("model_id")->references("id")->on("spare_part_models")->onDelete("cascade");
             $table->foreign("seller_id")->references("id")->on("users")->onDelete("cascade");
             $table->foreign("city_id")->references("id")->on("cities")->onDelete("cascade");
             $table->timestamps();

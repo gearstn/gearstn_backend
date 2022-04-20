@@ -146,7 +146,7 @@ class SparePartController extends Controller
 
 
         //If the client wants to create a non existing model
-        if ($inputs['spare_part_model_id'] == 0 && isset($inputs['new_spare_part_model'])) {
+        if ($inputs['model_id'] == 0 && isset($inputs['new_spare_part_model'])) {
             $data = [
                 'title_en' => $inputs['new_spare_part_model'],
                 'title_ar' => $inputs['new_spare_part_model'],
@@ -163,7 +163,7 @@ class SparePartController extends Controller
 
         $spare_part = SparePart::create($inputs);
         $spare_part->sku = random_int(10000000, 99999999);
-        $model_title = SparePartModel::findorFail($spare_part->spare_part_model_id)->title_en;
+        $model_title = SparePartModel::findorFail($spare_part->model_id)->title_en;
         $spare_part->slug = $spare_part->year . '-' . $spare_part->manufacture->title_en . '-' . $model_title . '-' . $spare_part->sku;
         $spare_part->save();
 
@@ -250,7 +250,7 @@ class SparePartController extends Controller
         $q = items_filter($q, isset($inputs['category_id']) ? $inputs['category_id'] : null, 'category_id');
         $q = items_filter($q, isset($inputs['sub_category_id']) ? $inputs['sub_category_id'] : null, 'sub_category_id');
         $q = items_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
-        $q = items_filter($q, isset($inputs['spare_part_model_id']) ? $inputs['spare_part_model_id'] : null, 'spare_part_model_id');
+        $q = items_filter($q, isset($inputs['model_id']) ? $inputs['model_id'] : null, 'model_id');
         $q = items_filter($q, isset($inputs['country']) ? $inputs['country'] : null, 'country');
         $q = items_filter($q, isset($inputs['city_id']) ? $inputs['city_id'] : null, 'city_id');
         $q = items_range_filter($q, isset($inputs['min_price']) ? $inputs['min_price'] : null, isset($inputs['max_price']) ? $inputs['max_price'] : null, 'price');

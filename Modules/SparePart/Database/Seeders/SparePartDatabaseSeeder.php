@@ -33,7 +33,7 @@ class SparePartDatabaseSeeder extends Seeder
             'category_id'=> Category::where('title_en','spare parts')->first()->id,
             'sub_category_id'=> $sub_category->id,
             'manufacture_id'=> 1,
-            'spare_part_model_id'=> SparePartModel::where('title_en','dx-engine')->first()->id,
+            'model_id'=> SparePartModel::where('title_en','dx-engine')->first()->id,
         ];
         SparePart::create($spare_part);
     }
