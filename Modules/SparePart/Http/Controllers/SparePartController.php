@@ -16,7 +16,10 @@ use Modules\SparePart\Entities\SparePart;
 use Modules\SparePart\Http\Requests\StoreSparePartRequest;
 use Modules\SparePart\Http\Resources\SparePartResource;
 use Modules\SparePartModel\Entities\SparePartModel;
+use Modules\SparePartModel\Http\Controllers\SparePartModelController;
 use Modules\Subscription\Entities\ExtraPlan;
+use Modules\Upload\Http\Controllers\UploadController;
+use Modules\Upload\Http\Requests\StoreUploadRequest;
 
 class SparePartController extends Controller
 {
@@ -40,10 +43,10 @@ class SparePartController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find($inputs['seller_id']);
-        $user_subscriptions = $user->subscriptions()->get();
-        $user_extra_subscriptions = ExtraPlan::where('user_id', $user->id)->get();
-        $using_extra_plan_id = null;
-        $plan_ends_at = null;
+        // $user_subscriptions = $user->subscriptions()->get();
+        // $user_extra_subscriptions = ExtraPlan::where('user_id', $user->id)->get();
+        // $using_extra_plan_id = null;
+        // $plan_ends_at = null;
        /* if ($user_subscriptions->count() > 0) {
             foreach ($user_subscriptions as $plan) {
                 if (str_contains($plan->slug, 'mozaa')) {
@@ -143,15 +146,15 @@ class SparePartController extends Controller
 
 
         //If the client wants to create a non existing model
-        if ($inputs['model_id'] == 0 && isset($inputs['new_model'])) {
+        if ($inputs['spare_part_model_id'] == 0 && isset($inputs['new_spare_part_model'])) {
             $data = [
-                'title_en' => $inputs['new_model'],
-                'title_ar' => $inputs['new_model'],
+                'title_en' => $inputs['new_spare_part_model'],
+                'title_ar' => $inputs['new_spare_part_model'],
                 'category_id' => $inputs['category_id'],
                 'sub_category_id' => $inputs['sub_category_id'],
                 'manufacture_id' => $inputs['manufacture_id'],
             ];
-            $post = new Post_Caller(MachineModelController::class, 'store', StoreMachineModelRequest::class, $data);
+            $post = new Post_Caller(SparePartModelController::class, 'store', Request::class, $data);
             $response = $post->call();
             if ($response->status() != 200) {return $response;}
             $inputs['model_id'] = json_decode($response->getContent())->id;
@@ -160,7 +163,7 @@ class SparePartController extends Controller
 
         $spare_part = SparePart::create($inputs);
         $spare_part->sku = random_int(10000000, 99999999);
-        $model_title = SparePartModel::findorFail($spare_part->model_id)->title_en;
+        $model_title = SparePartModel::findorFail($spare_part->spare_part_model_id)->title_en;
         $spare_part->slug = $spare_part->year . '-' . $spare_part->manufacture->title_en . '-' . $model_title . '-' . $spare_part->sku;
         $spare_part->save();
 

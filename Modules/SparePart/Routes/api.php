@@ -21,7 +21,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::middleware('auth:sanctum')->group( function () {
         //Store Update Destroy routes for Machines and Models
         Route::resource('spare-parts', 'SparePartController' ,['as' => 'frontend'])->only('store','update','destroy');
-        Route::get('/user-spare-parts', [SparePartControllerController::class, 'user_spare_parts']);
+        Route::get('/user-spare-parts', [SparePartController::class, 'user_spare_parts']);
     });
 
     Route::resource('spare-parts', 'SparePartController' ,['as' => 'frontend'])->except('create', 'edit');
@@ -32,6 +32,4 @@ Route::group(['middleware' => 'cors'], function () {
     Route::get('/spare-part-price', [SparePartController::class, 'get_spare_part_price']);
     Route::get('/latest-spare-parts', [SparePartController::class, 'latest_spare_parts'] ,['as' => 'frontend']);
     Route::get('/spare-part-view', [SparePartController::class, 'add_spare_part_view']);
-
-
 });
