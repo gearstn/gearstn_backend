@@ -5,6 +5,8 @@ namespace Modules\SparePartModel\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Category\Entities\Category;
+use Modules\SparePartModel\Entities\SparePartModel;
+use Modules\SubCategory\Entities\SubCategory;
 
 class SparePartModelDatabaseSeeder extends Seeder
 {
@@ -17,16 +19,30 @@ class SparePartModelDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $categories = [
+        $category =
             [
                 'title_en' => 'spare parts',
                 'title_ar' => 'فطع غيار',
                 'image_url' => 'spare-parts.png',
-            ],
-        ];
+            ];
 
-        foreach ($categories as $category) {
-            Category::create($category);
-        }
+           $cat_result = Category::create($category);
+
+
+        $subcategory = [
+            'title_en' => 'Engine',
+            'title_ar' => 'محرك',
+            'category_id' => 2,
+        ];
+        $sub_result = SubCategory::create($subcategory);
+
+        $spare_part_model = [
+            'title_en' => 'dx-engine',
+            'title_ar' => 'dx-engine',
+            'category_id' => $cat_result->id,
+            'sub_category_id' =>$sub_result->id ,
+            'manufacture_id' => 1,
+        ];
+        SparePartModel::create($spare_part_model);
     }
 }
