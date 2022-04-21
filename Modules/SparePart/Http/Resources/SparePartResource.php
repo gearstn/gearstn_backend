@@ -39,8 +39,9 @@ class SparePartResource extends JsonResource
             'category_id' => Category::find($this->category_id,$selected_columns),
             'sub_category_id' => SubCategory::find($this->sub_category_id,$selected_columns),
             'manufacture_id' => Manufacture::find($this->manufacture_id,$selected_columns),
-            'model_id' => SparePartModel::find($this->model_id,$selected_columns),
+            'model_id' => SparePartModel::find($this->spare_part_model,$selected_columns),
             'views' => views(SparePart::find($this->id))->count()
         ];
-        return $data;    }
+        return $data;    
+    }
 }
