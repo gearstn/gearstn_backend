@@ -19,8 +19,6 @@ class SubCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $category_name = $request->category;
-
         $inputs = $request->all();
         $validator = Validator::make($inputs, ['category' => 'required'] );
         if ($validator->fails()) {
