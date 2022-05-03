@@ -5,6 +5,7 @@ namespace Modules\SparePart\Http\Controllers;
 use App\Classes\CollectionPaginate;
 use App\Classes\POST_Caller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,9 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use Modules\SparePart\Entities\SparePart;
 use Modules\SparePart\Http\Requests\StoreSparePartRequest;
 use Modules\SparePart\Http\Resources\SparePartResource;
+use Modules\SparePart\Jobs\SetSparePartHideDateJob;
 use Modules\SparePartModel\Entities\SparePartModel;
 use Modules\SparePartModel\Http\Controllers\SparePartModelController;
-use Modules\Subscription\Entities\ExtraPlan;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\Upload\Http\Requests\StoreUploadRequest;
 
@@ -43,65 +44,31 @@ class SparePartController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find($inputs['seller_id']);
-        // $user_subscriptions = $user->subscriptions()->get();
-        // $user_extra_subscriptions = ExtraPlan::where('user_id', $user->id)->get();
-        // $using_extra_plan_id = null;
-        // $plan_ends_at = null;
-       /* if ($user_subscriptions->count() > 0) {
+        $user_subscriptions = $user->subscriptions()->get();
+        $plan_ends_at = null;
+        if ($user_subscriptions->count() > 0) {
             foreach ($user_subscriptions as $plan) {
-                if (str_contains($plan->slug, 'mozaa')) {
+                if (str_contains($plan->slug, 'spare-parts')) {
                     $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
                     $subscription->features();
-                    $feature_slug_machines = null;
+                    $feature_slug_spare_parts = null;
                     $feature_slug_photos = null;
-                    $feature_slug_videos = null;
                     $photos_count = isset($inputs['photos']) ? count($inputs['photos']) : 0;
-                    $videos_count = isset($inputs['videos']) ? count($inputs['videos']) : 0;
                     foreach ($subscription->features as $feature) {
-                        if (str_contains($feature->slug, 'number-of-listing')) {
-                            $feature_slug_machines = $feature->slug;
+                        if (str_contains($feature->slug, 'number-of-spare-parts')) {
+                            $feature_slug_spare_parts = $feature->slug;
                         }
 
-                        if (str_contains($feature->slug, 'total-photos')) {
+                        if (str_contains($feature->slug, 'photos-per-spare-parts')) {
                             $feature_slug_photos = $feature->slug;
                         }
 
-                        if (str_contains($feature->slug, 'total-videos')) {
-                            $feature_slug_videos = $feature->slug;
-                        }
-
                     }
-                    $video_feature = null;
-                    $plan->getFeatureValue($feature_slug_videos) == 'false' ? $video_feature == 0 : $video_feature = 1;
-
-                    if ($plan->getFeatureRemainings($feature_slug_machines) > 0 && $plan->getFeatureRemainings($feature_slug_photos) > $photos_count ) {
+                    if ( $plan->getFeatureRemainings($feature_slug_photos) > $photos_count ) {
                         $plan_ends_at = $plan->ends_at;
-                        $plan->recordFeatureUsage($feature_slug_machines, 1);
+                        $plan->recordFeatureUsage($feature_slug_spare_parts, 1);
                         $plan->recordFeatureUsage($feature_slug_photos, $photos_count);
-                        if($video_feature){
-                            if($plan->getFeatureRemainings($feature_slug_videos) > $videos_count){
-                                $plan->recordFeatureUsage($feature_slug_videos, $videos_count);
-                            }
-                        }
-
-                    } elseif ($user_extra_subscriptions->count() > 0) {
-                        foreach ($user_extra_subscriptions as $subscription) {
-                            $number_of_listing = $subscription->number_of_listing;
-                            $listed_machine = $subscription->machines == null ? [] : json_decode($subscription->machines);
-
-                            if ($number_of_listing > count($listed_machine)) {
-                                $using_extra_plan_id = $subscription->id;
-                                break;
-                            }
-                        }
-                        if ($using_extra_plan_id == null) {
-                            return response()->json([
-                                'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
-                                'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
-                            ], 422);
-                        }
-
-                    } else {
+                    }    else {
                         return response()->json([
                             'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
                             'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
@@ -109,31 +76,15 @@ class SparePartController extends Controller
                     }
                 }
             }
-        } elseif ($user_extra_subscriptions->count() > 0) {
-            foreach ($user_extra_subscriptions as $subscription) {
-                $number_of_listing = $subscription->number_of_listing;
-                $listed_machine = json_decode($subscription->number_of_listing);
-                if ($number_of_listing > count($listed_machine)) {
-                    $using_extra_plan_id = $subscription->id;
-                    break;
-                }
-            }
-            if ($using_extra_plan_id == null) {
-                return response()->json([
-                    'message_en' => 'You Have acrossed limit of your subscription, you have to upgrade your account',
-                    'message_ar' => 'لقد وصلت للحد الاقصى لتسجيل الماكينات , يجب ترقية حسابك',
-                ], 422);
-            }
         }
         else{
             return response()->json([
                 'message_en' => "You don't have any subscription",
                 'message_ar' => 'ليس لديك أي اشتراك',
             ], 422);
-        }*/
+        }
 
         //Uploads route to upload images and get array of ids
-
         $data = [
             'photos' => $inputs['photos'],
             'seller_id' => $user->id,
@@ -143,7 +94,6 @@ class SparePartController extends Controller
         if ($response->status() != 200) {return $response;}
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
-
 
         //If the client wants to create a non existing model
         if ($inputs['model_id'] == 0 && isset($inputs['new_spare_part_model'])) {
@@ -167,29 +117,20 @@ class SparePartController extends Controller
         $spare_part->slug = $spare_part->year . '-' . $spare_part->manufacture->title_en . '-' . $model_title . '-' . $spare_part->sku;
         $spare_part->save();
 
-        //Saving Machine in the extra subscription if used
-        //And Dispatch hide machine job
-        // $details = ['machine_id' => $machine->id];
-        // if ($using_extra_plan_id !== null) {
-        //     $extra_plan = ExtraPlan::find($using_extra_plan_id);
-        //     $extra_plan_machines = json_decode($extra_plan->machines);
-        //     $extra_plan_machines[] = $machine->id;
-        //     $extra_plan->machines = json_encode($extra_plan_machines);
-        //     $extra_plan->save();
-        //     SetMachineHideDataJob::dispatch($details)->delay(Carbon::parse($extra_plan->ends_at));
-        // }
-        // elseif ($plan_ends_at !== null) {
-        //     SetMachineHideDataJob::dispatch($details)->delay(Carbon::parse($plan_ends_at));
-        // }
+        //Dispatch hide spare-part job
+        $details = ['spare_part_id' => $spare_part->id];
+        if ($plan_ends_at !== null) {
+            SetSparePartHideDateJob::dispatch($details)->delay(Carbon::parse($plan_ends_at));
+        }
 
-        //Send Mail To the machine owner
-        // $data = [
-        //     'machine_id' => $machine->id,
-        //     'seller_id' => $inputs['seller_id'],
-        // ];
-        // $post = new Post_Caller(MailController::class, 'store_machine', StoreMachineMailRequest::class, $data);
-        // $response = $post->call();
-        // if ($response->status() != 200) {return $response;}
+        // Send Mail To the machine owner
+        $data = [
+            'spare_part_id' => $spare_part->id,
+            'seller_id' => $inputs['seller_id'],
+        ];
+        $post = new Post_Caller(MailController::class, 'store_spare_part', Request::class, $data);
+        $response = $post->call();
+        if ($response->status() != 200) {return $response;}
 
         return response()->json(new SparePartResource($spare_part), 200);
     }
