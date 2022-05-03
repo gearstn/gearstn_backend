@@ -13,9 +13,11 @@ use Modules\Mail\Emails\ContactBuyerMail;
 use Modules\Mail\Emails\ContactSellerMail;
 use Modules\Mail\Emails\OpenConversationMail;
 use Modules\Mail\Emails\StoreMachineMail;
+use Modules\Mail\Emails\StoreSparePartMail;
 use Modules\Mail\Http\Requests\ContactSellerRequest;
 use Modules\Mail\Http\Requests\OpenConversationMailRequest;
 use Modules\Mail\Http\Requests\StoreMachineMailRequest;
+use Modules\SparePart\Entities\SparePart;
 
 class MailController extends Controller
 {
@@ -87,4 +89,30 @@ class MailController extends Controller
 
         Mail::to($owner->email)->send(new OpenConversationMail($details));
     }
+
+
+    public function store_spare_part(Request $request)
+    {
+
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'spare_part_id' => 'required'
+        ] );
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $spare_part = SparePart::find($inputs['spare_part_id']);
+        $seller = User::find($spare_part->seller_id);
+
+        $details = [
+            'title' => 'You have stored spare part '.$spare_part->slug,
+            'seller'=> $seller,
+        ];
+
+        Mail::to($seller->email)->send(new StoreSparePartMail($details));
+        return response('Email sent Successfully',200);
+    }
+
 }
