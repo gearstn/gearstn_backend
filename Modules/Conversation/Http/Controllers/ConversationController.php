@@ -42,7 +42,7 @@ class ConversationController extends Controller
         //     'owner_id' => $inputs['owner_id'],
         // ];
         // $response = redirect()->route('open-conversation-with-seller' , $mail_parameters );
-        if($response->status() != 200) { return $response; }
+        // if($response->status() != 200) { return $response; }
 
         return response()->json(new ConversationResource($conversation), 200);
     }
