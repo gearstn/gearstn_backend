@@ -18,6 +18,7 @@ use Modules\Conversation\Http\Requests\CheckForConversationRequest;
 use Modules\Conversation\Http\Resources\ConversationResource;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Mail\Http\Requests\OpenConversationMailRequest;
+use Modules\SparePart\Entities\SparePart;
 
 class ConversationController extends Controller
 {
@@ -29,15 +30,18 @@ class ConversationController extends Controller
     public function store(StoreConversationRequest $request)
     {
         $inputs = $request->validated();
+        $inputs['model_id'] = $inputs['product_id'];
+        $inputs['product_type'] == 'machine' ?  $inputs['model_type'] = class_basename(Machine::class) : $inputs['model_type'] = class_basename(SparePart::class);
+        unset($inputs['product_id'],$inputs['product_type']);
         $conversation = Conversation::create($inputs);
 
 //        Send Mail To the machine owner
-        $mail_parameters = [
-            'machine_id' => $inputs['machine_id'],
-            'acquire_id' => $inputs['acquire_id'],
-            'owner_id' => $inputs['owner_id'],
-        ];
-        $response = redirect()->route('open-conversation-with-seller' , $mail_parameters );
+        // $mail_parameters = [
+        //     'machine_id' => $inputs['machine_id'],
+        //     'acquire_id' => $inputs['acquire_id'],
+        //     'owner_id' => $inputs['owner_id'],
+        // ];
+        // $response = redirect()->route('open-conversation-with-seller' , $mail_parameters );
         if($response->status() != 200) { return $response; }
 
         return response()->json(new ConversationResource($conversation), 200);

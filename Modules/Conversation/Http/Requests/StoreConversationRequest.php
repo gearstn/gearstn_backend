@@ -17,7 +17,8 @@ class StoreConversationRequest extends FormRequest
             'chat_token' => 'required|unique:conversations',
             'acquire_id' => 'required',
             'owner_id' => 'required',
-            'machine_id' => 'required',
+            'product_id' => 'required',
+            'product_type' => 'required',
         ];
     }
 
