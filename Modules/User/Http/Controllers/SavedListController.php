@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Machine\Entities\Machine;
 use Modules\Machine\Http\Resources\MachineResource;
+use Modules\SparePart\Entities\SparePart;
+use Modules\SparePart\Http\Resources\SparePartResource;
 use Modules\User\Http\Requests\SaveList\AddToListRequest;
 use Modules\User\Http\Requests\SaveList\RemoveFromListRequest;
 
@@ -23,8 +25,14 @@ class SavedListController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find(auth()->user()->id);
-        $machine = Machine::find($inputs['machine_id']);
-        $user->wish($machine,$user->id);
+        if($inputs['product_type'] == 'machine'){
+            $product = Machine::find($inputs['product_id']);
+            $user->wish($product,$user->id);
+        }
+        else{
+            $product = SparePart::find($inputs['product_id']);
+            $user->wish($product,$user->id);
+        }
         return response()->json($user->wishlist($user->id),200);
     }
 
@@ -33,9 +41,16 @@ class SavedListController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find(auth()->user()->id);
-        $machine = Machine::find($inputs['machine_id']);
-        $user->unwish($machine,$user->id);
-        return response()->json(MachineResource::collection($user->wishlist($user->id)),200);
+        if($inputs['product_type'] == 'machine'){
+            $product = Machine::find($inputs['product_id']);
+            $user->unwish($product,$user->id);
+            return response()->json(MachineResource::collection($user->wishlist($user->id)),200);
+        }
+        else{
+            $product = SparePart::find($inputs['product_id']);
+            $user->unwish($product,$user->id);
+            return response()->json(SparePartResource::collection($user->wishlist($user->id)),200);
+        }
     }
 
     public function clearList()
