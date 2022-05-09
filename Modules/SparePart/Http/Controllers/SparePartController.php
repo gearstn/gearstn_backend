@@ -217,10 +217,10 @@ class SparePartController extends Controller
     public function getMinMaxOfField(): JsonResponse
     {
         $results = [];
-        $results['max_price'] = SparePart::max('price');
-        $results['min_price'] = SparePart::min('price');
-        $results['max_year'] = SparePart::max('year');
-        $results['min_year'] = SparePart::min('year');
+        $results['max_price'] = SparePart::max('price') || 0;
+        $results['min_price'] = SparePart::min('price') || 0;
+        $results['max_year'] = SparePart::max('year') || 0;
+        $results['min_year'] = SparePart::min('year') || 0;
         $results['max_hours'] = 0;
         $results['min_hours'] = 0;
         return response()->json($results, 200);
