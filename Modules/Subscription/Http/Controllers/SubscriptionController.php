@@ -110,14 +110,33 @@ class SubscriptionController extends Controller
         ], 200);
     }
 
-    public function user_subscriptions()
+    public function user_subscriptions_by_type(Request $request)
     {
+        $inputs = $request->all();
+
+        $validator = Validator::make($inputs, ["subscription_type" => "required"]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
         $user = User::find(auth()->user()->id);
-        $plan_id = $user->activeSubscriptions()->first() ? $user->activeSubscriptions()->first()->plan_id : false;
-        $plan = app('rinvex.subscriptions.plan')->where('id', $plan_id)->get();
-        return SubscriptionResource::collection($plan)->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
+        $plans = $user->activeSubscriptions()->all() ? $user->activeSubscriptions()->all() : false;
+        foreach ($plans as $plan) {
+            $active_plans_ids[] = app('rinvex.subscriptions.plan')->where('id', $plan->plan_id)->first()->id;
+        }
+        $active_plans = app('rinvex.subscriptions.plan')->whereIn('id', $active_plans_ids)->where('slug', 'LIKE', '%'.$inputs['subscription_type'].'%')->get();
+        return SubscriptionResource::collection( $active_plans )->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
     }
 
+    public function user_all_subscriptions()
+    {
+        $user = User::find(auth()->user()->id);
+        $plans = $user->activeSubscriptions()->all() ? $user->activeSubscriptions()->all() : false;
+        foreach ($plans as $plan) {
+            $active_plans_ids[] = app('rinvex.subscriptions.plan')->where('id', $plan->plan_id)->first()->id;
+        }
+        $active_plans = app('rinvex.subscriptions.plan')->whereIn('id', $active_plans_ids)->get();
+        return SubscriptionResource::collection( $active_plans )->additional(['status' => 200, 'message' => 'Subscriptions fetched successfully']);
+    }
 
     public function user_extra_subscriptions()
     {
