@@ -76,7 +76,14 @@ class MailController extends Controller
     public function open_conversation_with_seller(OpenConversationMailRequest $request)
     {
         $inputs = $request->validated();
-        $machine = Machine::find($inputs['machine_id']);
+
+        if ($inputs['model_type'] == 'machine' ) {
+            $model = Machine::find($inputs['model_id']);
+        }
+        else{
+            $model = SparePart::find($inputs['model_id']);
+        }
+
         $owner = User::find($inputs['owner_id']);
         $acquire = User::find($inputs['acquire_id']);
 
@@ -84,7 +91,7 @@ class MailController extends Controller
             'subject' => $acquire->first_name . ' ' . $acquire->last_name . ' ' . ' opened a conversation ' ,
             'acquire'=> $acquire,
             'owner'=> $owner,
-            'machine'=> $machine,
+            'model'=> $model,
         ];
 
         Mail::to($owner->email)->send(new OpenConversationMail($details));

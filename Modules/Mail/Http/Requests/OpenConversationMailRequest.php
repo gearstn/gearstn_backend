@@ -16,7 +16,8 @@ class OpenConversationMailRequest extends FormRequest
         return [
             'acquire_id' => 'required',
             'owner_id' => 'required',
-            'machine_id' => 'required',
+            'model_id' => 'required',
+            'model_type' => 'required'
         ];
     }
 

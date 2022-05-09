@@ -36,13 +36,14 @@ class ConversationController extends Controller
         $conversation = Conversation::create($inputs);
 
 //        Send Mail To the machine owner
-        // $mail_parameters = [
-        //     'machine_id' => $inputs['machine_id'],
-        //     'acquire_id' => $inputs['acquire_id'],
-        //     'owner_id' => $inputs['owner_id'],
-        // ];
-        // $response = redirect()->route('open-conversation-with-seller' , $mail_parameters );
-        // if($response->status() != 200) { return $response; }
+        $mail_parameters = [
+            'model_id' => $inputs['model_id'],
+            'model_type' => $inputs['model_type'],
+            'acquire_id' => $inputs['acquire_id'],
+            'owner_id' => $inputs['owner_id'],
+        ];
+        $response = redirect()->route('open-conversation-with-seller' , $mail_parameters );
+        if($response->status() != 200) { return $response; }
 
         return response()->json(new ConversationResource($conversation), 200);
     }
