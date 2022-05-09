@@ -21,14 +21,14 @@ class SubscriptionResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
-            'price' => currency_converter('EGP',$this->price == null ? 0 : $this->price ),
+            'price' => currency_converter('EGP', $this->price == null ? 0 : $this->price),
             'currency' => $this->currency,
             'invoice_period' => $this->invoice_period,
             'invoice_interval' => $this->invoice_interval,
-             'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order'))
+            'features' => SubscriptionFeatureResource::collection($this->features->sortBy('sort_order')),
         ];
-        if (Route::current()->uri == 'api/user-subscriptions-by-type' || Route::current()->uri == 'api/user-all-subscriptions') {
-            // $data['features_usages'] = new SubscriptionFeatureRemanings($this);
+        if ( (Route::current()->uri == 'api/user-subscriptions-by-type' || Route::current()->uri == 'api/user-all-subscriptions') && str_contains($this->slug,'machine') ) {
+            $data['features_usages'] = new SubscriptionFeatureRemanings($this);
         }
         return $data;
     }
