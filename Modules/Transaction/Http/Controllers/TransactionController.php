@@ -15,6 +15,7 @@ use Modules\Transaction\Http\Requests\StoreTransactionRequest;
 use Modules\Transaction\Http\Resources\TransactionResource;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 use Modules\Transaction\Jobs\DelayedExtraSubsctiptionJob;
 use Modules\Transaction\Jobs\DelayedSubsctiptionJob;
 
@@ -26,16 +27,44 @@ class TransactionController extends Controller
      */
     public function store(StoreTransactionRequest $request)
     {
-
-        if (isset($request->validator) && $request->validator->fails()) {
-            return response([
-                'error_code' => 'VALIDATION_ERROR',
-                'message'   => 'The given data was invalid.',
-                'errors'    => $request->validator->errors()
-            ], 400);
+        $validation_cast = [
+            "type" => 'required|string' ,
+            "referenceNumber" => 'required|string|unique:fawry_transactions,referenceNumber',
+            "merchantRefNumber" => 'required|string|unique:fawry_transactions,merchantRefNumber' ,
+            "orderAmount" => 'required|string' ,
+            "paymentAmount" => 'required|string' ,
+            "fawryFees" => 'required|string' ,
+            "orderStatus" => 'required|string' ,
+            "paymentMethod" => 'required|string' ,
+            "paymentTime" => 'string' ,
+            "customerName" => 'required|string' ,
+            "customerMobile" => 'required|string' ,
+            "customerMail" => 'required|string' ,
+            "customerProfileId" => 'required|string' ,
+            "taxes" => 'required|string' ,
+            "statusCode" => 'required|string' ,
+            "statusDescription" => 'required|string' ,
+            "basketPayment" => 'required|string',
+            'subscription_id' => 'integer',
+            'number_of_listing' => 'integer',
+            'number_of_months' => 'integer'
+        ];
+        $input_string = $request->transaction_data;
+        $inputs = json_decode($input_string);
+        $validator = Validator::make($inputs, $validation_cast);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
         }
+        // if (isset($request->validator) && $request->validator->fails()) {
+        //     return response([
+        //         'error_code' => 'VALIDATION_ERROR',
+        //         'message'   => 'The given data was invalid.',
+        //         'errors'    => $request->validator->errors()
+        //     ], 400);
+        // }
 
-        $inputs = $request->validated();
+        // $inputs = $request->validated();
+
         $subscription_data = [
             'subscription_id' => $inputs['subscription_id'],
         ];
