@@ -66,7 +66,7 @@ class ConversationController extends Controller
     {
         $inputs = $request->validated();
         $id = Auth::user()->id;
-        $conversation = Conversation::where('acquire_id', $id)->Where('product_id', $inputs['product_id'])->first();
+        $conversation = Conversation::where('acquire_id', $id)->Where('model_id', $inputs['product_id'])->first();
         return response()->json(new ConversationResource($conversation), 200);
     }
     /**
