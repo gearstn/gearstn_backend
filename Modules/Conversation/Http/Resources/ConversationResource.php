@@ -25,7 +25,7 @@ class ConversationResource extends JsonResource
             "acquire" => User::find($this->acquire_id,['id','first_name', 'last_name']),
             "owner" => User::find($this->owner_id,['id','first_name', 'last_name']),
         ];
-        if($this->model_type == 'machine'){
+        if($this->model_type == 'Machine'){
             $data['product'] = Machine::find( $this->product_id ,['id','slug']);
         }
         else{
