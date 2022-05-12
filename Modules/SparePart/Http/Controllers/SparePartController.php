@@ -13,6 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Modules\Mail\Http\Controllers\MailController;
 use Modules\SparePart\Entities\SparePart;
 use Modules\SparePart\Http\Requests\StoreSparePartRequest;
 use Modules\SparePart\Http\Resources\SparePartResource;

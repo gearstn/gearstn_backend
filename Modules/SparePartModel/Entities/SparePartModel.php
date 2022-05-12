@@ -37,9 +37,9 @@ class SparePartModel extends Model
     {
         return $this->belongsTo(Manufacture::class);
     }
-    public function machines()
+    public function spare_parts()
     {
-        return $this->hasMany(Machine::class);
+        return $this->hasMany(SparePart::class);
     }
 
     protected static function newFactory()

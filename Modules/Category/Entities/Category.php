@@ -37,7 +37,11 @@ class Category extends Model
     {
         return $this->hasMany(Machine::class);
     }
-    
+    public function spare_parts()
+    {
+        return $this->hasMany(SparePart::class);
+    }
+
     protected static function newFactory()
     {
         //return \Modules\Category\Database\factories\CategoryFactory::new();

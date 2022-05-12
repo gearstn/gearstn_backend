@@ -98,8 +98,10 @@ class SparePart extends Model implements Viewable
             'sub_category_title_ar' => $this->sub_category['title_ar'],
             'manufacture_title_en' => $this->manufacture['title_en'],
             'manufacture_title_ar' => $this->manufacture['title_ar'],
-            'spare_part_model_title_en' => $this->spare_part_model['title_en'],
-            'spare_part_model_title_ar' => $this->spare_part_model['title_ar']
+            // 'spare_part_model_title_en' => $this->spare_part_model['title_en'],
+            // 'spare_part_model_title_ar' => $this->spare_part_model['title_ar']
+            'spare_part_model_title_en' => $this->spare_part_model,
+            'spare_part_model_title_ar' => $this->spare_part_model
         ];
     }
 
