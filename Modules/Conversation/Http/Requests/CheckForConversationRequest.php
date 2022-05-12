@@ -14,7 +14,7 @@ class CheckForConversationRequest extends FormRequest
     public function rules()
     {
         return [
-            'machine_id' => 'required'
+            'product_id' => 'required'
         ];
     }
 
