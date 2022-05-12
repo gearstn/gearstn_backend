@@ -24,12 +24,14 @@ class ConversationResource extends JsonResource
             "owner_done" => $this->owner_done,
             "acquire" => User::find($this->acquire_id,['id','first_name', 'last_name']),
             "owner" => User::find($this->owner_id,['id','first_name', 'last_name']),
+            'model_type' =>$this->model_type
         ];
         if($this->model_type == 'Machine'){
-            $data['product'] = Machine::find( $this->product_id ,['id','slug']);
+            $data['product'] = Machine::find( $this->model_id ,['id','slug']);
+
         }
         else{
-            $data['product'] = SparePart::find( $this->product_id ,['id','slug']);
+            $data['product'] = SparePart::find( $this->model_id ,['id','slug']);
         }
 
         return $data;
