@@ -31,26 +31,27 @@ class TransactionController extends Controller
             "type" => 'required|string' ,
             "referenceNumber" => 'required|string|unique:fawry_transactions,referenceNumber',
             "merchantRefNumber" => 'required|string|unique:fawry_transactions,merchantRefNumber' ,
-            "orderAmount" => 'required|string' ,
-            "paymentAmount" => 'required|string' ,
-            "fawryFees" => 'required|string' ,
+            "orderAmount" => 'required' ,
+            "paymentAmount" => 'required' ,
+            "fawryFees" => 'required' ,
             "orderStatus" => 'required|string' ,
             "paymentMethod" => 'required|string' ,
-            "paymentTime" => 'string' ,
+            "paymentTime" => 'required' ,
             "customerName" => 'required|string' ,
             "customerMobile" => 'required|string' ,
             "customerMail" => 'required|string' ,
             "customerProfileId" => 'required|string' ,
-            "taxes" => 'required|string' ,
-            "statusCode" => 'required|string' ,
+            "taxes" => 'required' ,
+            "statusCode" => 'required' ,
             "statusDescription" => 'required|string' ,
-            "basketPayment" => 'required|string',
+            "basketPayment" => 'required',
             'subscription_id' => 'integer',
             'number_of_listing' => 'integer',
             'number_of_months' => 'integer'
         ];
-        $input_string = $request->transaction_data;
-        $inputs = json_decode($input_string);
+        $inputs = $request->all();
+        // $input_string = $request->transaction_data;
+        // $inputs = json_decode($input_string,true);
         $validator = Validator::make($inputs, $validation_cast);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
