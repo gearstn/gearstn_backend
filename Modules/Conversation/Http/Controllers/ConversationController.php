@@ -18,6 +18,7 @@ use Modules\Conversation\Http\Requests\CheckForConversationRequest;
 use Modules\Conversation\Http\Resources\ConversationResource;
 use Modules\Mail\Http\Controllers\MailController;
 use Modules\Mail\Http\Requests\OpenConversationMailRequest;
+use Modules\SparePart\Entities\SparePart;
 
 class ConversationController extends Controller
 {
@@ -29,11 +30,15 @@ class ConversationController extends Controller
     public function store(StoreConversationRequest $request)
     {
         $inputs = $request->validated();
+        $inputs['model_id'] = $inputs['product_id'];
+        $inputs['product_type'] == 'machine' ?  $inputs['model_type'] = class_basename(Machine::class) : $inputs['model_type'] = class_basename(SparePart::class);
+        unset($inputs['product_id'],$inputs['product_type']);
         $conversation = Conversation::create($inputs);
 
 //        Send Mail To the machine owner
         $mail_parameters = [
-            'machine_id' => $inputs['machine_id'],
+            'model_id' => $inputs['model_id'],
+            'model_type' => $inputs['model_type'],
             'acquire_id' => $inputs['acquire_id'],
             'owner_id' => $inputs['owner_id'],
         ];
@@ -61,7 +66,7 @@ class ConversationController extends Controller
     {
         $inputs = $request->validated();
         $id = Auth::user()->id;
-        $conversation = Conversation::where('acquire_id', $id)->Where('machine_id', $inputs['machine_id'])->first();
+        $conversation = Conversation::where('acquire_id', $id)->Where('model_id', $inputs['product_id'])->first();
         return response()->json(new ConversationResource($conversation), 200);
     }
     /**

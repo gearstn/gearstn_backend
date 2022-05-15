@@ -2,17 +2,14 @@
 
 namespace Modules\MachineModel\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\MachineModel\Entities\MachineModel;
 use Modules\MachineModel\Http\Requests\FilterMachineModelRequest;
-use Modules\MachineModel\Http\Requests\StoreMachineModelRequest;
 use Modules\MachineModel\Http\Resources\MachineModelResource;
-use Modules\Manufacture\Entities\Manufacture;
-use Modules\SubCategory\Entities\SubCategory;
+
 
 class MachineModelController extends Controller
 {
