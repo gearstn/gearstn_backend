@@ -3,7 +3,6 @@
 use AmrShawky\LaravelCurrency\Facade\Currency;
 use Illuminate\Support\Facades\Route;
 
-
 if (!function_exists("searchable_lang")) {
 
     function searchable_lang($inputs, $search_by)
