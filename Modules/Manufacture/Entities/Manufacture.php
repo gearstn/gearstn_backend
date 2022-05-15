@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Machine\Entities\Machine;
 use Modules\MachineModel\Entities\MachineModel;
+use Modules\SparePart\Entities\SparePart;
 use Modules\SubCategory\Entities\SubCategory;
 
 class Manufacture extends Model
@@ -43,7 +44,11 @@ class Manufacture extends Model
     {
         return $this->hasMany(Machine::class);
     }
-        
+    public function spare_parts()
+    {
+        return $this->hasMany(SparePart::class);
+    }
+
     protected static function newFactory()
     {
         //return \Modules\Manufacture\Database\factories\ManufactureFactory::new();

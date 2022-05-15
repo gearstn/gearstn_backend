@@ -5,6 +5,7 @@ namespace Modules\Conversation\Http\Resources;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Machine\Entities\Machine;
+use Modules\SparePart\Entities\SparePart;
 
 class ConversationResource extends JsonResource
 {
@@ -23,8 +24,16 @@ class ConversationResource extends JsonResource
             "owner_done" => $this->owner_done,
             "acquire" => User::find($this->acquire_id,['id','first_name', 'last_name']),
             "owner" => User::find($this->owner_id,['id','first_name', 'last_name']),
-            "machine" => Machine::find( $this->machine_id ,['id','slug']),
+            'model_type' =>$this->model_type
         ];
+        if($this->model_type == 'Machine'){
+            $data['product'] = Machine::find( $this->model_id ,['id','slug']);
+
+        }
+        else{
+            $data['product'] = SparePart::find( $this->model_id ,['id','slug']);
+        }
+
         return $data;
     }
 }

@@ -14,7 +14,8 @@ class AddToListRequest extends FormRequest
     public function rules()
     {
         return [
-            'machine_id' => 'required'
+            'product_id' => 'required',
+            'product_type' => 'required'
         ];
     }
 

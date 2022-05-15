@@ -16,7 +16,8 @@ class Conversation extends Model
         'owner_done',
         'acquire_id',
         'owner_id',
-        'machine_id'
+        'model_id',
+        'model_type'
     ];
 
     public static $cast = [

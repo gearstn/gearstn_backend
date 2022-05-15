@@ -13,9 +13,11 @@ use Modules\Mail\Emails\ContactBuyerMail;
 use Modules\Mail\Emails\ContactSellerMail;
 use Modules\Mail\Emails\OpenConversationMail;
 use Modules\Mail\Emails\StoreMachineMail;
+use Modules\Mail\Emails\StoreSparePartMail;
 use Modules\Mail\Http\Requests\ContactSellerRequest;
 use Modules\Mail\Http\Requests\OpenConversationMailRequest;
 use Modules\Mail\Http\Requests\StoreMachineMailRequest;
+use Modules\SparePart\Entities\SparePart;
 
 class MailController extends Controller
 {
@@ -74,7 +76,14 @@ class MailController extends Controller
     public function open_conversation_with_seller(OpenConversationMailRequest $request)
     {
         $inputs = $request->validated();
-        $machine = Machine::find($inputs['machine_id']);
+
+        if ($inputs['model_type'] == 'machine' ) {
+            $model = Machine::find($inputs['model_id']);
+        }
+        else{
+            $model = SparePart::find($inputs['model_id']);
+        }
+
         $owner = User::find($inputs['owner_id']);
         $acquire = User::find($inputs['acquire_id']);
 
@@ -82,9 +91,35 @@ class MailController extends Controller
             'subject' => $acquire->first_name . ' ' . $acquire->last_name . ' ' . ' opened a conversation ' ,
             'acquire'=> $acquire,
             'owner'=> $owner,
-            'machine'=> $machine,
+            'model'=> $model,
         ];
 
         Mail::to($owner->email)->send(new OpenConversationMail($details));
     }
+
+
+    public function store_spare_part(Request $request)
+    {
+
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'spare_part_id' => 'required'
+        ] );
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        $spare_part = SparePart::find($inputs['spare_part_id']);
+        $seller = User::find($spare_part->seller_id);
+
+        $details = [
+            'title' => 'You have stored spare part '.$spare_part->slug,
+            'seller'=> $seller,
+        ];
+
+        Mail::to($seller->email)->send(new StoreSparePartMail($details));
+        return response('Email sent Successfully',200);
+    }
+
 }

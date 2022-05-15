@@ -25,9 +25,9 @@ if (!function_exists("number_in_page")) {
     }
 }
 //Machine Normal filters ex:[category,subCategory,.....]
-if (!function_exists("machines_filter")) {
+if (!function_exists("items_filter")) {
 
-    function machines_filter($q,$input,$field)
+    function items_filter($q,$input,$field)
     {
         return $q->when( $input != null, function ($q) use ($input,$field) {
             return $q->filter(function ($item) use ($input,$field) { if($item->$field == $input )return true;});
@@ -35,9 +35,9 @@ if (!function_exists("machines_filter")) {
     }
 }
 //Machine Range filters ex:[price, years, hours]
-if (!function_exists("machines_range_filter")) {
+if (!function_exists("items_range_filter")) {
 
-    function machines_range_filter($q,$min,$max,$field)
+    function items_range_filter($q,$min,$max,$field)
     {
         return $q->when( ( isset($min ) || isset($max) ) && ($min != null || $max != null) , function ($q) use ($min,$max,$field) {
             return $q->filter(function ($item) use ($min,$max,$field) { return $item->$field >= $min && $max >= $item->$field; });

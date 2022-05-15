@@ -12,8 +12,8 @@ use Modules\SubCategory\Entities\SubCategory;
 class MachineModel extends Model
 {
     use HasFactory;
-    protected $table = 'models';
-    
+    protected $table = 'machine_models';
+
     protected $fillable = [
         'title_en',
         'title_ar',
@@ -23,7 +23,7 @@ class MachineModel extends Model
     ];
 
     public static $cast = [
-        'title_en' => 'required|unique:models',
+        'title_en' => 'required|unique:machine_models',
         'title_ar' => 'required',
         'category_id' => 'required',
         'sub_category_id' => 'required',

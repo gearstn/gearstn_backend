@@ -5,6 +5,8 @@ namespace Modules\SubCategory\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
+use Modules\Category\Entities\Category;
 use Modules\SubCategory\Entities\SubCategory;
 use Modules\SubCategory\Http\Resources\SubCategoryResource;
 
@@ -15,9 +17,16 @@ class SubCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sub_categories = SubCategory::all();
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, ['category' => 'required'] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $category_name = $inputs['category'];
+        $category = Category::where('title_en',$category_name)->orWhere('title_ar',$category_name)->first()->id;
+        $sub_categories = SubCategory::where('category_id',$category)->get();
         return SubCategoryResource::collection($sub_categories)->additional(['status' => 200, 'message' => 'SubCategories fetched successfully']);
     }
 

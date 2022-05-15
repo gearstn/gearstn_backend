@@ -15,5 +15,7 @@
     "Blog": true,
     "Subscription": true,
     "Conversation": true,
-    "Transaction": true
+    "Transaction": true,
+    "SparePart": true,
+    "SparePartModel": true
 }
