@@ -112,6 +112,12 @@ class MachineController extends Controller
                         ], 422);
                     }
                 }
+                else {
+                    return response()->json([
+                        'message_en' => "You don't have any subscription",
+                        'message_ar' => 'ليس لديك أي اشتراك',
+                    ], 422);
+                }
             }
         } elseif ($user_extra_subscriptions->count() > 0) {
             foreach ($user_extra_subscriptions as $subscription) {
@@ -135,6 +141,7 @@ class MachineController extends Controller
                 'message_ar' => 'ليس لديك أي اشتراك',
             ], 422);
         }
+        
         //Uploads route to upload images and get array of ids
 
         $data = [
