@@ -10,7 +10,13 @@
     <br>
     <p>from {{ $details['acquire']->first_name }} {{ $details['acquire']->last_name }}</p>
     <br>
+
+<! --
+
     <p>about your product {{ $details['model']->slug }}</p>
+
+ -->
+
     <br>
     <p>Thank you</p>
     <br><br><br>
@@ -21,8 +27,12 @@
     <br>
     <p> {{ $details['acquire']->first_name }} {{ $details['acquire']->last_name }} من </p>
     <br>
+
+<! --
+
     <p>{{ $details['model']->slug }} حول منتجك </p>
-    <br>
+    -->
+ <br>
     <p>شكرا لك</p>
 </body>
 
