@@ -17,19 +17,20 @@ class StoreSparePartRequest extends FormRequest
             'year' => 'required',
             'sn' => 'required',
             'description' => 'required',
-            'country' => 'required',
+            // 'country' => 'required',
             'slug' => 'sometimes',
             'seller_id' => 'required',
             'category_id' => 'required',
             'sub_category_id' => 'required',
             'manufacture_id' => 'required',
             'model_id' => 'required_without:new_spare_part_model',
-            'city_id' => 'required',
+            'city_id' => 'sometimes',
             'new_spare_part_model' => 'required_without:model_id',
             'sku' => 'sometimes',
             'price' => 'sometimes',
             "photos" => ["required","array","min:1","max:5"],
             "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:1000"],
+            'country_id' => 'required'
         ];
     }
 
