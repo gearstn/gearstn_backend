@@ -15,9 +15,18 @@ class CountryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cities = Country::all();
-        return CountryResource::collection($cities)->additional(['status' => 200, 'message' => 'Countries fetched successfully']);
+
+        if($request->header('X-localization') == 'ar'){
+            $countries = Country::all()->sortBy('title_ar');;
+        }
+        elseif ($request->header('X-localization') == 'en') {
+            $countries = Country::all()->sortBy('title_en');;
+        }
+        else{
+            $countries = Country::all()->sortBy('title_ar');;
+        }
+        return CountryResource::collection($countries)->additional(['status' => 200, 'message' => 'Countries fetched successfully']);
     }
 }
