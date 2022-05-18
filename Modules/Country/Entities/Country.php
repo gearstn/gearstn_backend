@@ -10,7 +10,7 @@ class Country extends Model
     use HasFactory;
 
     protected $table = 'countries';
-    protected $fillable = ['title_en','title_ar','code'];
+    protected $fillable = ['title_en','title_ar','code','flag' ,'phone_prefixes'];
 
     public static $cast = [
         'title_en' => 'required',

@@ -18,7 +18,9 @@ class CountryResource extends JsonResource
             "id" => $this->id,
             "title_en" => $this->title_en,
             "title_ar" => $this->title_ar,
-            'code' => $this->code
+            'code' => $this->code,
+            'flag' => $this->flag,
+            'phone_prefixes' => json_decode($this->phone_prefixes,true)
         ];
         return $data;
     }

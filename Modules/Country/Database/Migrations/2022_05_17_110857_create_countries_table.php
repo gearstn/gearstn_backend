@@ -18,6 +18,8 @@ class CreateCountriesTable extends Migration
             $table->string('title_en');
             $table->string('title_ar');
             $table->string('code')->unique();
+            $table->string('flag');
+            $table->json('phone_prefixes')->nullable();
         });
     }
 
