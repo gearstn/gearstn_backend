@@ -34,12 +34,12 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'role_id' => 'required',
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|unique:users,phone',
-            'country_code' => 'required'
+            'country_id' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
-        $inputs['country_id'] = Country::where('code' , $inputs['country_code'])->id;
+        // $inputs['country_id'] = Country::where('code' , $inputs['country_code'])->id;
         $inputs['password'] = bcrypt($inputs['password']);
         $role = Role::find($inputs['role_id']);
         $user = User::create($inputs);
