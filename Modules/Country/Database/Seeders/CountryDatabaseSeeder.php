@@ -266,7 +266,7 @@ class CountryDatabaseSeeder extends Seeder
                     $result = [];
                     $result['title_en'] = $country['name']['common'];
                     $result['title_ar'] = $country['translations']['ara']['common'];
-                    $result['code'] = $country['cca3'];
+                    $result['code'] = $country['cca2'];
                     $result['flag'] = $country['flags']['svg'];
 
                     if ( $country['idd'] !== [] ){
