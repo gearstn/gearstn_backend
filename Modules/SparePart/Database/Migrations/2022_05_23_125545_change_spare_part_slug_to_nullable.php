@@ -16,6 +16,7 @@ class ChangeSparePartSlugToNullable extends Migration
         Schema::table('spare_parts', function (Blueprint $table) {
             $table->string('slug')->nullable()->change();
             $table->string('sku')->nullable()->change();
+            $table->unsignedBigInteger('city_id')->nullable()->change();
         });    }
 
     /**
@@ -28,5 +29,6 @@ class ChangeSparePartSlugToNullable extends Migration
         Schema::table('spare_parts', function (Blueprint $table) {
             $table->string('slug')->change();
             $table->string('sku')->change();
+            $table->unsignedBigInteger('city_id')->change();
         });    }
 }
