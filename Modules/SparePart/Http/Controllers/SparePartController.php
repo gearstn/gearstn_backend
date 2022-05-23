@@ -193,7 +193,7 @@ class SparePartController extends Controller
         $q = items_filter($q, isset($inputs['sub_category_id']) ? $inputs['sub_category_id'] : null, 'sub_category_id');
         $q = items_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
         $q = items_filter($q, isset($inputs['model_id']) ? $inputs['model_id'] : null, 'model_id');
-        $q = items_filter($q, isset($inputs['country']) ? $inputs['country'] : null, 'country');
+        $q = items_filter($q, isset($inputs['country_id']) ? $inputs['country_id'] : null, 'country_id');
         $q = items_filter($q, isset($inputs['city_id']) ? $inputs['city_id'] : null, 'city_id');
         $q = items_range_filter($q, isset($inputs['min_price']) ? $inputs['min_price'] : null, isset($inputs['max_price']) ? $inputs['max_price'] : null, 'price');
         $q = items_range_filter($q, isset($inputs['min_year']) ? $inputs['min_year'] : null, isset($inputs['max_year']) ? $inputs['max_year'] : null, 'year');

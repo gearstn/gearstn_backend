@@ -12,6 +12,7 @@ use Modules\SubCategory\Entities\SubCategory;
 use Modules\Upload\Entities\Upload;
 use AmrShawky\LaravelCurrency\Facade\Currency;
 use Illuminate\Support\Facades\Config;
+use Modules\Country\Entities\Country;
 use Modules\Machine\Entities\Machine;
 
 class MachineResource extends JsonResource
@@ -34,7 +35,7 @@ class MachineResource extends JsonResource
             'description' => $this->description,
             'sell_type' => $this->sell_type,
             'rent_hours' => $this->rent_hours,
-            'country' => $this->country,
+            'country_id' => Country::find($this->country_id,$selected_columns),
             'slug' => $this->slug,
             'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
             'skq' => $this->skq,

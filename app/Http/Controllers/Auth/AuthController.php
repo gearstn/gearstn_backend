@@ -18,6 +18,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Modules\Country\Entities\Country;
 
 class AuthController extends Controller
 {
@@ -32,12 +34,24 @@ class AuthController extends Controller
             'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'role_id' => 'required',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|unique:users,phone',
+            'country_id' => 'required'
         ]);
-
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
+
+        $country = Country::find($inputs['country_id']);
+        $validator = Validator::make($inputs, [
+            'phone' => [
+                'required',
+                Rule::phone()->detect()->country($country->code),
+            ],
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+
+        // $inputs['country_id'] = Country::where('code' , $inputs['country_code'])->id;
         $inputs['password'] = bcrypt($inputs['password']);
         $role = Role::find($inputs['role_id']);
         $user = User::create($inputs);

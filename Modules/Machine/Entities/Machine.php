@@ -48,7 +48,8 @@ class Machine extends Model implements Viewable
         'serial_photo_id',
         'hourmeter_photo_id',
         'phone_clicks',
-        'videos'
+        'videos',
+        'country_id'
     ];
     public static $cast = [
         'year' => 'required',
