@@ -30,10 +30,10 @@ class AppServiceProvider extends ServiceProvider
             return app()->env == "local" || app()->env == "dev" || app()->env == "development";
         });
         if($this->app->environment('production')) {
-            // \Illuminate\Support\Facades\URL::forceScheme('https');
+            \Illuminate\Support\Facades\URL::forceScheme('https');
         }
-        // resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
-        // $this->app['request']->server->set('HTTPS', true);
+        resolve(\Illuminate\Routing\UrlGenerator::class)->forceScheme('https');
+        $this->app['request']->server->set('HTTPS', true);
 
     }
 }
