@@ -15,7 +15,7 @@ class StoreSparePartRequest extends FormRequest
     {
         return [
             'year' => 'required',
-            'sn' => 'required',
+            'sn' => 'sometimes',
             'description' => 'required',
             // 'country' => 'required',
             'slug' => 'sometimes',
