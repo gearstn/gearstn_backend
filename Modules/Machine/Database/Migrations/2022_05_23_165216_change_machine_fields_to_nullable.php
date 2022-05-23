@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeSparePartSlugToNullable extends Migration
+class ChangeMachineFieldsToNullable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class ChangeSparePartSlugToNullable extends Migration
      */
     public function up()
     {
-        Schema::table('spare_parts', function (Blueprint $table) {
+        Schema::table('machines', function (Blueprint $table) {
             $table->string('slug')->nullable()->change();
             $table->string('sku')->nullable()->change();
             $table->unsignedBigInteger('city_id')->nullable()->change();
-        });    
+        });  
     }
 
     /**
@@ -27,10 +27,10 @@ class ChangeSparePartSlugToNullable extends Migration
      */
     public function down()
     {
-        Schema::table('spare_parts', function (Blueprint $table) {
+        Schema::table('machines', function (Blueprint $table) {
             $table->string('slug')->change();
             $table->string('sku')->change();
             $table->unsignedBigInteger('city_id')->change();
-        });    
+        });  
     }
 }
