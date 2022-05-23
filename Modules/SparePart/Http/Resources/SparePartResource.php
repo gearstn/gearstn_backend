@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Category\Entities\Category;
 use Modules\City\Entities\City;
+use Modules\Country\Entities\Country;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SparePart\Entities\SparePart;
 use Modules\SparePartModel\Entities\SparePartModel;
