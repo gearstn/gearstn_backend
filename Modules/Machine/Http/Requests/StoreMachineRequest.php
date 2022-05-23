@@ -17,7 +17,6 @@ class StoreMachineRequest extends FormRequest
     {
         return [
             'year' => 'required',
-            'country' => 'required',
             'sn' => 'required',
             'description' => 'required',
             'condition' => 'required',
@@ -27,18 +26,19 @@ class StoreMachineRequest extends FormRequest
             'sub_category_id' => 'required',
             'manufacture_id' => 'required',
             'model_id' => 'required_without:new_model',
-            'city_id' => 'required',
+            'city_id' => 'sometimes',
             'new_model' => 'required_without:model_id',
 //            'manufacturing_place' => 'required|string',
             'slug' => 'sometimes',
             'sku' => 'sometimes',
             'report_file' => 'required_if:manufacturing_place,forign',
             "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:1000"],
+            "photos.*" => ["required","mimes:jpeg,jpg,png,gif,webp","max:1000"],
             "videos" => ["array","min:0","max:3"],
-            "serial_photo" => ["mimes:jpeg,jpg,png,gif","max:1000"],
-            "hour_meter_photo" => ["mimes:jpeg,jpg,png,gif","max:1000"],
-            "videos" => ["array","min:1","max:5"]
+            "serial_photo" => ["mimes:jpeg,jpg,png,gif,webp","max:1000"],
+            "hour_meter_photo" => ["mimes:jpeg,jpg,png,gif,webp","max:1000"],
+            "videos" => ["array","min:1","max:5"],
+            "country_id" => 'required'
         ];
     }
 

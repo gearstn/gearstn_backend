@@ -40,7 +40,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'panned',
         'phone',
         'national_id',
-        'national_id_image'
+        'national_id_image',
+        'county_id',
+        'city_id'
     ];
 
     /**

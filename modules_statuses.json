@@ -17,5 +17,6 @@
     "Conversation": true,
     "Transaction": true,
     "SparePart": true,
-    "SparePartModel": true
+    "SparePartModel": true,
+    "Country": true
 }

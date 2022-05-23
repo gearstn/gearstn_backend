@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Category\Entities\Category;
 use Modules\City\Entities\City;
+use Modules\Country\Entities\Country;
 use Modules\Manufacture\Entities\Manufacture;
 use Modules\SparePart\Entities\SparePart;
 use Modules\SparePartModel\Entities\SparePartModel;
@@ -28,7 +29,7 @@ class SparePartResource extends JsonResource
             'year' => $this->year,
             'sn' => $this->sn,
             'description' => $this->description,
-            'country' => $this->country,
+            'country_id' => Country::find($this->country_id,$selected_columns),
             'slug' => $this->slug,
             'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
             'skq' => $this->skq,
