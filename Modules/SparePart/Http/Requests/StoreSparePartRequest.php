@@ -29,7 +29,7 @@ class StoreSparePartRequest extends FormRequest
             'sku' => 'sometimes',
             'price' => 'sometimes',
             "photos" => ["required","array","min:1","max:5"],
-            "photos.*" => ["required","mimes:jpeg,jpg,png,gif","max:1000"],
+            "photos.*" => ["required","mimes:jpeg,jpg,png,gif,webp","max:1000"],
             'country_id' => 'required'
         ];
     }
