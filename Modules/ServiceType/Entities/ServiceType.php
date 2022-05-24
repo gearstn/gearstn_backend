@@ -9,6 +9,8 @@ class ServiceType extends Model
 {
     use HasFactory;
 
+    protected $table = 'service_types';
+
     protected $fillable = ['title_en', 'title_ar'];
 
     public function services()
