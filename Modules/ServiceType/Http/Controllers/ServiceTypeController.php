@@ -5,75 +5,52 @@ namespace Modules\ServiceType\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
+use Modules\ServiceType\Entities\ServiceType;
+use Modules\ServiceType\Http\Resources\ServiceTypeResource;
 class ServiceTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return Renderable
+     *
+     * @return Response
      */
     public function index()
     {
-        return view('servicetype::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('servicetype::create');
+        $service_types = ServiceType::paginate(number_in_page());
+        return ServiceTypeResource::collection($service_types)->additional(['status' => 200, 'message' => 'Models fetched successfully']);
     }
 
     /**
      * Store a newly created resource in storage.
+     *
      * @param Request $request
-     * @return Renderable
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        //
+        $inputs = $request->all();
+        $validator = Validator::make($inputs, [
+            'title_en' => 'required|unique:service_types',
+            'title_ar' => 'required'
+        ] );
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
+        }
+        $service_type = ServiceType::create($inputs);
+        return response()->json(new ServiceTypeResource($service_type), 200);
     }
 
     /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
      */
     public function show($id)
     {
-        return view('servicetype::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('servicetype::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        $service_type = ServiceType::findOrFail($id);
+        return response()->json(new ServiceTypeResource($service_type),200);
     }
 }
