@@ -94,4 +94,11 @@ class ServiceController extends Controller
         return ServiceResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
     }
 
+    public function user_services(): AnonymousResourceCollection
+    {
+        $services = Service::where('userr_id', Auth::user()->id)->get();
+        return ServiceResource::collection($services)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
+    }
+
+
 }

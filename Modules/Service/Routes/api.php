@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Service\Http\Controllers\ServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/service', function (Request $request) {
-    return $request->user();
+//Routes for frontend
+Route::group(['middleware' => 'cors'], function () {
+
+    //Auth routes
+    Route::middleware('auth:sanctum')->group( function () {
+        //Store Update Destroy routes for Machines and Models
+        Route::resource('services', 'ServiceController' ,['as' => 'frontend'])->only('store','update','destroy');
+        Route::get('/user-services', [ServiceController::class, 'user_services']);
+    });
+
+    Route::resource('services', 'ServiceController' ,['as' => 'frontend'])->except('create', 'edit');
+    //Search for all Entities
+    Route::get('/services-search', [ServiceController::class, 'search_filter']);
 });
