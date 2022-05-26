@@ -204,6 +204,10 @@ class SparePartController extends Controller
         $results = [];
         $results['max_price'] = SparePart::max('price') || 0;
         $results['min_price'] = SparePart::min('price') || 0;
+        $results['max_year'] =  0;
+        $results['min_year'] =  0;
+        $results['max_hours'] = 0;
+        $results['min_hours'] = 0;
         return response()->json($results, 200);
     }
 
