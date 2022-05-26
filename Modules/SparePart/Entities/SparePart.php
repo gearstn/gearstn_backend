@@ -22,6 +22,7 @@ class SparePart extends Model implements Viewable
     protected $table = 'spare_parts';
 
     protected $fillable = [
+        'description',
         'slug',
         'images',
         'approved',
@@ -88,8 +89,6 @@ class SparePart extends Model implements Viewable
             'category_title_ar' => $this->category['title_ar'],
             'sub_category_title_en' => $this->sub_category['title_en'],
             'sub_category_title_ar' => $this->sub_category['title_ar'],
-            'manufacture_title_en' => $this->manufacture['title_en'],
-            'manufacture_title_ar' => $this->manufacture['title_ar'],
         ];
     }
 
