@@ -22,6 +22,7 @@ use Modules\SparePartModel\Entities\SparePartModel;
 use Modules\SparePartModel\Http\Controllers\SparePartModelController;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\Upload\Http\Requests\StoreUploadRequest;
+use Modules\SubCategory\Entities\SubCategory;
 
 class SparePartController extends Controller
 {
@@ -96,26 +97,10 @@ class SparePartController extends Controller
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
-        //If the client wants to create a non existing model
-        if ($inputs['model_id'] == 0 && isset($inputs['new_spare_part_model'])) {
-            $data = [
-                'title_en' => $inputs['new_spare_part_model'],
-                'title_ar' => $inputs['new_spare_part_model'],
-                'category_id' => $inputs['category_id'],
-                'sub_category_id' => $inputs['sub_category_id'],
-                'manufacture_id' => $inputs['manufacture_id'],
-            ];
-            $post = new Post_Caller(SparePartModelController::class, 'store', Request::class, $data);
-            $response = $post->call();
-            if ($response->status() != 200) {return $response;}
-            $inputs['model_id'] = json_decode($response->getContent())->id;
-        }
-
-
         $spare_part = SparePart::create($inputs);
         $spare_part->sku = random_int(10000000, 99999999);
-        $model_title = SparePartModel::findorFail($spare_part->model_id)->title_en;
-        $spare_part->slug = $spare_part->year . '-' . $spare_part->manufacture->title_en . '-' . $model_title . '-' . $spare_part->sku;
+        $sub_category_title = SubCategory::findorFail($spare_part->sub_category_id)->title_en;
+        $spare_part->slug = $sub_category_title . '-' . $spare_part->sku;
         $spare_part->save();
 
         //Dispatch hide spare-part job
