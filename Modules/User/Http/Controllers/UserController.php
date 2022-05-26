@@ -198,7 +198,7 @@ class UserController extends Controller
         $user = User::findOrFail($inputs['seller_id']);
 
         if($inputs['product_type'] == 'machine'){
-            $machine = Machine::where('id', '=', $inputs['machine_id'])->firstOrFail();
+            $machine = Machine::where('id', '=', $inputs['product_id'])->firstOrFail();
             $machine->phone_clicks = $machine->phone_clicks + 1;
             $machine->save();
         }
