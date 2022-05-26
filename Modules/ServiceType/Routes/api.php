@@ -21,5 +21,5 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         //Store Update Destroy routes for Machines and Models
         Route::resource('service-types', 'ServiceTypeController' ,['as' => 'frontend'])->only('store','update','destroy');
     });
-    Route::resource('machine-models', 'ServiceTypeController' ,['as' => 'frontend'])->only('index','show');
+    Route::resource('service-models', 'ServiceTypeController' ,['as' => 'frontend'])->only('index','show');
 });

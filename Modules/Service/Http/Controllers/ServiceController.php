@@ -9,6 +9,7 @@ use Modules\Service\Entities\Service;
 use Modules\Service\Http\Requests\StoreServiceRequest;
 use Modules\Service\Http\Resources\ServiceResource;
 use App\Classes\CollectionPaginate;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -94,9 +95,9 @@ class ServiceController extends Controller
         return ServiceResource::collection($paginatedResult)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
     }
 
-    public function user_services(): AnonymousResourceCollection
+    public function user_services()
     {
-        $services = Service::where('userr_id', Auth::user()->id)->get();
+        $services = Service::where('user_id', Auth::user()->id)->get();
         return ServiceResource::collection($services)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
     }
 

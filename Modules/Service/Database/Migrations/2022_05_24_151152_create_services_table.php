@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration
             $table->string('company_name');
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();
-            $table->boolean('approve');
+            $table->boolean('approved')->default(0);
             $table->unsignedBigInteger('service_type_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('country_id')->nullable();
