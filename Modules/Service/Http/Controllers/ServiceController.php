@@ -10,6 +10,7 @@ use Modules\Service\Http\Requests\StoreServiceRequest;
 use Modules\Service\Http\Resources\ServiceResource;
 use App\Classes\CollectionPaginate;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class ServiceController extends Controller
 {
@@ -32,8 +33,15 @@ class ServiceController extends Controller
     public function store(StoreServiceRequest $request)
     {
         $inputs = $request->validated();
-        $service = Service::create($inputs);
-        return response()->json(new ServiceResource($service), 200);
+        $user = User::find($inputs['user_id']);
+        if($user->hasRole('services-provider')){
+            $service = Service::create($inputs);
+            return response()->json(new ServiceResource($service), 200);
+        }
+        return response()->json([
+            'message_en' => "You don't have Service Provider Role",
+            'message_ar' => 'ليس لديك دور مقدم الخدمة',
+        ], 422);
     }
 
     /**
@@ -97,8 +105,15 @@ class ServiceController extends Controller
 
     public function user_services()
     {
-        $services = Service::where('user_id', Auth::user()->id)->get();
-        return ServiceResource::collection($services)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
+        $user = User::find(Auth::user()->id);
+        if($user->hasRole('services-provider')){
+            $services = Service::where('user_id', Auth::user()->id)->get();
+            return ServiceResource::collection($services)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
+        }
+        return response()->json([
+            'message_en' => "You don't have Service Provider Role",
+            'message_ar' => 'ليس لديك دور مقدم الخدمة',
+        ], 422);
     }
 
 
