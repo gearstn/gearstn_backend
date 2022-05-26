@@ -16,6 +16,7 @@ class StoreSparePartRequest extends FormRequest
         return [
             'description' => 'required',
             'slug' => 'sometimes',
+            'condition' => 'required',
             'seller_id' => 'required',
             'category_id' => 'required',
             'sub_category_id' => 'required',

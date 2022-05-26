@@ -100,6 +100,7 @@ class SparePartController extends Controller
         $spare_part = SparePart::create($inputs);
         $spare_part->sku = random_int(10000000, 99999999);
         $sub_category_title = SubCategory::findorFail($spare_part->sub_category_id)->title_en;
+        $sub_category_title = preg_replace("/[\s_]/", "-", $sub_category_title);
         $spare_part->slug = $sub_category_title . '-' . $spare_part->sku;
         $spare_part->save();
 
