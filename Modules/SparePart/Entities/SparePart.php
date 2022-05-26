@@ -22,10 +22,7 @@ class SparePart extends Model implements Viewable
     protected $table = 'spare_parts';
 
     protected $fillable = [
-        'year',
-        'sn',
         'description',
-        'country',
         'slug',
         'images',
         'approved',
@@ -38,8 +35,9 @@ class SparePart extends Model implements Viewable
         'category_id',
         'sub_category_id',
         'manufacture_id',
-        'model_id',
-        'country_id'
+        'country_id',
+        'is_original',
+        'condition'
     ];
     public static $cast = [
         // 'year' => 'required',
@@ -71,11 +69,6 @@ class SparePart extends Model implements Viewable
         return $this->belongsTo(Manufacture::class);
     }
 
-    public function spare_part_model()
-    {
-        return $this->belongsTo(SparePartModel::class);
-    }
-
     //User how want to sell a machine
     public function seller()
     {
@@ -97,12 +90,6 @@ class SparePart extends Model implements Viewable
             'category_title_ar' => $this->category['title_ar'],
             'sub_category_title_en' => $this->sub_category['title_en'],
             'sub_category_title_ar' => $this->sub_category['title_ar'],
-            'manufacture_title_en' => $this->manufacture['title_en'],
-            'manufacture_title_ar' => $this->manufacture['title_ar'],
-            // 'spare_part_model_title_en' => $this->spare_part_model['title_en'],
-            // 'spare_part_model_title_ar' => $this->spare_part_model['title_ar']
-            'spare_part_model_title_en' => $this->spare_part_model,
-            'spare_part_model_title_ar' => $this->spare_part_model
         ];
     }
 
