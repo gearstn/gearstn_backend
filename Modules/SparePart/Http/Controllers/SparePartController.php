@@ -23,6 +23,7 @@ use Modules\SparePartModel\Http\Controllers\SparePartModelController;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\Upload\Http\Requests\StoreUploadRequest;
 use Modules\SubCategory\Entities\SubCategory;
+use Modules\Manufacture\Entities\Manufacture;
 
 class SparePartController extends Controller
 {
@@ -96,6 +97,11 @@ class SparePartController extends Controller
         if ($response->status() != 200) {return $response;}
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
+
+
+        $manufacture = Manufacture::find($inputs['manufacture_id']);
+        if($manufacture == null)
+            unset($inputs['manufacture_id']);
 
         $spare_part = SparePart::create($inputs);
         $spare_part->sku = random_int(10000000, 99999999);
