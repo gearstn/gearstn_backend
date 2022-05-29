@@ -4,6 +4,7 @@ namespace Modules\ServiceType\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\ServiceType\Entities\ServiceType;
 
 class ServiceTypeDatabaseSeeder extends Seeder
 {
@@ -14,8 +15,7 @@ class ServiceTypeDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        ServiceType::create(['title_en' => 'transport' ,'title_ar'=>'شحن']);
+        ServiceType::create(['title_en' => 'maintenance' ,'title_ar'=>'صيانة']);
     }
 }
