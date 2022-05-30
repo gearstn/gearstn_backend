@@ -24,7 +24,7 @@ class ServiceResource extends JsonResource
             "address" => $this->address,
             "description" => $this->description,
             'approved' => $this->approved,
-            'user_id' => User::find($this->user_id,['id','first_name', 'last_name', 'company_name', 'country', 'email' , 'phone']),
+            'user' => User::find($this->user_id,['id','first_name', 'last_name', 'company_name', 'country', 'email' , 'phone']),
             'service_type_id' => ServiceType::find($this->service_type_id,['id','title_en', 'title_ar']),
             'city_id' => City::find($this->city_id,$selected_columns),
             'country_id' => Country::find($this->country_id,$selected_columns),
