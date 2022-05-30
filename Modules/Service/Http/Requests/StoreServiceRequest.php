@@ -18,7 +18,9 @@ class StoreServiceRequest extends FormRequest
             'address' => 'required',
             'description' => 'required',
             'user_id' => 'required',
-            'service_type_id' => 'required'
+            'service_type_id' => 'required',
+            'city_id' => 'sometimes',
+            'country_id' => 'sometimes'
         ];
     }
 
