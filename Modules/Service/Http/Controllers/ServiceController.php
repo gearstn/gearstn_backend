@@ -2,15 +2,18 @@
 
 namespace Modules\Service\Http\Controllers;
 
+use App\Classes\CollectionPaginate;
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Modules\Service\Entities\Service;
 use Modules\Service\Http\Requests\StoreServiceRequest;
 use Modules\Service\Http\Resources\ServiceResource;
-use App\Classes\CollectionPaginate;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use Modules\Upload\Http\Controllers\UploadController;
+use Modules\Upload\Http\Requests\StoreUploadRequest;
+use App\Classes\POST_Caller;
 
 class ServiceController extends Controller
 {
@@ -34,7 +37,20 @@ class ServiceController extends Controller
     {
         $inputs = $request->validated();
         $user = User::find($inputs['user_id']);
-        if($user->hasRole('services-provider')){
+        if ($user->hasRole('services-provider')) {
+
+            //Uploads route to upload images and get array of ids
+            $data = [
+                'photos' => $inputs['photos'],
+                'seller_id' => $user->id,
+            ];
+            $post = new Post_Caller(UploadController::class, 'store', StoreUploadRequest::class, $data);
+            $response = $post->call();
+            if ($response->status() != 200) {return $response;}
+            $inputs['images'] = $response->getContent();
+            unset($inputs['photos']);
+
+
             $service = Service::create($inputs);
             return response()->json(new ServiceResource($service), 200);
         }
@@ -66,7 +82,6 @@ class ServiceController extends Controller
         $service->delete();
         return response()->json(new ServiceResource($service), 200);
     }
-
 
     public function search_filter(Request $request): AnonymousResourceCollection
     {
@@ -106,7 +121,7 @@ class ServiceController extends Controller
     public function user_services()
     {
         $user = User::find(Auth::user()->id);
-        if($user->hasRole('services-provider')){
+        if ($user->hasRole('services-provider')) {
             $services = Service::where('user_id', Auth::user()->id)->get();
             return ServiceResource::collection($services)->additional(['status' => 200, 'message' => 'Services fetched successfully']);
         }
@@ -115,6 +130,5 @@ class ServiceController extends Controller
             'message_ar' => 'ليس لديك دور مقدم الخدمة',
         ], 422);
     }
-
 
 }

@@ -20,7 +20,9 @@ class StoreServiceRequest extends FormRequest
             'user_id' => 'required',
             'service_type_id' => 'required',
             'city_id' => 'sometimes',
-            'country_id' => 'sometimes'
+            'country_id' => 'sometimes',
+            "photos" => ["required","array","min:1","max:1"],
+            "photos.*" => ["required","mimes:jpeg,jpg,png,gif,webp","max:1000"],
         ];
     }
 

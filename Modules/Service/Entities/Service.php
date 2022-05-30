@@ -21,7 +21,8 @@ class Service extends Model
         'user_id',
         'service_type_id',
         'country_id',
-        'city_id'
+        'city_id',
+        'images'
     ];
 
     //User how want to sell a machine
