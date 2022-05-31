@@ -190,17 +190,18 @@ class UserController extends Controller
     public function get_phone(Request $request): JsonResponse
     {
         $inputs = $request->all();
-        $validator = Validator::make($inputs,  ['seller_id' => 'required','machine_id' => 'required']);
+        $validator = Validator::make($inputs,  ['seller_id' => 'required','product_id' => 'required','product_type' => 'required']);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
         }
 
         $user = User::findOrFail($inputs['seller_id']);
 
-        $machine = Machine::where('id', '=', $inputs['machine_id'])->firstOrFail();
-        $machine->phone_clicks = $machine->phone_clicks + 1;
-        $machine->save();
-
+        if($inputs['product_type'] == 'machine'){
+            $machine = Machine::where('id', '=', $inputs['product_id'])->firstOrFail();
+            $machine->phone_clicks = $machine->phone_clicks + 1;
+            $machine->save();
+        }
         $phone = $user->phone;
         return response()->json($phone, 200);
     }

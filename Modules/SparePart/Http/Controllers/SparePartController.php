@@ -22,6 +22,8 @@ use Modules\SparePartModel\Entities\SparePartModel;
 use Modules\SparePartModel\Http\Controllers\SparePartModelController;
 use Modules\Upload\Http\Controllers\UploadController;
 use Modules\Upload\Http\Requests\StoreUploadRequest;
+use Modules\SubCategory\Entities\SubCategory;
+use Modules\Manufacture\Entities\Manufacture;
 
 class SparePartController extends Controller
 {
@@ -96,26 +98,16 @@ class SparePartController extends Controller
         $inputs['images'] = $response->getContent();
         unset($inputs['photos']);
 
-        //If the client wants to create a non existing model
-        if ($inputs['model_id'] == 0 && isset($inputs['new_spare_part_model'])) {
-            $data = [
-                'title_en' => $inputs['new_spare_part_model'],
-                'title_ar' => $inputs['new_spare_part_model'],
-                'category_id' => $inputs['category_id'],
-                'sub_category_id' => $inputs['sub_category_id'],
-                'manufacture_id' => $inputs['manufacture_id'],
-            ];
-            $post = new Post_Caller(SparePartModelController::class, 'store', Request::class, $data);
-            $response = $post->call();
-            if ($response->status() != 200) {return $response;}
-            $inputs['model_id'] = json_decode($response->getContent())->id;
-        }
 
+        $manufacture = Manufacture::find($inputs['manufacture_id']);
+        if($manufacture == null)
+            unset($inputs['manufacture_id']);
 
         $spare_part = SparePart::create($inputs);
         $spare_part->sku = random_int(10000000, 99999999);
-        $model_title = SparePartModel::findorFail($spare_part->model_id)->title_en;
-        $spare_part->slug = $spare_part->year . '-' . $spare_part->manufacture->title_en . '-' . $model_title . '-' . $spare_part->sku;
+        $sub_category_title = SubCategory::findorFail($spare_part->sub_category_id)->title_en;
+        $sub_category_title = preg_replace("/[\s_]/", "-", $sub_category_title);
+        $spare_part->slug = $sub_category_title . '-' . $spare_part->sku;
         $spare_part->save();
 
         //Dispatch hide spare-part job
@@ -191,12 +183,11 @@ class SparePartController extends Controller
         $q = items_filter($q, 1, 'approved'); // To get approved
         $q = items_filter($q, isset($inputs['category_id']) ? $inputs['category_id'] : null, 'category_id');
         $q = items_filter($q, isset($inputs['sub_category_id']) ? $inputs['sub_category_id'] : null, 'sub_category_id');
-        $q = items_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
-        $q = items_filter($q, isset($inputs['model_id']) ? $inputs['model_id'] : null, 'model_id');
+        // $q = items_filter($q, isset($inputs['manufacture_id']) ? $inputs['manufacture_id'] : null, 'manufacture_id');
         $q = items_filter($q, isset($inputs['country_id']) ? $inputs['country_id'] : null, 'country_id');
         $q = items_filter($q, isset($inputs['city_id']) ? $inputs['city_id'] : null, 'city_id');
         $q = items_range_filter($q, isset($inputs['min_price']) ? $inputs['min_price'] : null, isset($inputs['max_price']) ? $inputs['max_price'] : null, 'price');
-        $q = items_range_filter($q, isset($inputs['min_year']) ? $inputs['min_year'] : null, isset($inputs['max_year']) ? $inputs['max_year'] : null, 'year');
+        // $q = items_range_filter($q, isset($inputs['min_year']) ? $inputs['min_year'] : null, isset($inputs['max_year']) ? $inputs['max_year'] : null, 'year');
 
         //Sort the collection of machines if requested
         $q = $q->when(isset($inputs['sort_by']) && $inputs['sort_by'] != null, function ($q) use ($inputs) {
@@ -220,8 +211,8 @@ class SparePartController extends Controller
         $results = [];
         $results['max_price'] = SparePart::max('price') || 0;
         $results['min_price'] = SparePart::min('price') || 0;
-        $results['max_year'] = SparePart::max('year') || 0;
-        $results['min_year'] = SparePart::min('year') || 0;
+        $results['max_year'] =  0;
+        $results['min_year'] =  0;
         $results['max_hours'] = 0;
         $results['min_hours'] = 0;
         return response()->json($results, 200);

@@ -60,7 +60,7 @@ class SavedListController extends Controller
         }
         else{
             $product = SparePart::find($inputs['product_id']);
-            $user->unwish($product,$user->id);
+            $user->unwish($product,'spare-parts');
             return response()->json(SparePartResource::collection($user->wishlist($user->id)),200);
         }
     }
