@@ -3,7 +3,8 @@
 namespace Modules\Service\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\DatabaseRule;
 class StoreServiceRequest extends FormRequest
 {
     /**
@@ -14,8 +15,14 @@ class StoreServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'company_name' => 'required',
-            'address' => 'required',
+            'company_name' =>  [
+                'required',
+                Rule::unique('services')->where(function ($query) {
+                    return $query->where('company_name', $this->company_name)
+                    ->where('service_type_id', $this->service_type_id);
+                })
+            ],
+             'address' => 'required',
             'description' => 'required',
             'user_id' => 'required',
             'service_type_id' => 'required',
