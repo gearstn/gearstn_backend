@@ -18,5 +18,7 @@
     "Transaction": true,
     "SparePart": true,
     "SparePartModel": true,
-    "Country": true
+    "Country": true,
+    "Service": true,
+    "ServiceType": true
 }

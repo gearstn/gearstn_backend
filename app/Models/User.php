@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use LamaLama\Wishlist\HasWishlists;
 use Modules\Machine\Entities\Machine;
+use Modules\Service\Entities\Service;
 use Modules\Subscription\Entities\Subscription;
 use Spatie\Permission\Traits\HasRoles;
 use Rinvex\Subscriptions\Traits\HasSubscriptions;
@@ -80,6 +81,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Machine::class);
     }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
 
     public function subscription()
     {
