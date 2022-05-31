@@ -83,7 +83,7 @@ class ServiceController extends Controller
         return response()->json(new ServiceResource($service), 200);
     }
 
-    public function search_filter(Request $request): AnonymousResourceCollection
+    public function search_filter(Request $request)
     {
         $inputs = $request->all();
         //Full Search in all fields
