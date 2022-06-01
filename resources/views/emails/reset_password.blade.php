@@ -34,7 +34,7 @@
                     style="width:602px;border-collapse:collapse;border:1px solid #ccc;border-spacing:0;text-align:left;">
                     <tr>
                         <td align="center" style="padding:10px 0;  height: 50px;">
-                            <img src="https://gearstn.com/images/logo.png" alt="" width="20%"
+                            <img src="https://gearstn.com/images/logo.svg" alt="" width="20%"
                                 style="height:auto;display:block;" />
                         </td>
                     </tr>
@@ -49,7 +49,7 @@
                                         password reset request for your account.
                                     </p>
                                     <a href="{{$details['link']}}"
-                                        style="margin: 20px 0; display: block; width: fit-content; text-align: center; background-color: #172c54; 
+                                        style="margin: 20px 0; display: block; width: fit-content; text-align: center; background-color: #172c54;
                                         color: #fafafa; padding: 10px 25px; border-radius: 5px; text-decoration: none;">
                                         Reset Password
                                     </a>

@@ -18,7 +18,7 @@
                             style="vertical-align:top;text-align:left;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;font-size:14px;font-weight:400;color:#091e42;line-height:20px">
                             <div style="padding-top:30px;padding-bottom:20px;vertical-align:top;text-align:center">
                                 <a href="https://www.gearstn.com" target="_blank">
-                                    <img src="https://www.gearstn.com/images/logo.png" height="40" alt="GearsTN">
+                                    <img src="https://gearstn.com/images/logo.svg" height="40" alt="GearsTN">
                                 </a>
                             </div>
                             <hr style="margin-top:24px;margin-bottom:24px;border:0;border-bottom:1px solid #c1c7d0">
