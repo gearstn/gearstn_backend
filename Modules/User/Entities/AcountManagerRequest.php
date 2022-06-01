@@ -12,18 +12,16 @@ class AcountManagerRequest extends Model
     protected $table = 'account_manager_requests';
 
     protected $fillable = [
-        'company_name',
-        'email',
-        'first_name',
-        'last_name',
+        'request_type',
+        'message',
+        'read',
+        'done',
         'user_id',
-        'assigned_to_id'
     ];
 
     public static $cast = [
-        'email' => 'required',
-        'first_name' => 'required',
-        'last_name' => 'required',
+        'request_type' => 'required',
+        'message' => 'required',
         'user_id' => 'required',
     ];
 

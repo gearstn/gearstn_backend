@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Modules\Machine\Entities\Machine;
 use Modules\User\Entities\AcountManagerRequest;
+use Modules\User\Http\Requests\StoreAccountManagerRequest;
 use Modules\User\Http\Requests\User\ChangePasswordRequest;
 
 class UserController extends Controller
@@ -166,24 +167,15 @@ class UserController extends Controller
     }
 
 
-    public function request_account_manager(): JsonResponse
+    public function request_account_manager(StoreAccountManagerRequest $request): JsonResponse
     {
-        $user = Auth::user();
-        $data = [
-            'company_name' => $user->company_name,
-            'email' => $user->email,
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
-            'user_id' => $user->id,
-        ];
-        $validator = Validator::make($data, AcountManagerRequest::$cast);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 400);
-        }
+        $user_id = Auth::user()->id;
+        $inputs = $request->validated();
+        $inputs['user_id'] = $user_id;
 
-        AcountManagerRequest::create($data);
-        return response()->json(['message_en' => 'your request has been created successfully',
-                                 'message_ar' => 'تم إنشاء طلبك بنجاح'
+        AcountManagerRequest::create($inputs);
+        return response()->json(['message_en' => 'your request has been created successfully, We will contact you soon',
+                                 'message_ar' => 'تم إنشاء طلبك بنجاح ، وسنتصل بك قريبًا'
                                 ], 200);
     }
 
