@@ -38,10 +38,11 @@ class MachineResource extends JsonResource
             'country_id' => Country::find($this->country_id,$selected_columns),
             'slug' => $this->slug,
             'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
-            'skq' => $this->skq,
-//            'price' =>  $this->show_price == 1 ? currency_converter('USD',$this->price) : 'Price Hidden',
+            'sku' => $this->sku,
             'price' =>  $this->price == null ? null :currency_converter('USD',$this->price),
             'approved' => $this->approved,
+            'featured' => $this->featured,
+            'verified' => $this->verified,
             'seller_id' => User::find($this->seller_id,['id','first_name', 'last_name', 'company_name', 'country', 'email' , 'phone']),
             'city_id' => City::find($this->city_id,$selected_columns),
             'category_id' => Category::find($this->category_id,$selected_columns),
@@ -51,7 +52,6 @@ class MachineResource extends JsonResource
             'views' => views(Machine::find($this->id))->count(),
             'phone_clicks' => $this->phone_clicks,
             'videos' => Upload::findMany(json_decode($this->videos),['id', 'url']),
-
         ];
         return $data;
     }

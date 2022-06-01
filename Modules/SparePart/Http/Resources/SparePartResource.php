@@ -35,6 +35,8 @@ class SparePartResource extends JsonResource
             'is_original' => $this->is_original,
             'condition' => $this->condition,
             'approved' => $this->approved,
+            'featured' => $this->featured,
+            'verified' => $this->verified,
             'seller_id' => User::find($this->seller_id,['id','first_name', 'last_name', 'company_name', 'country', 'email' , 'phone']),
             'city_id' => City::find($this->city_id,$selected_columns),
             'category_id' => Category::find($this->category_id,$selected_columns),
