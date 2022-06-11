@@ -25,7 +25,7 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         Route::get('/users/full-profile',[UserController::class, 'getFullUser']);
         Route::post('/users',[UserController::class, 'update'])->name('users.update');
         Route::resource('users','UserController')->only('destroy');
-        Route::get('/users/phone',[UserController::class, 'get_phone']);
+
         Route::post('/users/request_account_manager',[UserController::class, 'request_account_manager'])->name('users.request_account_manager');
 
         Route::get('/list', [SavedListController::class,'getList'])->name('list');
@@ -34,4 +34,8 @@ Route::group(['prefix' => '/','middleware' => 'cors'], function () {
         Route::get('/list/clear', [SavedListController::class,'clearList'])->name('list.clear');
 
     });
+
+        Route::get('/users/phone',[UserController::class, 'get_phone']);
+
+
 });
