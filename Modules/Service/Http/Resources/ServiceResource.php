@@ -28,6 +28,7 @@ class ServiceResource extends JsonResource
             'service_type_id' => ServiceType::find($this->service_type_id,['id','title_en', 'title_ar']),
             'city_id' => City::find($this->city_id,$selected_columns),
             'country_id' => Country::find($this->country_id,$selected_columns),
+            'images' => Upload::findMany(json_decode($this->images),['id', 'url']),
         ];
         return $data;
     }
