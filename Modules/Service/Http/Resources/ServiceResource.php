@@ -7,6 +7,8 @@ use App\Models\User;
 use Modules\Country\Entities\Country;
 use Modules\ServiceType\Entities\ServiceType;
 use Modules\City\Entities\City;
+use Modules\Upload\Entities\Upload;
+
 class ServiceResource extends JsonResource
 {
     /**
