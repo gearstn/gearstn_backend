@@ -53,7 +53,7 @@ class MachineController extends Controller
         $plan_ends_at = null;
         if ($user_subscriptions->count() > 0) {
             foreach ($user_subscriptions as $plan) {
-                if (str_contains($plan->slug, 'mozaa')) {
+                if (str_contains($plan->slug, 'machine-distributor')) {
                     $subscription = app('rinvex.subscriptions.plan')->find($plan->plan_id);
                     $subscription->features();
                     $feature_slug_machines = null;
