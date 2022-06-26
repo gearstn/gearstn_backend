@@ -44,7 +44,7 @@ class UploadController extends Controller
         foreach ($inputs['photos'] as $image) {
 
             $fileInfo = $image->getClientOriginalName();
-            $newFileName = time() . '.' . $image->extension();
+            $newFileName = uniqid() . time() . '.' . $image->extension();
             if ($image->getSize() /1024 > 250.0){
                 $img = Image::make($image)->insert( storage_path('app/public/logo.png') , 'bottom-right')->limitColors(256)->gamma(1.0)->encode($image->extension());
             }
