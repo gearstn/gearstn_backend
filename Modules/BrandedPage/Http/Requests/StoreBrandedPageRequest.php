@@ -14,8 +14,6 @@ class StoreBrandedPageRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_en' => 'required',
-            'name_ar' => 'required',
             'slug' => 'sometimes',
             'about_en' => 'required',
             'about_ar' => 'required',
@@ -24,7 +22,7 @@ class StoreBrandedPageRequest extends FormRequest
             'twitter_link' => 'required',
             'website_link' => 'required',
             'user_id' => 'required',
-            "photos" => ["required", "array", "min:1", "max:5"],
+            "photos" => ["required", "array", "min:1", "max:1"],
             "photos.*" => ["required", "mimes:jpeg,jpg,png,gif,webp", "max:1000"],
         ];
     }

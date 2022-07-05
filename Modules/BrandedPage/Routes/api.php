@@ -15,5 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => '/','middleware' => 'cors'], function () {
-    Route::resource('branded-pages','BrandedPageController' ,['as' => 'frontend']);
+    Route::middleware('auth:sanctum')->group( function () {
+        Route::resource('branded-pages','BrandedPageController' ,['as' => 'frontend']);
+    });
 });

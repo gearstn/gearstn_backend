@@ -6,6 +6,7 @@ use App\Classes\POST_Caller;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Modules\BrandedPage\Entities\BrandedPage;
 use Modules\BrandedPage\Http\Requests\StoreBrandedPageRequest;
 use Modules\BrandedPage\Http\Requests\UpdateBrandedPageRequest;
@@ -40,8 +41,8 @@ class BrandedPageController extends Controller
     public function store(StoreBrandedPageRequest $request)
     {
         $inputs = $request->validated();
-        $inputs['slug'] = $inputs['name_en'] . '-' . $inputs['user_id'];
-
+        $user = Auth::user();
+        $inputs['slug'] = $user->company_name;
         $data = [
             'photos' => $inputs['photos'],
             'seller_id' => $inputs['user_id'],

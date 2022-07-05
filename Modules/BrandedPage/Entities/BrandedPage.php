@@ -10,8 +10,6 @@ class BrandedPage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name_en',
-        'name_ar',
         'slug',
         'about_en',
         'about_ar',

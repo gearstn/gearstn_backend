@@ -14,8 +14,6 @@ class UpdateBrandedPageRequest extends FormRequest
     public function rules()
     {
         return [
-            'name_en' => 'required',
-            'name_ar' => 'required',
             'slug' => 'sometimes',
             'about_en' => 'required',
             'about_ar' => 'required',
