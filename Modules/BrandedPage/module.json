@@ -1,0 +1,13 @@
+{
+    "name": "BrandedPage",
+    "alias": "brandedpage",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\BrandedPage\\Providers\\BrandedPageServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

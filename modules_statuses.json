@@ -20,5 +20,6 @@
     "SparePartModel": true,
     "Country": true,
     "Service": true,
-    "ServiceType": true
+    "ServiceType": true,
+    "BrandedPage": true
 }
