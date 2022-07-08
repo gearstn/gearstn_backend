@@ -4,6 +4,7 @@ namespace Modules\BrandedPage\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\BrandedPage\Entities\BrandedPage;
 
 class BrandedPageDatabaseSeeder extends Seeder
 {
@@ -14,8 +15,22 @@ class BrandedPageDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        $pages = [
+            [
+                'slug' => 'test',
+                'about_en' => 'test',
+                'about_ar' => 'test',
+                'address' => 'test',
+                'facebook_link' => 'test',
+                'twitter_link' => 'test',
+                'website_link' => 'test',
+                'user_id' => 1,
+                'image_id' => 1,
+            ],
+       ];
 
-        // $this->call("OthersTableSeeder");
+       foreach ($pages as $page) {
+           BrandedPage::create($page);
+       }
     }
 }
