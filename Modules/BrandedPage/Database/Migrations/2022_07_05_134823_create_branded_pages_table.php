@@ -21,6 +21,9 @@ class CreateBrandedPagesTable extends Migration
             $table->string('address')->nullable();
             $table->string('facebook_link')->nullable();
             $table->string('twitter_link')->nullable();
+            $table->string('linkedin_link')->nullable();
+            $table->string('instagram_link')->nullable();
+            $table->string('youtube_channel_link')->nullable();
             $table->string('website_link')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('image_id');
