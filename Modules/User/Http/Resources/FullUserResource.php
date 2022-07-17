@@ -3,6 +3,7 @@
 namespace Modules\User\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\BrandedPage\Entities\BrandedPage;
 use Modules\Upload\Entities\Upload;
 
 class FullUserResource extends JsonResource
@@ -30,6 +31,7 @@ class FullUserResource extends JsonResource
             "country" => $this->country,
             "phone" => $this->phone,
             "role" => $this->getRoleNames(),
+            'has_branded_page' => BrandedPage::where('user_id', $this->id)->exists(),
         ];
 
         if ($this->hasRole('distributor') ) {

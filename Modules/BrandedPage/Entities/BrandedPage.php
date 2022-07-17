@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class BrandedPage extends Model
 {
     use HasFactory;
+    protected $table = 'branded_pages';
 
     protected $fillable = [
         'slug',

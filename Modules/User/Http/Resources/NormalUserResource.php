@@ -3,6 +3,7 @@
 namespace Modules\User\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\BrandedPage\Entities\BrandedPage;
 
 class NormalUserResource extends JsonResource
 {
@@ -24,6 +25,7 @@ class NormalUserResource extends JsonResource
             "country" => $this->country,
             "role" => $this->getRoleNames(),
             "phone" => $this->phone,
+            'has_branded_page' => BrandedPage::where('user_id', $this->id)->exists(),
         ];
         return $data;
     }
