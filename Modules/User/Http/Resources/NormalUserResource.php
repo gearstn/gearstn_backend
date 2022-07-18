@@ -26,6 +26,7 @@ class NormalUserResource extends JsonResource
             "role" => $this->getRoleNames(),
             "phone" => $this->phone,
             'has_branded_page' => BrandedPage::where('user_id', $this->id)->exists(),
+            'can_own_branded_page' => $this->can_own_branded_page,
         ];
         return $data;
     }

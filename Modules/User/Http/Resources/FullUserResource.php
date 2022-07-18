@@ -32,6 +32,7 @@ class FullUserResource extends JsonResource
             "phone" => $this->phone,
             "role" => $this->getRoleNames(),
             'has_branded_page' => BrandedPage::where('user_id', $this->id)->exists(),
+            'can_own_branded_page' => $this->can_own_branded_page,
         ];
 
         if ($this->hasRole('distributor') ) {
