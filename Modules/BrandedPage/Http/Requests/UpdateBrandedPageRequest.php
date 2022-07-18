@@ -18,12 +18,12 @@ class UpdateBrandedPageRequest extends FormRequest
             'about_en' => 'required',
             'about_ar' => 'required',
             'address' => 'required',
-            'facebook_link' => 'required',
-            'twitter_link' => 'required',
-            'linkedin_link' => 'required',
-            'instagram_link' => 'required',
-            'youtube_channel_link' => 'required',
-            'website_link' => 'required',
+            'facebook_link' => 'sometimes',
+            'twitter_link' => 'sometimes',
+            'linkedin_link' => 'sometimes',
+            'instagram_link' => 'sometimes',
+            'youtube_channel_link' => 'sometimes',
+            'website_link' => 'sometimes',
         ];
     }
 

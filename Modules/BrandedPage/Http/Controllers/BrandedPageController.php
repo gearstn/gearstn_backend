@@ -42,6 +42,7 @@ class BrandedPageController extends Controller
     {
         $inputs = $request->validated();
         $user = Auth::user();
+        $inputs['user_id'] = $user->id;
         $inputs['slug'] = $user->company_name;
         $data = [
             'photos' => $inputs['photos'],
@@ -50,9 +51,8 @@ class BrandedPageController extends Controller
         $post = new POST_Caller(UploadController::class, 'store', Request::class, $data);
         $response = $post->call();
         if ($response->status() != 200) {return $response;}
-        $inputs['image_id'] = $response->getContent();
+        $inputs['image_id'] = json_decode($response->getContent())[0];
         unset($inputs['photos']);
-
         $branded_page = BrandedPage::create($inputs);
         return response()->json(new BrandedPageResource($branded_page), 200);
     }
