@@ -15,7 +15,7 @@ class CreateBrandedPagesTable extends Migration
     {
         Schema::create('branded_pages', function (Blueprint $table) {
             $table->id();
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->longText('about_en');
             $table->longText('about_ar');
             $table->string('address')->nullable();

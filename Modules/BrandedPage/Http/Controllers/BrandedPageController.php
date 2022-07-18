@@ -42,17 +42,24 @@ class BrandedPageController extends Controller
     {
         $inputs = $request->validated();
         $user = Auth::user();
-        $inputs['user_id'] = $user->id;
         $inputs['slug'] = $user->company_name;
         $data = [
             'photos' => $inputs['photos'],
             'seller_id' => $inputs['user_id'],
         ];
+
+
+        $branded_page = BrandedPage::findOrFail($inputs['slug']);
+        if($branded_page){
+            return response()->json(['message_ar' => 'الصفحة ذات العلامات التجارية موجودة بالفعل', 'message_en' => 'Branded Page already exists'], 400);
+        }
+
         $post = new POST_Caller(UploadController::class, 'store', Request::class, $data);
         $response = $post->call();
         if ($response->status() != 200) {return $response;}
-        $inputs['image_id'] = json_decode($response->getContent())[0];
+        $inputs['image_id'] = $response->getContent();
         unset($inputs['photos']);
+
         $branded_page = BrandedPage::create($inputs);
         return response()->json(new BrandedPageResource($branded_page), 200);
     }
