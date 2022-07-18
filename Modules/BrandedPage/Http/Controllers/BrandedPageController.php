@@ -42,6 +42,13 @@ class BrandedPageController extends Controller
     {
         $inputs = $request->validated();
         $user = Auth::user();
+
+        if(!$user->can_own_branded_page) {
+            return response()->json(['message_ar' => 'لا يسمح لك بإنشاء صفحة ذات علامة تجارية',
+                                     'message_en' => 'You are not allowed to create branded page'], 403);
+        }
+
+        $inputs['user_id'] = $user->id;
         $inputs['slug'] = $user->company_name;
         $data = [
             'photos' => $inputs['photos'],
@@ -51,7 +58,8 @@ class BrandedPageController extends Controller
 
         $branded_page = BrandedPage::findOrFail($inputs['slug']);
         if($branded_page){
-            return response()->json(['message_ar' => 'الصفحة ذات العلامات التجارية موجودة بالفعل', 'message_en' => 'Branded Page already exists'], 400);
+            return response()->json(['message_ar' => 'الصفحة ذات العلامات التجارية موجودة بالفعل',
+                                     'message_en' => 'Branded Page already exists'], 400);
         }
 
         $post = new POST_Caller(UploadController::class, 'store', Request::class, $data);
