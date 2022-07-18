@@ -43,7 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'national_id',
         'national_id_image',
         'country_id',
-        'city_id'
+        'city_id',
+        'can_own_branded_page',
     ];
 
     /**
