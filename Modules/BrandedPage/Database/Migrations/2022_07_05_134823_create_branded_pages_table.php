@@ -25,7 +25,7 @@ class CreateBrandedPagesTable extends Migration
             $table->string('instagram_link')->nullable();
             $table->string('youtube_channel_link')->nullable();
             $table->string('website_link')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->unsignedBigInteger('image_id');
             $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
             $table->foreign("image_id")->references("id")->on("uploads")->onDelete("cascade");
