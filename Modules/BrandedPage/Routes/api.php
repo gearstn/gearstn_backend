@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\BrandedPage\Http\Controllers\BrandedPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::middleware('auth:sanctum')->group( function () {
         Route::resource('branded-pages','BrandedPageController');
+        Route::get('get-user-branded-page/{$user_id}',[BrandedPageController::class,'getUserBrandedPage']);
         Route::resource('branded-pages-posts','BrandedPagePostController');
     });
 });
