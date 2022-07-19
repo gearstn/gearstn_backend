@@ -17,8 +17,8 @@ use Modules\BrandedPage\Http\Controllers\BrandedPageController;
 
 Route::group(['prefix' => '/','middleware' => 'cors'], function () {
     Route::middleware('auth:sanctum')->group( function () {
+        Route::get('get-user-branded-page/{user_id}',[BrandedPageController::class,'getUserBrandedPage']);
         Route::resource('branded-pages','BrandedPageController');
-        Route::get('get-user-branded-page/{$user_id}',[BrandedPageController::class,'getUserBrandedPage']);
         Route::resource('branded-pages-posts','BrandedPagePostController');
     });
 });

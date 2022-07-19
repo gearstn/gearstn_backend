@@ -118,7 +118,7 @@ class BrandedPageController extends Controller
 
     public function getUserBrandedPage($user_id)
     {
-        $branded_page = BrandedPage::where('user', $user_id)->get();
+        $branded_page = BrandedPage::where('user_id', $user_id)->first();
         return response()->json(new BrandedPageResource($branded_page), 200);
     }
 }
